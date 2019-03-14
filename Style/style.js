@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 // This is style for splash screen
 export const splashStyle = StyleSheet.create({
@@ -89,7 +89,18 @@ export const loginStyle = StyleSheet.create({
     backgroundColor: "#1F4C61",
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    position: "absolute",
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height - 24
+  },
+  text:
+  {
+    fontSize: 12,
+    textAlign: "right",
+    marginTop: 10,
+    color: "white",
+    fontWeight: "bold"
   }
 });
 
@@ -98,9 +109,12 @@ export const registerStyle = StyleSheet.create({
   wrapper:
   {
       backgroundColor: "#364860",
-      flex: 1,
+      display: "flex",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      position: "absolute",
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height - 20
   },
   text:
   {
@@ -118,5 +132,13 @@ export const registerStyle = StyleSheet.create({
     width: "80%",
     justifyContent: "center",
     alignItems: "center"
+  },
+  picker:
+  {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20
   }
 });

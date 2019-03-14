@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput } from 'react-native';
+import { Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { Icon, Input, Avatar, SocialIcon } from 'react-native-elements';
 import RoundButtonIcon from './roundButtonIcon';
 import Anchor from './anchor';
@@ -11,18 +11,24 @@ export default class Login extends Component
   constructor(props)
   {
     super(props);
-    this.state = { isShow: false };
+    this.state = { isShow: false, error: false };
+    this.togglePassword = this.togglePassword.bind(this);
+    this.validate = this.validate.bind(this);
   }
 
+  togglePassword() { this.setState({isShow: !this.state.isShow, error: this.state.error}) }
+  validate() {
+    this.setState({isShow: this.state.isShow, error: !this.state.error});
+  }
   render()
   {
     return(
-        <View style={loginStyle.wrapper}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={loginStyle.wrapper}>
             <Avatar
                 rounded
                 size={160}
                 icon={{type: 'font-awesome', name: 'user'}}
-                containerStyle={{borderWidth: 4, borderColor: 'white'}}
+                containerStyle={{borderWidth: 4, borderColor: 'white', marginTop: 10}}
                 overlayContainerStyle={{backgroundColor: 'transparent'}}
             />
             <View style={{width: '90%', marginTop: 25}}>
@@ -35,18 +41,22 @@ export default class Login extends Component
                   placeholder="Password"
                   leftIcon={{ type: 'font-awesome', name: 'lock', color:'white', width: 30 }}
                   inputStyle={{ fontSize: 16, color: 'white', paddingLeft: 20 }}
-                  secureTextEntry={true}
+                  secureTextEntry={!this.state.isShow}
+                  errorMessage={ this.state.error ? "ERROR: Username or password is incorrect!" : ""}
+                  errorStyle={{color: "white", fontSize: 15, borderRadius: 10, backgroundColor: "#F93D5C", padding: 8}}
                 />
+                <TouchableOpacity style={{width: "40%", marginLeft: "55%"}} onPress={this.togglePassword}>
+                    <Text style={loginStyle.text}> {this.state.isShow ? "HIDE PASSWORD" : "SHOW PASSWORD"} </Text>
+                </TouchableOpacity>
               </View>
-
               <RoundButtonIcon
                   textColor="white"
                   text="LOGIN"
                   background="#3FBB64"
                   round={10}
-                  handleOnPress= { () => {} }
+                  handleOnPress= { this.validate }
                   iconStyle={{name:"chevron-circle-right", type: "font-awesome", color: "white"}}
-                  style={{marginTop: 50, width: '60%', marginBottom: 50, borderColor: "#3FBB64", borderWidth: 1}}
+                  style={{marginTop: 20, width: '60%', marginBottom: 20, borderColor: "#3FBB64", borderWidth: 1}}
                   underlayColor="#27AB83"
               />
               <Text
@@ -76,7 +86,7 @@ export default class Login extends Component
                   textStyle={{color: "white", fontSize: 16}}
                   handleOnPress={()=>{}}
               />
-        </View>
+        </ScrollView>
     );
   }
 }
