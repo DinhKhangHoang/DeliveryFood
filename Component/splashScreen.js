@@ -11,7 +11,7 @@ export default class SplashScreen extends Component
         <View style={{flex:1}}>
           <View style={splashStyle.wrapper}>
               <Image source={require('../Media/icon/Icon.png')} style={splashStyle.icon} />
-              <Text style={splashStyle.text}>Delivery Food</Text>
+              <Text style={splashStyle.text}>Food Delivery</Text>
           </View>
           <View style={splashStyle.loading}>
             <DotIndicator  size={10} color={"#014D40"}/>

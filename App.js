@@ -11,7 +11,7 @@ export default class App extends Component {
 render() {
     const Main = createAppContainer(MainScreen);
     return(
-      <Main />
+      <Register />
     );
   }
 }
