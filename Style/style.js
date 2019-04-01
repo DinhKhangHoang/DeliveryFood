@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
+
+const { width, height } = Dimensions.get('window');
 // This is style for splash screen
 export const splashStyle = StyleSheet.create({
   wrapper: {
@@ -53,7 +55,9 @@ export const roundButtonStyle = StyleSheet.create(
           fontSize: 18,
           width: '100%',
           textAlign: 'center',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          paddingHorizontal: 10,
+          paddingVertical: 5
       }
   }
 );
@@ -83,30 +87,51 @@ export const anchorStyle = StyleSheet.create({
 });
 
 
+export const anchorIconStyle = StyleSheet.create({
+  wrapper:
+  {
+    display: "flex",
+    width: "100%",
+    marginHorizontal: 15,
+    padding: 15,
+    borderBottomWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.2)"
+  },
+  text:
+  {
+    ...anchorStyle.text,
+    textAlign: "left"
+  },
+  icon:
+  {
+      paddingHorizontal: 15,
+  }
+});
+
 // This is style for login form
 export const loginStyle = StyleSheet.create({
   wrapper: {
-    backgroundColor: "#1F4C61",
+    backgroundColor: "transparent",
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    position: "absolute",
+    position: "absolute"
   },
   text:
   {
     fontSize: 12,
     textAlign: "right",
     marginTop: 10,
-    color: "white",
+    color: "#014D40",
     fontWeight: "bold"
   }
 });
 
-
+// Style for register component
 export const registerStyle = StyleSheet.create({
   wrapper:
   {
-      backgroundColor: "#364860",
+      backgroundColor: "transparent",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -114,17 +139,17 @@ export const registerStyle = StyleSheet.create({
   },
   text:
   {
-      fontSize: 35,
-      color: 'white',
+      fontSize: 40,
+      color: '#014D40',
       textAlign: "center",
       width: "100%",
       justifyContent: "center",
       marginTop: 50,
-      marginBottom: 50
+      marginBottom: 70
   },
   form:
   {
-    flex: 1,
+    display: "flex",
     justifyContent: "center",
     alignItems: "center"
   },
@@ -136,4 +161,188 @@ export const registerStyle = StyleSheet.create({
     alignItems: 'center',
     marginTop: 5
   }
+});
+
+
+// Style for Account component
+export const accountStyle = StyleSheet.create({
+      Wrapper:
+      {
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+      },
+      notLogInHeading:
+      {
+            fontSize: 22,
+            padding: 10,
+            fontWeight: "bold"
+      },
+      notLogInText:
+      {
+            fontSize: 16,
+            padding: 5,
+            color: "black"
+      },
+      titleStyle:
+      {
+        fontWeight: "bold",
+        fontSize: 20
+      },
+      title:
+      {
+        display: "flex",
+        flexDirection: "row",
+        paddingHorizontal: 20,
+        paddingBottom: 40,
+        width,
+        height: height * 0.3,
+        backgroundColor: "#6733B9",
+        alignItems: 'flex-end'
+      },
+      username:
+      {
+        color: "white",
+        fontSize: 18,
+        marginLeft: 30
+      }
+});
+
+
+// Style for HomeCustomer component
+export const homeStyle = StyleSheet.create({
+      wrapper:
+      {
+        flex: 1,
+        backgroundColor: "#EAEAEA"
+      },
+      scroll:
+      {
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: 'flex-start',
+          alignItems: "center"
+      },
+});
+
+// Style for swiper component
+export const swiperStyle = StyleSheet.create({
+    container:
+    {
+      display: "flex",
+      backgroundColor: "white",
+    },
+    swiperItem:
+    {
+      display: "flex",
+      justifyContent: "center",
+      width,
+      height: height * 0.4,
+    },
+    textOnSwiper:
+    {
+          fontSize: 30,
+          width,
+          fontWeight: "bold",
+          color: "white",
+          position: 'absolute',
+          top: height * 0.2 + 40,
+          paddingVertical: 30,
+          paddingHorizontal: 20,
+          backgroundColor: "rgba(0, 0, 0, 0.5)"
+
+    },
+    imageOnSwiper:
+    {
+          width:  width,
+          height: height * 0.4,
+    }
+});
+
+// Style for header component
+export const headerStyle = StyleSheet.create({
+      wrapper:
+      {
+        backgroundColor: "#5B9642",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        height: 60,
+        flexDirection: "row"
+      }
+});
+
+
+// Style for listView component
+export const listViewStyle = StyleSheet.create({
+    item:
+    {
+          height: 200,
+          width: 150,
+          margin: 5,
+          paddingBottom: 10,
+          borderWidth: 1,
+          borderColor: "gray",
+          borderRadius: 4,
+    },
+    wrapper:
+    {
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    image:
+    {
+        width: "100%",
+        height: "70%",
+        borderRadius: 3
+    },
+    text:
+    {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: 16,
+        paddingVertical: 10
+    },
+    rateWrapper:
+    {
+      backgroundColor: "#227100",
+      borderRadius: 40,
+      display: "flex",
+      flexDirection: "row",
+      width: "30%",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 3
+    },
+    wrapperRateAndPrice:
+    {
+      display: "flex",
+      flexDirection: "row",
+      width: "100%",
+      height: "10%",
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    priceWrapper:
+    {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "row",
+      width: "60%",
+    }
+});
+
+export const PersonalInfor = StyleSheet.create({
+
+});
+
+
+export const FoodManagement = StyleSheet.create({
+  
 });

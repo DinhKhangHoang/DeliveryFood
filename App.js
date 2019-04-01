@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import { Text, View } from 'react-native';
 import { createAppContainer } from 'react-navigation';
+import firebase from 'react-native-firebase';
 import SplashScreen from './Component/splashScreen';
 import Login from './Component/login';
 import Register from './Component/register';
+import MySwiper from './Component/Swiper';
+import AccountPage from "./Component/Account";
+import ListView from "./Component/ListView";
 import { MainScreen } from "./Component/mainScreen";
 
 
@@ -13,23 +17,37 @@ constructor(props)
   super(props);
   this.state = {
       isAuth: false,
-      isLoaded: false
+      isLoaded: false,
+      user: firebase.auth().currentUser
   };
 }
-render() {
-   if ( this.state.isLoaded === false)
-   {
-     // Load data from database
+ componentDidMount() {
+    this.unsubscriber = firebase.auth().onAuthStateChanged((puser) => {
+            this.setState({ ...this.state, user: puser });
+      });
+  }
 
 
-     //Pseudo time-consuming function
-     setTimeout( ()=>{this.setState({ ...this.state, isLoaded: true});},3000);
-     // this.setState({ ...this.state, isLoaded: true});
-     return ( <SplashScreen/> );
-   }
-    const Main = createAppContainer(MainScreen);
-    return(
-      <Main />
-    );
+  render() {
+
+    if (this.state.isLoaded === false)
+    {
+      // Load data from database...
+
+
+      // Pseudo time-consuming function
+      //this.setState({...this.state, isLoaded: true});
+      setTimeout(()=>this.setState({...this.state, isLoaded: true}), 1000);
+      return (<SplashScreen />);
+    }
+    else
+    {
+      const Main = createAppContainer(MainScreen);
+      return (
+            <Main />
+    )};
+
+
+  //  return ( <Login />);
   }
 }

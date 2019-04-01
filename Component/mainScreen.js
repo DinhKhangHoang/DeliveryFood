@@ -5,6 +5,7 @@ import { Icon } from "react-native-elements";
 import HomeCustomer from "./HomeCustomer";
 import NotificationPage from "./Notification";
 import AccountPage from "./Account";
+
 export const MainScreen = createBottomTabNavigator(
   {
     Home: HomeCustomer,
