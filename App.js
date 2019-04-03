@@ -3,13 +3,15 @@ import { Text, View } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import firebase from 'react-native-firebase';
 import SplashScreen from './Component/splashScreen';
+import { MainScreen } from "./Component/mainScreen";
+//--------------------------------------------------------------------
 import Login from './Component/login';
 import Register from './Component/register';
 import MySwiper from './Component/Swiper';
 import AccountPage from "./Component/Account";
 import ListView from "./Component/ListView";
-import { MainScreen } from "./Component/mainScreen";
-
+import ComponentWithTitle from "./Component/ComponentWithTitle";
+//---------------------------------------------------------------------
 
 export default class App extends Component {
 constructor(props)
@@ -37,7 +39,7 @@ constructor(props)
 
       // Pseudo time-consuming function
       //this.setState({...this.state, isLoaded: true});
-      setTimeout(()=>this.setState({...this.state, isLoaded: true}), 1000);
+      setTimeout( ()=>this.setState({...this.state, isLoaded: true}), 1000);
       return (<SplashScreen />);
     }
     else
@@ -48,6 +50,6 @@ constructor(props)
     )};
 
 
-  //  return ( <Login />);
+ // return ( <ComponentWithTitle />);
   }
 }

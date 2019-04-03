@@ -10,7 +10,7 @@ import Register from './register';
 import AnchorIcon from './anchorIcon';
 import ChangeInfor from "./changeInformation";
 import FManagement from "./FoodManagement";
-
+import Cart from "./Cart";
 
 
 // Define a home class for account that haven't logged in yet.
@@ -96,8 +96,9 @@ class HomeLogIn extends Component
           <FlatList
             showsVerticalScrollIndicator={false}
             data={[
-              {key: "Personal Information", handleOnPress: ()=>{}, icon: {name: "persona", type: "zocial", color: "#3D4DB8", name: "PersonInfor"}},
-              {key: "Food Management", handleOnPress: ()=>{}, icon: {name: "food", type: "material-community", color: "#89C440", name: "FoodManagement"}},
+              {key: "Personal Information", handleOnPress: ()=>{ this.props.navigation.navigate("PersonInfor");}, icon: {name: "persona", type: "zocial", color: "#3D4DB8" }},
+              {key: "Food Management", handleOnPress: ()=>{ this.props.navigation.navigate("FoodManagement"); }, icon: {name: "food", type: "material-community", color: "#89C440" }},
+              {key: "Shopping Cart", handleOnPress: ()=>{ this.props.navigation.navigate("Cart"); }, icon: { name: "shopping-cart", type: "feather", color: "#00A7F7" }},
               {key: 'Log out', handleOnPress: ()=>firebase.auth().signOut(), icon: {name: "logout", type: "material-community", color: "#FF5606"} },
             ]}
             renderItem={({item}) => <AnchorIcon
@@ -121,7 +122,8 @@ class AccountLogIn extends Component
           const Nav = createAppContainer(createStackNavigator({
             Home: { screen: HomeLogIn },
             PersonInfor: { screen: ChangeInfor },
-            FoodManagement: { screen: Login }
+            FoodManagement: { screen: FManagement },
+            Cart: { screen: Cart }
           },
           {
             initialRouteName: "Home"

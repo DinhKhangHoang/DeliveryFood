@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Picker, Dimensions, ImageBackground, ScrollView } from 'react-native';
+import { Text, View, Picker, ImageBackground, ScrollView } from 'react-native';
 import { Icon, Input } from 'react-native-elements';
 import RoundButtonIcon from './roundButtonIcon';
 import { registerStyle, accountStyle } from '../Style/style.js';
@@ -15,31 +15,18 @@ export default class Register extends Component
   constructor(props)
   {
       super(props);
-      this.state = {width: Dimensions.get('window').width, height: Dimensions.get('window').height, orientation: "portrait", password: "", confirmPass: "", isShow: false };
+      this.state = { password: "", confirmPass: "", isShow: false };
   }
 
-   getOrientation = () => {
-    if( this.refs.rootView )
-    {
-        if( Dimensions.get('window').width < Dimensions.get('window').height ) { this.setState({ ...this.state, orientation: 'portrait' }); }
-        else { this.setState({ ...this.state, orientation: 'landscape' }); }
-    }
-  }
-
-  componentDidMount()
-  {
-    this.getOrientation();
-    Dimensions.addEventListener( 'change', () => {   this.getOrientation();  });
-  }
 
   render()
   {
   const { password, confirmPass, isShow } = this.state;
   return(
-    <View style={ [registerStyle.wrapper, (this.state.orientation === "portrait" ? { width: this.state.width, height: this.state.height - 20 } : { width: this.state.height, height: this.state.width, flexDirection: "row"} ) ]} ref = "rootView">
+    <View style={ registerStyle.wrapper } ref = "rootView">
       <ImageBackground source={ require("../Media/wallpaper/login.png") } style={{width: "100%", height: "100%"}}  imageStyle={{opacity: 0.1 }} >
            <ScrollView  showsVerticalScrollIndicator={false} contentContainerStyle={{width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}} >
-           <Text style={[registerStyle.text, {fontWeight: "bold", display: (this.state.orientation === "portrait" ? "flex" : "none")}]}>Registration</Text>
+           <Text style={registerStyle.text}>Registration</Text>
            <View style={[{width: '80%'}, registerStyle.form]}>
               <Input
                   placeholder="Username"

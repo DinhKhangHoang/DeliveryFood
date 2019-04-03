@@ -115,7 +115,9 @@ export const loginStyle = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    position: "absolute"
+    position: "absolute",
+    height: height - 20,
+    width
   },
   text:
   {
@@ -124,6 +126,24 @@ export const loginStyle = StyleSheet.create({
     marginTop: 10,
     color: "#014D40",
     fontWeight: "bold"
+  },
+  title:
+  {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#014D40",
+    fontSize: 40,
+    fontWeight: "bold",
+    marginTop: 50,
+  },
+  scrollView:
+  {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
@@ -136,6 +156,8 @@ export const registerStyle = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
       position: "absolute",
+      height,
+      width
   },
   text:
   {
@@ -145,7 +167,8 @@ export const registerStyle = StyleSheet.create({
       width: "100%",
       justifyContent: "center",
       marginTop: 50,
-      marginBottom: 70
+      marginBottom: 70,
+      fontWeight: "bold"
   },
   form:
   {
@@ -196,7 +219,7 @@ export const accountStyle = StyleSheet.create({
         paddingHorizontal: 20,
         paddingBottom: 40,
         width,
-        height: height * 0.3,
+        height: height * 0.2,
         backgroundColor: "#6733B9",
         alignItems: 'flex-end'
       },
@@ -283,9 +306,10 @@ export const listViewStyle = StyleSheet.create({
           width: 150,
           margin: 5,
           paddingBottom: 10,
+          backgroundColor: "white",
           borderWidth: 1,
-          borderColor: "gray",
-          borderRadius: 4,
+          borderColor: "rgba(0, 0, 0, 0.2)",
+          borderRadius: 4
     },
     wrapper:
     {
@@ -338,11 +362,48 @@ export const listViewStyle = StyleSheet.create({
     }
 });
 
+
 export const PersonalInfor = StyleSheet.create({
 
 });
 
 
 export const FoodManagement = StyleSheet.create({
-  
+
+});
+
+export const  CartStyle = StyleSheet.create({
+
+});
+
+export const detailFood = StyleSheet.create({
+
+});
+
+
+export const componentWithTitle = StyleSheet.create({
+      wrapper:
+      {
+        width: "100%",
+      },
+      header:
+      {
+
+      },
+      body:
+      {
+
+      },
+      wrapperSnd:
+      {
+
+      },
+      title:
+      {
+
+      },
+      text:
+      {
+
+      }
 });
