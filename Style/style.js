@@ -372,12 +372,231 @@ export const FoodManagement = StyleSheet.create({
 
 });
 
+
 export const  CartStyle = StyleSheet.create({
 
 });
 
-export const detailFood = StyleSheet.create({
 
+export const detailFood = StyleSheet.create({
+    wrapper:
+    {
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          position: 'relative'
+    },
+    image:
+    {
+          width: "100%",
+    },
+    title:
+    {
+          fontSize: 20,
+          padding: 5,
+          marginVertical: 5,
+          textAlign: "center",
+          fontWeight: "bold"
+    },
+    price:
+    {
+          width: "40%",
+          fontSize: 18,
+          color: "#5B9642",
+          fontWeight: "bold",
+          paddingLeft: 20,
+          textAlign: "left",
+    },
+    foodInfor:
+    {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 5,
+        paddingTop: 0,
+        marginBottom: 10,
+        shadowOffset: { width: 10, height: 10 },
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        elevation: 3,
+        backgroundColor: "white",
+        width: "100%"
+
+    },
+    statusFood:
+    {
+        width: "90%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        paddingBottom: 5
+    },
+    titleAndPrice:
+    {
+        width: "90%"
+    },
+    textOnStatus:
+    {
+      fontSize: 14,
+      textAlign: "left",
+      width: "80%",
+      padding: 5
+    },
+    wrapperItemStatus:
+    {
+      width: "40%",
+      display: "flex",
+      justifyContent: 'space-between',
+      alignItems: "center",
+      flexDirection: "row"
+    }
+});
+
+export const resInfor = StyleSheet.create({
+  wrapper:
+  {
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "white",
+  },
+  name:
+  {
+      width: "65%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "row"
+  },
+  locate:
+  {
+      width: "95%",
+      marginLeft: 5,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "row"
+  },
+  banner:
+  {
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row"
+  },
+  statistics:
+  {
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "row",
+      marginTop: 15,
+      marginBottom: 5,
+      backgroundColor: "#F2FDE0",
+      borderRadius: 10,
+      paddingVertical: 15,
+  },
+  statisticsWrapper:
+  {
+    width: "30%",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  firstText:
+  {
+        fontSize: 16,
+        fontWeight: "bold",
+        color:"#227100",
+        textAlign: "center"
+  },
+  secondText:
+  {
+        fontSize: 14,
+        textAlign: "center"
+  }
+});
+
+export const commentStyle = StyleSheet.create({
+    wrapper:
+    {
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          borderBottomWidth: 1,
+          borderBottomColor: "rgba(0, 0, 0, 0.2)"
+    },
+    avatarAndName:
+    {
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: 'row'
+    },
+    nameAndTime:
+    {
+          width: "70%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+    },
+    content:
+    {
+          width: "80%",
+          fontSize: 14,
+          padding: 5,
+          marginVertical: 10
+
+    },
+    nameText:
+    {
+        fontSize: 14,
+        padding: 5,
+        paddingLeft: 20,
+        fontWeight: "bold",
+        textAlign: "left",
+        width: "100%"
+    },
+    timeText:
+    {
+          fontSize: 12,
+          textAlign: "left",
+          width: "80%",
+          paddingLeft: 5
+    },
+    anchorWrapper:
+    {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      flexDirection: "row",
+      width: "20%"
+    },
+    time:
+    {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "100%",
+      flexDirection: "row",
+      paddingLeft: 6
+
+    },
+    inputWrapper:
+    {
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        marginVertical: 10,
+        marginLeft: "5%"
+    }
 });
 
 
@@ -385,25 +604,107 @@ export const componentWithTitle = StyleSheet.create({
       wrapper:
       {
         width: "100%",
+        backgroundColor: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        shadowOffset: { width: 10, height: 10 },
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        elevation: 3,
+        paddingBottom: 5
+
       },
       header:
       {
+          width: "90%",
+          display: "flex",
+          flexDirection: 'row',
+          justifyContent: "center",
+          alignItems: "center",
+          padding: 5,
+          borderBottomWidth: 1,
+          borderBottomColor: "rgba(0, 0, 0, 0.2)",
+          marginBottom: 5
 
       },
       body:
       {
-
+          width: "90%",
+          padding: 5,
+          marginBottom: 5
       },
       wrapperSnd:
       {
-
+            width: "30%",
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "flex-end"
       },
       title:
       {
-
+            fontSize: 16,
+            textAlign: "left",
+            fontWeight: "bold"
       },
       text:
       {
-
+            width: "100%",
+            textAlign: 'right',
+            fontSize: 12,
       }
+});
+
+
+export const bookingStyle = StyleSheet.create({
+  wrapper:
+  {
+        width: "85%",
+        height: "70%",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        shadowOffset: { width: 10, height: 10 },
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        elevation: 3,
+        backgroundColor: "white",
+        padding: 8
+
+  },
+  image:
+  {
+          width: 100,
+          height: 100,
+          borderRadius: 50,
+  },
+  name:
+  {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%"
+  },
+  count:
+  {
+
+  },
+  address:
+  {
+
+  },
+  confirm:
+  {
+        borderTopWidth: 1,
+        borderTopColor: "rgba(0, 0, 0, 0.2)",
+        marginVertical: 5
+  },
+  adjustCount:
+  {
+
+  },
+  text:
+  {
+    fontSize: 14,
+  }
 });

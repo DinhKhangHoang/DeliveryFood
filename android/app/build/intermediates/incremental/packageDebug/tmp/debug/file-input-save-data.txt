@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Wed Apr 03 19:52:07 ICT 2019
+#Fri Apr 05 21:09:36 ICT 2019
 56.path=lib/armeabi-v7a/libicu_common.so
 5.base=D\:\\DeliveryFood\\android\\app\\build\\intermediates\\transforms\\mergeJniLibs\\debug\\0
 42.base=D\:\\DeliveryFood\\android\\app\\build\\intermediates\\transforms\\mergeJniLibs\\debug\\0

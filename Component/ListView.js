@@ -66,9 +66,9 @@ export default class ListView extends Component
   }
   render()
   {
-    const { title } = this.props;
+    const { title, containerStyle } = this.props;
     return (
-          <View style={{width: "100%"}}>
+          <View style={ [{width: "100%", backgroundColor: "white"}, containerStyle ]}>
             <View style={ listViewStyle.wrapper } >
                 <Text style={{fontWeight: "bold", fontSize: 16, width: "65%", padding: 10, marginLeft: 15}} >{ title }</Text>
                 <Anchor
