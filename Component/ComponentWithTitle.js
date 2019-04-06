@@ -10,11 +10,11 @@ export default class ComponentWithTitle extends Component
 {
   render()
   {
-    const { data, title, sndText = null, handleOnPressSndText, containerStyle } = this.props;
+    const { data, title, sndText = null, handleOnPressSndText = ()=>{} , containerStyle, dataStyle } = this.props;
     return (
       <View style={[componentWithTitle.wrapper, containerStyle]}>
           <View style={componentWithTitle.header}>
-              <Text style={componentWithTitle.title}>{ title }</Text>
+              <Text style={ [componentWithTitle.title, {width: (sndText === null ? "100%" : "70%")}] }>{ title }</Text>
               { sndText === null ? null : <Anchor
                   text={sndText}
                   textStyle={ componentWithTitle.text }
@@ -22,7 +22,7 @@ export default class ComponentWithTitle extends Component
                   wrapperStyle={componentWithTitle.wrapperSnd}
               /> }
           </View>
-          <View style={componentWithTitle.body}>
+          <View style={ [componentWithTitle.body, dataStyle] }>
               { data }
           </View>
       </View>
@@ -35,5 +35,6 @@ Anchor.propTypes = {
     title: PropTypes.string.isRequired,
     sndText: PropTypes.string,
     handleOnPressSndText: PropTypes.func,
-    containerStyle: PropTypes.object
+    containerStyle: PropTypes.object,
+    dataStyle: PropTypes.object
 };
