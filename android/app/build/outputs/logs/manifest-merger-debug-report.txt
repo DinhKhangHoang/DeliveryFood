@@ -4,13 +4,16 @@ ADDED from D:\DeliveryFood\android\app\src\main\AndroidManifest.xml:1:1-28:12
 INJECTED from D:\DeliveryFood\android\app\src\main\AndroidManifest.xml:1:1-28:12
 INJECTED from D:\DeliveryFood\android\app\src\main\AndroidManifest.xml:1:1-28:12
 INJECTED from D:\DeliveryFood\android\app\src\main\AndroidManifest.xml:1:1-28:12
+MERGED from [:react-native-date-picker] D:\DeliveryFood\node_modules\react-native-date-picker\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-firebase] D:\DeliveryFood\node_modules\react-native-firebase\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:2:1-15:12
 MERGED from [:react-native-gesture-handler] D:\DeliveryFood\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-vector-icons] D:\DeliveryFood\node_modules\react-native-vector-icons\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:2:1-11:12
 MERGED from [com.facebook.react:react-native:0.58.6] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\react-native-0.58.6.aar\30a95e9604b92ef2ce83272edb61b4c6\AndroidManifest.xml:2:1-15:12
+MERGED from [cn.carbswang.android:NumberPickerView:1.1.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\NumberPickerView-1.1.1.aar\98dbde2fbb368160e8e86bc18b5da7b9\AndroidManifest.xml:2:1-11:12
 MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\appcompat-v7-28.0.0.aar\12cd1e864722fc4cf9f7c953fb4bf8e5\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:firebase-core:16.0.8] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-core-16.0.8.aar\9f01c352aa7ecb018194db013931eace\AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.firebase:firebase-auth:16.1.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-auth-16.1.0.aar\2f727fa7a0cc680e546765d841ce3b3c\AndroidManifest.xml:17:1-42:12
+MERGED from [net.time4j:time4j-android:4.2-2018i] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\time4j-android-4.2-2018i.aar\8d73440478a148b261106265957b0427\AndroidManifest.xml:2:1-13:12
 MERGED from [com.google.android.gms:play-services-flags:16.0.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\play-services-flags-16.0.1.aar\bfa140c13b7cc1eeae0c833b9311c5b7\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:firebase-auth-interop:16.0.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-auth-interop-16.0.1.aar\6d7cf63b5f55ebafcc564db50b07633b\AndroidManifest.xml:2:1-10:12
 MERGED from [com.google.firebase:firebase-analytics:16.4.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-analytics-16.4.0.aar\9ebcbd18a65684fa1e20a9c7aac6ba84\AndroidManifest.xml:2:1-9:12
@@ -112,6 +115,8 @@ MERGED from [com.google.firebase:firebase-core:16.0.8] C:\Users\Minh\.gradle\cac
 MERGED from [com.google.firebase:firebase-core:16.0.8] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-core-16.0.8.aar\9f01c352aa7ecb018194db013931eace\AndroidManifest.xml:7:5-20
 MERGED from [com.google.firebase:firebase-auth:16.1.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-auth-16.1.0.aar\2f727fa7a0cc680e546765d841ce3b3c\AndroidManifest.xml:23:5-40:19
 MERGED from [com.google.firebase:firebase-auth:16.1.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-auth-16.1.0.aar\2f727fa7a0cc680e546765d841ce3b3c\AndroidManifest.xml:23:5-40:19
+MERGED from [net.time4j:time4j-android:4.2-2018i] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\time4j-android-4.2-2018i.aar\8d73440478a148b261106265957b0427\AndroidManifest.xml:11:5-20
+MERGED from [net.time4j:time4j-android:4.2-2018i] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\time4j-android-4.2-2018i.aar\8d73440478a148b261106265957b0427\AndroidManifest.xml:11:5-20
 MERGED from [com.google.firebase:firebase-auth-interop:16.0.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-auth-interop-16.0.1.aar\6d7cf63b5f55ebafcc564db50b07633b\AndroidManifest.xml:7:5-8:19
 MERGED from [com.google.firebase:firebase-auth-interop:16.0.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-auth-interop-16.0.1.aar\6d7cf63b5f55ebafcc564db50b07633b\AndroidManifest.xml:7:5-8:19
 MERGED from [com.google.firebase:firebase-analytics:16.4.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-analytics-16.4.0.aar\9ebcbd18a65684fa1e20a9c7aac6ba84\AndroidManifest.xml:7:5-20
@@ -198,6 +203,8 @@ uses-sdk
 INJECTED from D:\DeliveryFood\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\DeliveryFood\android\app\src\main\AndroidManifest.xml
 INJECTED from D:\DeliveryFood\android\app\src\main\AndroidManifest.xml
+MERGED from [:react-native-date-picker] D:\DeliveryFood\node_modules\react-native-date-picker\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-date-picker] D:\DeliveryFood\node_modules\react-native-date-picker\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-firebase] D:\DeliveryFood\node_modules\react-native-firebase\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-firebase] D:\DeliveryFood\node_modules\react-native-firebase\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-gesture-handler] D:\DeliveryFood\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:7:5-9:41
@@ -206,12 +213,16 @@ MERGED from [:react-native-vector-icons] D:\DeliveryFood\node_modules\react-nati
 MERGED from [:react-native-vector-icons] D:\DeliveryFood\node_modules\react-native-vector-icons\android\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.58.6] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\react-native-0.58.6.aar\30a95e9604b92ef2ce83272edb61b4c6\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.58.6] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\react-native-0.58.6.aar\30a95e9604b92ef2ce83272edb61b4c6\AndroidManifest.xml:7:5-9:41
+MERGED from [cn.carbswang.android:NumberPickerView:1.1.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\NumberPickerView-1.1.1.aar\98dbde2fbb368160e8e86bc18b5da7b9\AndroidManifest.xml:7:5-9:41
+MERGED from [cn.carbswang.android:NumberPickerView:1.1.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\NumberPickerView-1.1.1.aar\98dbde2fbb368160e8e86bc18b5da7b9\AndroidManifest.xml:7:5-9:41
 MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\appcompat-v7-28.0.0.aar\12cd1e864722fc4cf9f7c953fb4bf8e5\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\appcompat-v7-28.0.0.aar\12cd1e864722fc4cf9f7c953fb4bf8e5\AndroidManifest.xml:20:5-44
 MERGED from [com.google.firebase:firebase-core:16.0.8] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-core-16.0.8.aar\9f01c352aa7ecb018194db013931eace\AndroidManifest.xml:5:5-44
 MERGED from [com.google.firebase:firebase-core:16.0.8] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-core-16.0.8.aar\9f01c352aa7ecb018194db013931eace\AndroidManifest.xml:5:5-44
 MERGED from [com.google.firebase:firebase-auth:16.1.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-auth-16.1.0.aar\2f727fa7a0cc680e546765d841ce3b3c\AndroidManifest.xml:21:5-44
 MERGED from [com.google.firebase:firebase-auth:16.1.0] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-auth-16.1.0.aar\2f727fa7a0cc680e546765d841ce3b3c\AndroidManifest.xml:21:5-44
+MERGED from [net.time4j:time4j-android:4.2-2018i] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\time4j-android-4.2-2018i.aar\8d73440478a148b261106265957b0427\AndroidManifest.xml:7:5-9:41
+MERGED from [net.time4j:time4j-android:4.2-2018i] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\time4j-android-4.2-2018i.aar\8d73440478a148b261106265957b0427\AndroidManifest.xml:7:5-9:41
 MERGED from [com.google.android.gms:play-services-flags:16.0.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\play-services-flags-16.0.1.aar\bfa140c13b7cc1eeae0c833b9311c5b7\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-flags:16.0.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\play-services-flags-16.0.1.aar\bfa140c13b7cc1eeae0c833b9311c5b7\AndroidManifest.xml:20:5-44
 MERGED from [com.google.firebase:firebase-auth-interop:16.0.1] C:\Users\Minh\.gradle\caches\transforms-1\files-1.1\firebase-auth-interop-16.0.1.aar\6d7cf63b5f55ebafcc564db50b07633b\AndroidManifest.xml:5:5-44

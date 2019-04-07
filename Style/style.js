@@ -3,6 +3,15 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 // This is style for splash screen
+export const flexStyle = StyleSheet.create({
+    wrapper:
+    {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    }
+});
+
 export const splashStyle = StyleSheet.create({
   wrapper: {
     flex: 10,
@@ -657,19 +666,28 @@ export const componentWithTitle = StyleSheet.create({
 
 
 export const bookingStyle = StyleSheet.create({
+  container:
+  {
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+  },
   wrapper:
   {
         width: "85%",
         height: "70%",
-        flex: 1,
-        justifyContent: "center",
+        display: "flex",
+        justifyContent: "flex-start",
         alignItems: "center",
         shadowOffset: { width: 10, height: 10 },
         shadowColor: 'black',
         shadowOpacity: 0.3,
         elevation: 3,
         backgroundColor: "white",
-        padding: 8
+        padding: 10,
+        borderRadius: 10,
 
   },
   image:
@@ -677,34 +695,91 @@ export const bookingStyle = StyleSheet.create({
           width: 100,
           height: 100,
           borderRadius: 50,
+          marginLeft: 10
   },
   name:
   {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          width: "100%"
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          backgroundColor: "#F2FDE0",
+          borderRadius: 50,
+          marginTop: 20
   },
   count:
   {
+        marginVertical: 5,
+        marginHorizontal: 4,
+        width: "100%"
 
   },
   address:
   {
-
+      marginVertical: 5,
+      marginHorizontal: 4,
+      width: "100%"
   },
   confirm:
   {
         borderTopWidth: 1,
         borderTopColor: "rgba(0, 0, 0, 0.2)",
-        marginVertical: 5
+        marginTop: 10,
+        width: "100%",
+        display: "flex",
+        justifyContent: 'space-around',
+        alignItems: "center",
+        flexDirection: "row",
+        paddingVertical: 10
   },
   adjustCount:
   {
-
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          width: "60%",
+          borderColor: "rgba(0, 0, 0, 0.2)",
+          borderWidth: 1,
+          borderRadius: 5,
+          marginLeft: "20%"
   },
   text:
   {
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: "bold",
+    padding: 5,
+    paddingVertical: 10,
+    textAlign: 'left',
+    width: "100%"
+  },
+  time:
+  {
+      marginVertical: 5,
+      marginHorizontal: 4,
+      width: "100%"
+  },
+  TouchableOpacity:
+  {
+    width: "30%",
+    display: "flex",
+    justifyContent: "center"
+  },
+
+  counting:
+  {
+     width: "40%",
+     fontSize: 18,
+     fontWeight: "bold",
+     paddingVertical: 5,
+     paddingHorizontal: 15,
+     borderLeftWidth: 1,
+     borderRightWidth: 1,
+     borderColor: "rgba(0, 0, 0, 0.2)",
+     textAlign: "center"
   }
 });
