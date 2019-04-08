@@ -476,3 +476,65 @@ export const listViewMenuItemStyle = StyleSheet.create({
     paddingTop: 10
   }
 });
+export const modalViewInfoStyle = StyleSheet.create({
+    item:
+    {
+          height: 500,
+          width: 400,
+          margin: 5,
+          paddingBottom: 10,
+          backgroundColor: "white",
+          //borderWidth: 1,
+          //borderColor: "rgba(0, 0, 0, 0.2)",
+          //borderRadius: 4
+    },
+    wrapper:
+    {
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    image:
+    {
+        width: "80%",
+        height: "60%",
+        borderRadius: 3
+    },
+    text:
+    {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: 16,
+        paddingVertical: 10
+    },
+    rateWrapper:
+    {
+      backgroundColor: "#227100",
+      borderRadius: 40,
+      display: "flex",
+      flexDirection: "row",
+      width: "30%",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 3
+    },
+    wrapperRateAndPrice:
+    {
+      display: "flex",
+      flexDirection: "column",
+      width: "100%",
+      height: "10%",
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    priceWrapper:
+    {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "row",
+      width: "60%",
+    }
+});

@@ -1,27 +1,28 @@
 import React, { Component } from "react";
-import { Text, View, Image, SectionList,Button,Alert } from "react-native";
+import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight } from "react-native";
 import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
-import { listViewMenuItemStyle } from "../Style/style.js";
+import { listViewMenuItemStyle, modalViewInfoStyle } from "../Style/style.js";
+import ModalViewInfo from "./ModalViewInfo.js"
 
 class ListViewMenuItem extends Component
 {
     constructor(props)
     {
       super(props);
-      this.PressProperty = this.PressProperty.bind(this);
+      this._onPressProperty = this._onPressProperty.bind(this);
     }
-    PressProperty(){
+    _onPressProperty(){
       key ='';
       Alert.alert(
-        "Hello"+ this.props.title,
-        'My Alert Msg',
+        this.props.title,
+        'Select one',
         [
           {text: 'Delete', onPress: () => {key = 'Delete';}},
           {
             text: 'View Information',
-            onPress: () => {key = 'View Information'},
+            onPress: () => <ModalViewInfo imgURL= {this.props.imgURL} title ={this.props.title} rate = {this.props.rate} price = {this.props.price}/>,
             style: 'cancel',
           },
           {text: 'Edit', onPress: () => {key = 'Edit'}},
@@ -32,6 +33,7 @@ class ListViewMenuItem extends Component
     render()
     {
       const { imgURL, title = "", rate = 0, price } = this.props;
+      key ="";
       return (
             <View style={ listViewMenuItemStyle.item }>
                   <Image
@@ -53,7 +55,7 @@ class ListViewMenuItem extends Component
                     </View>
                   </View>
                   <View style = {listViewMenuItemStyle.button}>
-                    <Icon type = "font-awesome" name ="ellipsis-v" color="#227100" size ={35} onPress= {this.PressProperty}/>
+                    <Icon type = "font-awesome" name ="ellipsis-v" color="#227100" size ={35} onPress= {this._onPressProperty}/>
                   </View>
             </View>
       );
