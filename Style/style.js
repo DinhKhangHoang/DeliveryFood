@@ -407,3 +407,72 @@ export const componentWithTitle = StyleSheet.create({
 
       }
 });
+export const listViewMenuItemStyle = StyleSheet.create({
+  item:
+  {
+      flexDirection:"row",
+      height: 100,
+      width: "100%",
+      margin: 5,
+      backgroundColor: "white",
+      borderWidth: 1,
+      borderColor: "rgba(0, 0, 0, 0.2)",
+      borderRadius: 4
+  },
+  image:
+  {
+      width: 100,
+      height: "100%",
+      borderRadius: 3
+  },
+  wrapper:
+  {
+      display: "flex",
+      flexDirection: "row",
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center"
+  },
+  text:
+  {
+      textAlign: "left",
+      fontWeight: "bold",
+      fontSize: 16,
+      paddingBottom: 20,
+      paddingTop: 10,
+      paddingLeft: 10
+  },
+  wrapperRateAndPrice:
+  {
+    display: "flex",
+    flexDirection: "row",
+    width: "50%",
+    height: "10%",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  priceWrapper:
+  {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "60%",
+  },
+  rateWrapper:
+  {
+    backgroundColor: "#227100",
+    borderRadius: 40,
+    display: "flex",
+    flexDirection: "row",
+    width: "30%",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 3
+  },
+  button:
+  {
+    marginRight: 20,
+    paddingTop: 10
+  }
+});
