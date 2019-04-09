@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight } from "react-native";
+import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal } from "react-native";
 import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
 import { listViewMenuItemStyle, modalViewInfoStyle } from "../Style/style.js";
-import ModalViewInfo from "./ModalViewInfo.js"
 
 class ListViewMenuItem extends Component
 {
@@ -12,6 +11,8 @@ class ListViewMenuItem extends Component
     {
       super(props);
       this._onPressProperty = this._onPressProperty.bind(this);
+      //this.renderModalViewinfo = this.renderModalViewInfo.bind(this);
+      this.state = {ViewInfovisible : false};
     }
     _onPressProperty(){
       key ='';
@@ -22,8 +23,7 @@ class ListViewMenuItem extends Component
           {text: 'Delete', onPress: () => {key = 'Delete';}},
           {
             text: 'View Information',
-            onPress: () => <ModalViewInfo imgURL= {this.props.imgURL} title ={this.props.title} rate = {this.props.rate} price = {this.props.price}/>,
-            style: 'cancel',
+            onPress: ()=>{this.setState({ViewInfovisible : true})} ,
           },
           {text: 'Edit', onPress: () => {key = 'Edit'}},
         ],
@@ -33,8 +33,8 @@ class ListViewMenuItem extends Component
     render()
     {
       const { imgURL, title = "", rate = 0, price } = this.props;
-      key ="";
       return (
+        <View>
             <View style={ listViewMenuItemStyle.item }>
                   <Image
                       source={ imgURL }
@@ -58,6 +58,40 @@ class ListViewMenuItem extends Component
                     <Icon type = "font-awesome" name ="ellipsis-v" color="#227100" size ={35} onPress= {this._onPressProperty}/>
                   </View>
             </View>
+
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.ViewInfovisible}
+              onRequestClose={() => {
+                this.setState({ViewInfovisible: false});
+              }}>
+              <View style={ modalViewInfoStyle.item }>
+                  <Image
+                      source={ imgURL }
+                      style={ modalViewInfoStyle.image }
+                      resizeMode='cover'
+                  />
+                  <Text style={ modalViewInfoStyle.text }>{ title }</Text>
+                  <View style={ modalViewInfoStyle.wrapperRateAndPrice }>
+                      <View style={ modalViewInfoStyle.rateWrapper }>
+                          <Icon name="star" type="antdesign" color="white" size={15} />
+                          <Text style={{color: "white", fontSize: 10, marginLeft: 5}}>{ rate }</Text>
+                      </View>
+                      <View style={ modalViewInfoStyle.priceWrapper }>
+                          <Icon type="font-awesome" name="dollar" color="#227100" size={15} />
+                          <Text style={{fontSize: 15, color: "#227100", marginLeft: 5, fontWeight: "bold"}}>{ price }</Text>
+                      </View>
+                  </View>
+              </View>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setState({ViewInfovisible: false});
+                }}>
+                <Text>Hide Modal</Text>
+              </TouchableHighlight>
+            </Modal>
+        </View>
       );
     }
 }
