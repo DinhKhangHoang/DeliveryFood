@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal } from "react-native";
+import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput } from "react-native";
 import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
-import { listViewMenuItemStyle, modalViewInfoStyle } from "../Style/style.js";
+import { listViewMenuItemStyle, modalViewInfoStyle, modalEditInfoStyle } from "../Style/style.js";
 
 class ListViewMenuItem extends Component
 {
@@ -12,22 +12,25 @@ class ListViewMenuItem extends Component
       super(props);
       this._onPressProperty = this._onPressProperty.bind(this);
       //this.renderModalViewinfo = this.renderModalViewInfo.bind(this);
-      this.state = {ViewInfovisible : false};
+      this.state = {ViewInfovisible : false,
+                    EditInfovisible : false,
+                    inputtitle : this.props.title,
+                    inputprice : this.props.price,
+      };
     }
     _onPressProperty(){
-      key ='';
       Alert.alert(
         this.props.title,
         'Select one',
         [
-          {text: 'Delete', onPress: () => {key = 'Delete';}},
+          {text: 'Delete', onPress: () => {}},
           {
             text: 'View Information',
             onPress: ()=>{this.setState({ViewInfovisible : true})} ,
           },
-          {text: 'Edit', onPress: () => {key = 'Edit'}},
+          {text: 'Edit', onPress: () => {this.setState({EditInfovisible: true})}},
         ],
-        {cancelable: false},
+        {cancelable: true},
       );
     }
     render()
@@ -58,7 +61,6 @@ class ListViewMenuItem extends Component
                     <Icon type = "font-awesome" name ="ellipsis-v" color="#227100" size ={35} onPress= {this._onPressProperty}/>
                   </View>
             </View>
-
             <Modal
               animationType="slide"
               transparent={false}
@@ -87,6 +89,41 @@ class ListViewMenuItem extends Component
               <TouchableHighlight
                 onPress={() => {
                   this.setState({ViewInfovisible: false});
+                }}>
+                <Text>Hide Modal</Text>
+              </TouchableHighlight>
+            </Modal>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.EditInfovisible}
+              onRequestClose={() => {
+                this.setState({EditInfovisible: false});
+              }}>
+              <View style={ modalEditInfoStyle.item }>
+                  <Image
+                      source={ imgURL }
+                      style={ modalEditInfoStyle.image }
+                      resizeMode='cover'
+                  />
+                  <View style = {modalEditInfoStyle.wrappername}>
+                    <Text style={ modalEditInfoStyle.textname }>Name :</Text>
+                    <TextInput style = {modalEditInfoStyle.inputname}
+                                onChangeText = {(text) => {this.setState({inputtitle : text});}}
+                                value = {this.state.inputtitle}
+                    />
+                  </View>
+                  <View style = {modalEditInfoStyle.wrappername}>
+                    <Text style={ modalEditInfoStyle.textname }>Price :</Text>
+                    <TextInput style = {modalEditInfoStyle.inputname}
+                                onChangeText = {(text) => {this.setState({inputprice : text});}}
+                                value = {this.state.inputprice}
+                    />
+                  </View>
+              </View>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setState({EditInfovisible: false});
                 }}>
                 <Text>Hide Modal</Text>
               </TouchableHighlight>

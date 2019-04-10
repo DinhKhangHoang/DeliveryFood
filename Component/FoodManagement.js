@@ -20,6 +20,7 @@ export default class FManagement extends Component
                             name ="plus"
                             color="white"
                             size ={30}
+                            underlayColor="transparent"
                           />
                         </View>
                       ),

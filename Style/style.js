@@ -479,11 +479,10 @@ export const listViewMenuItemStyle = StyleSheet.create({
 export const modalViewInfoStyle = StyleSheet.create({
     item:
     {
-          height: 500,
-          width: 400,
-          margin: 5,
+          height: 400,
           paddingBottom: 10,
           backgroundColor: "white",
+          flexDirection : "column"
           //borderWidth: 1,
           //borderColor: "rgba(0, 0, 0, 0.2)",
           //borderRadius: 4
@@ -498,7 +497,7 @@ export const modalViewInfoStyle = StyleSheet.create({
     },
     image:
     {
-        width: "80%",
+        width: "100%",
         height: "60%",
         borderRadius: 3
     },
@@ -537,4 +536,41 @@ export const modalViewInfoStyle = StyleSheet.create({
       flexDirection: "row",
       width: "60%",
     }
+});
+export const modalEditInfoStyle = StyleSheet.create({
+    item:
+    {
+          height: 400,
+          paddingBottom: 10,
+          backgroundColor: "white",
+          flexDirection : "column"
+          //borderWidth: 1,
+          //borderColor: "rgba(0, 0, 0, 0.2)",
+          //borderRadius: 4
+    },
+    image:
+    {
+        width: "100%",
+        height: "60%",
+        borderRadius: 3
+    },
+    wrappername:
+    {
+        flexDirection:"row",
+        paddingVertical: 10,
+    },
+    textname:
+    {
+        paddingLeft: 20,
+        fontWeight: "bold",
+        fontSize: 16,
+        width: "20%",
+    },
+    inputname:
+    {
+        width: "80%",
+        textAlign: "left",
+        fontSize : 16,
+        justifyContent: "center"
+    },
 });
