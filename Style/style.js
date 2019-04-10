@@ -374,14 +374,40 @@ export const listViewStyle = StyleSheet.create({
 });
 
 
-export const PersonalInfor = StyleSheet.create({
+export const notification = StyleSheet.create({
+    headerTitle:
+    {
+          color: "white",
+          fontSize: 20,
+          fontWeight: "bold"
+    },
+    backWrapper:
+    {
 
+    },
+    back:
+    {
+
+    },
+    drawerTitle:
+    {
+          width: 100,
+          height: 100,
+          fontSize: 80,
+          position: 'absolute',
+          left: "29%",
+          top: 50,
+          zIndex: 9,
+          fontWeight: "bold",
+          color: "white",
+          borderWidth: 4,
+          borderColor: "white",
+          borderRadius: 60,
+          paddingLeft: 20,
+          paddingBottom: 22
+    }
 });
 
-
-export const FoodManagement = StyleSheet.create({
-
-});
 
 
 export const  CartStyle = StyleSheet.create({

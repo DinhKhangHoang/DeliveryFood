@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import { Alert, AppRegistry, Text, View, TextInput, StyleSheet, color, Button } from "react-native";
-import { PersonalInfor, accountStyle } from "../Style/style";
+import { accountStyle } from "../Style/style";
 
 
 export default class ChangeInfor extends Component
 {
   static navigationOptions = {
                     title: 'Personal Information',
-                    headerTitleStyle:  accountStyle.titleStyle
+                    headerTitleStyle:  { ...accountStyle.titleStyle, color: "white" },
+                    headerStyle:{
+                          backgroundColor: "#0078D7",
+                    },
   };
 	_onPressButton() {
 		Alert.alert('Data is saved')
@@ -20,28 +23,30 @@ export default class ChangeInfor extends Component
 			<TextInput style={styles.input}
 				underlineColorAndroid="transparent"
 				placeholder="Nguyen Van A"
-				placeholderTextColor="#00008b"
+				placeholderTextColor="gray"
 				autoCapitalize="none"
-			/>	
+			/>
 			<Text style={styles.textMessage}>Phone Number:</Text>
 			<TextInput style={styles.input}
 				underlineColorAndroid="transparent"
 				placeholder="0123456789"
-				placeholderTextColor="#00008b"
+				placeholderTextColor="gray"
 				autoCapitalize="none"
-			/>	
+			/>
 			<Text style={styles.textMessage}>Address:</Text>
 			<TextInput style={styles.input}
 				underlineColorAndroid="transparent"
 				placeholder="Linh Trung,Thu Duc"
-				placeholderTextColor="#00008b"
+				placeholderTextColor="gray"
 				autoCapitalize="none"
-			/>	
-			<Button
+			/>
+      <View style={{width: "100%", marginTop: 20}}>
+      <Button
 				title="Save"
-				color="green"
+				color="#0078D7"
 				onPress={this._onPressButton}
 			/>
+      </View>
 		</View>
     );
   }
@@ -49,20 +54,27 @@ export default class ChangeInfor extends Component
 
 const styles = StyleSheet.create({
 	container: {
-		flexDirection: 'column',
-		justifyContent: 'flex-start',
-		paddingTop: 30
+    flex: 1,
+		paddingTop: 30,
+    width: "90%",
+    alignItems: "center",
+    marginLeft: "5%"
+
 	},
 	input: {
-		margin: 15,
+		marginVertical: 15,
 		height: 40,
-		borderColor: '#7a42f4',
-		borderWidth: 1
+		borderColor: 'gray',
+		borderWidth: 1,
+    borderRadius: 5,
+    width: "80%"
 	},
 	textMessage: {
 		marginTop: 16,
-		fontSize: 20,
-		color: 'green'
+		fontSize: 16,
+    fontWeight: "bold",
+    paddingLeft: 15,
+		color: '#0078D7',
+    width: "100%"
 	},
 })
-

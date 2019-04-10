@@ -5,6 +5,9 @@ import { StackNavigator } from 'react-navigation';
 import resultsearch from './resultsearch'
 
 class Searchpage extends Component {
+	static navigationOptions = {
+									header: null
+					};
 	render() {
 		return (
 			<View>
