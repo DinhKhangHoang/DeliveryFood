@@ -33,7 +33,6 @@ constructor(props)
 
 
   render() {
-    /*
     if (this.state.isLoaded === false)
     {
       // Load data from database...
@@ -50,10 +49,5 @@ constructor(props)
       return (
             <Main />
     )};
-    */
-
- return (
-          <Booking />
-        );
   }
 }
