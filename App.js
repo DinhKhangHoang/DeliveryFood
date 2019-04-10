@@ -11,6 +11,8 @@ import MySwiper from './Component/Swiper';
 import AccountPage from "./Component/Account";
 import ListView from "./Component/ListView";
 import ComponentWithTitle from "./Component/ComponentWithTitle";
+import DetailFood from "./Component/DetailFood";
+import Booking from "./Component/Booking";
 //---------------------------------------------------------------------
 
 export default class App extends Component {
@@ -31,7 +33,7 @@ constructor(props)
 
 
   render() {
-
+    
     if (this.state.isLoaded === false)
     {
       // Load data from database...
@@ -48,8 +50,8 @@ constructor(props)
       return (
             <Main />
     )};
+ 
 
-
- // return ( <ComponentWithTitle />);
+ 
   }
 }
