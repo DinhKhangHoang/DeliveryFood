@@ -1,3 +1,4 @@
+import React from "react";
 import { StyleSheet, Dimensions } from 'react-native';
 
 
@@ -6,7 +7,7 @@ const { width, height } = Dimensions.get('window');
 export const flexStyle = StyleSheet.create({
     wrapper:
     {
-      flex: 1,
+      display: "flex",
       justifyContent: "center",
       alignItems: "center"
     }
@@ -58,6 +59,7 @@ export const roundButtonStyle = StyleSheet.create(
       general: {
           display: 'flex',
           padding: 5,
+          justifyContent: 'center'
       },
       text:
       {
@@ -125,7 +127,7 @@ export const loginStyle = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: "absolute",
-    height: height - 20,
+    height: height - 30,
     width
   },
   text:
@@ -138,13 +140,13 @@ export const loginStyle = StyleSheet.create({
   },
   title:
   {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#014D40",
-    fontSize: 40,
-    fontWeight: "bold",
-    marginTop: 50,
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      color: "#014D40",
+      fontSize: 40,
+      fontWeight: "bold",
+      marginTop: 30,
   },
   scrollView:
   {
@@ -459,6 +461,16 @@ export const detailFood = StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: "center",
       flexDirection: "row"
+    },
+    button:
+    {
+      top: 10,
+      left: 15,
+      backgroundColor: "rgba(255, 255, 255, 0.2)",
+      padding: 10,
+      width: 50,
+      height: 50,
+      borderRadius: 40
     }
 });
 
@@ -677,7 +689,7 @@ export const bookingStyle = StyleSheet.create({
   wrapper:
   {
         width: "85%",
-        height: "70%",
+        height: "80%",
         display: "flex",
         justifyContent: "flex-start",
         alignItems: "center",
@@ -746,7 +758,7 @@ export const bookingStyle = StyleSheet.create({
           borderColor: "rgba(0, 0, 0, 0.2)",
           borderWidth: 1,
           borderRadius: 5,
-          marginLeft: "20%"
+          marginLeft: "20%",
   },
   text:
   {
@@ -772,14 +784,136 @@ export const bookingStyle = StyleSheet.create({
 
   counting:
   {
-     width: "40%",
-     fontSize: 18,
+     fontSize: 15,
      fontWeight: "bold",
-     paddingVertical: 5,
+     paddingVertical: 8,
      paddingHorizontal: 15,
      borderLeftWidth: 1,
      borderRightWidth: 1,
      borderColor: "rgba(0, 0, 0, 0.2)",
      textAlign: "center"
+  },
+  modal:
+  {
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center"
+  },
+  modalCounting:
+  {
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center"
+  }
+});
+
+
+export const bookTableStyle = StyleSheet.create({
+  wrapper:
+  {
+        width: "80%",
+        backgroundColor: "white",
+        shadowOffset: { width: 10, height: 10 },
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        elevation: 3,
+        display: "flex",
+        alignItems: "center"
+  },
+  container:
+  {
+    width,
+    height,
+    flex: 1
+  },
+  title:
+  {
+    fontSize: 20,
+    textAlign: "center",
+    padding: 10,
+    fontWeight: "bold",
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(0, 0, 0, 0.2)",
+    width: "90%",
+
+  },
+  titleWrapper:
+  {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  text:
+  {
+    fontSize: 14,
+    fontWeight: "bold",
+    padding: 5,
+    marginVertical: 5
+  },
+  price:
+  {
+    textAlign: "center",
+    width: "100%",
+    fontSize: 18,
+    color: "#911111",
+    fontWeight: "bold"
+  },
+  picker:
+  {
+    width: "100%",
+    height: 20,
+    color: "gray"
+  }
+});
+
+export const resInforStyle = StyleSheet.create({
+  wrapper:
+  {
+    flex: 1,
+    alignItems: 'center'
+  },
+  wrapperText:
+  {
+    ...flexStyle.wrapper,
+    flexDirection: "row",
+    width: "90%",
+    borderBottomWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.2)",
+    padding: 5
+  },
+  icon:
+  {
+    width: "15%"
+  },
+  text:
+  {
+    width: "85%",
+    textAlign: 'right',
+    fontWeight: "bold",
+    fontSize: 16,
+    padding: 10
+  },
+  infor:
+  {
+    display: "flex",
+    alignItems: 'center'
+  },
+  map:
+  {
+    width: "100%",
+    height: "52%"
+  },
+  button:
+  {
+    borderWidth: 1,
+    borderColor: "#1F9F5F",
+    marginTop: -1,
+    width: width,
+    height: 65
   }
 });

@@ -8,10 +8,29 @@ import { swiperStyle } from "../Style/style.js";
 // Define item in swiper
 class SwiperItem extends Component
 {
+  constructor(props)
+  {
+        super(props);
+        this.state = { disabled: false };
+        this.handleOnPress = this.handleOnPress.bind(this);
+  }
+
+  handleOnPress()
+  {
+    setTimeout( ()=>this.setState( { disabled:false } ), 1000);
+    this.props.handleOnPress();
+    this.setState( { disabled: true } );
+  }
+
+
   render()
   {
     return(
-      <TouchableOpacity style={this.props.containerStyle} activeOpacity={0.8}>
+      <TouchableOpacity
+              style={this.props.containerStyle}
+              activeOpacity={0.8}
+              onPress={ (!this.state.disabled && this.handleOnPress) }
+      >
           <Image resizeMode='cover' source={this.props.imageURL}  style={this.props.imageStyle}  />
           <Text style={swiperStyle.textOnSwiper}>{this.props.text}</Text>
       </TouchableOpacity>
@@ -35,9 +54,9 @@ export default class MySwiper extends Component
     super(props);
     this.state = {
       data: [
-      { image: require("../Media/swiper/1.jpg"), text: "One Food Over A Day" },
-      { image: require("../Media/swiper/2.jpg"), text: "Two" },
-      { image: require("../Media/swiper/3.jpg"), text: "Three" }
+      { key: require("../Media/swiper/1.jpg"), title: "One Food Over A Day", price: 10000, rate: 4.2},
+      { key: require("../Media/swiper/2.jpg"), title: "Two", price: 12000, rate: 3.6},
+      { key: require("../Media/swiper/3.jpg"), title: "Three", price: 22000, rate: 4.6 }
      ]
     };
 
@@ -47,10 +66,11 @@ export default class MySwiper extends Component
   {
     return (
       <SwiperItem
-            imageURL={item.image}
-            text={item.text}
+            imageURL={item.key}
+            text={item.title}
             containerStyle={ swiperStyle.swiperItem }
             imageStyle={ swiperStyle.imageOnSwiper }
+            handleOnPress={ ()=>this.props.navigation.push( this.props.routename, { data: item } ) }
        />
      );
 }

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 export default class RoundButton extends Component
 {
     render() {
-      const { textStyle, textColor = "black", text, background = "#1F9F5F", round = 20, underlayColor = "transparent", boxStyle } = this.props;
+      const { textStyle, textColor = "black", text, background = "#1F9F5F", round = 20, underlayColor = "transparent", boxStyle, style } = this.props;
       return(
           <TouchableHighlight
               underlayColor={underlayColor}
@@ -25,7 +25,7 @@ RoundButton.propTypes = {
   text: PropTypes.string.isRequired,
   background: PropTypes.string,
   round: PropTypes.number,
-  handleOnPress: PropTypes.func.isRequired,
+  //handleOnPress: PropTypes.func.isRequired,
   boxStyle: PropTypes.object,
   underlayColor: PropTypes.string
 };

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Text, View, Image, ScrollView } from "react-native";
+import { Text, View, Image, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { Rating, Avatar, AirbnbRating, Icon, Input  } from "react-native-elements";
 import ComponentWithTitle from "./ComponentWithTitle";
 import RoundButton from "./roundButton";
 import Anchor from "./anchor";
 import ListView from "./ListView";
-import { detailFood, commentStyle, listViewStyle, resInfor } from "../Style/style";
+import { detailFood, commentStyle, listViewStyle, resInfor, accountStyle } from "../Style/style";
+
 
 
 class Comment extends Component
@@ -19,7 +20,7 @@ class Comment extends Component
 
   like()
   {
-    this.setState({ ...this.state, liked: true})
+    this.setState({ ...this.state, liked: !this.state.liked})
     /* Cap nhat danh sach ng like */
   }
 
@@ -52,8 +53,6 @@ class Comment extends Component
                                   name="like1"
                                   type="antdesign"
                                   color={ (this.state.liked ? "#2089DC" : "gray" )}  /* change color when liked */
-                                  disabled={this.state.liked}
-                                  disabledStyle={{backgroundColor: "transparent"}}
                                   onPress = { this.like }
                             />
                             <Icon
@@ -109,24 +108,45 @@ class CommentInput extends Component
 
 export default class DetailFood extends Component
 {
+  static navigationOptions = ({ navigation }) => ({
+      title: navigation.state.params.data.title,
+      headerTitleStyle: accountStyle.titleStyle
+    });
 
+
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+      like: false   // Lay du lieu tu db
+     }
+     this.like = this.like.bind(this);
+  }
+
+  like() { this.setState({...this.state, like: !this.state.like}); }
   render()
   {
+    if ( Platform.OS === 'android' ) {
+            require('intl');
+            require('intl/locale-data/jsonp/en');
+    }
+
+    const data = this.props.navigation.getParam("data");
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ width: "100%", height: "100%" }}>
           <View style={detailFood.foodInfor} >
               <Image
-                  source={ require("../Media/listView/2.jpg") }   /*  This must be data from main-screen */
+                  source={ data.key }   /*  This must be data from main-screen */
                   style={ detailFood.image }
               />
               <View style={ detailFood.titleAndPrice }>
-                      <Text style={detailFood.title}>This is the title of food</Text>
+                      <Text style={detailFood.title}>{ data.title }</Text>
                       <View style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", borderBottomWidth: 1, borderBottomColor: "rgba(0, 0, 0, 0.2)", width: "100%", padding: 5, marginBottom: 5}}>
-                            <Text style={detailFood.price}>55.000đ</Text>
+                            <Text style={detailFood.price}> { new Intl.NumberFormat('en').format(data.price)  + " đ"} </Text>
                             <View style={{width: "20%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", borderRadius: 40, backgroundColor: "#227100", padding: 5, marginRight: 20, paddingHorizontal: 10}}>
                                     <Icon name="star" type="antdesign" color="white" size={15} />
-                                    <Text style={{color: "white", fontSize: 14, marginLeft: 10}}>{ 4.3 }</Text>
+                                    <Text style={{color: "white", fontSize: 14, marginLeft: 10}}>{ data.rate }</Text>
                             </View>
                             <RoundButton
                                   text="ORDER"
@@ -136,7 +156,7 @@ export default class DetailFood extends Component
                                   round={5}
                                   underlayColor="#227110"
                                   textStyle={{fontSize: 16, paddingVertical: 0, paddingHorizontal: 5}}
-                                  handleOnPress={ ()=>{} }
+                                  handleOnPress={ ()=>{ this.props.navigation.push("Order", {data: data} ); } }
                             />
                       </View>
               </View>
@@ -160,15 +180,15 @@ export default class DetailFood extends Component
                 data={
                   <View style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row",  padding: 5}}>
                     <RoundButton
-                          text="Like"   /*   Like or Liked  */
+                          text= { (this.state.like ? "Liked" : "Like" ) }  /*   Like or Liked  */
                           background="transparent"
                           /*  background-color must depend on whether like or haven't yet  */
-                          textColor="gray"
+                          textColor={ (this.state.like ? "#0078D7" : "gray" ) }
                           round={5}
                           /*   icon must depend on whether like or haven't yet    */
-                          boxStyle={{borderColor: "gray", borderWidth: 1, width: "30%", marginRight: "15%", marginLeft: -20}}
-                          handleOnPress={ ()=>{} }
-                          /* Function handler when like food */
+                          boxStyle={{borderColor: (this.state.like ? "#0078D7" : "gray" ), borderWidth: 1, width: "30%", marginRight: "15%", marginLeft: -20}}
+                          handleOnPress={ this.like }
+                          /* Function handler when like food -- update db */
                      />
                     <AirbnbRating
                           style={{width: "65%", fontSize: 16}}
@@ -216,7 +236,7 @@ export default class DetailFood extends Component
                               textStyle={{fontSize: 14, padding: 5}}
                               round={40}
                               boxStyle={{ borderWidth: 1, borderColor: "#227100", width: "33%"}}
-                              handleOnPress={ ()=>{} }
+                              handleOnPress={ ()=>{ this.props.navigation.push("Infor"); } }
                               underlayColor="#F2FDE0"
                         />
                   </View>
@@ -267,6 +287,8 @@ export default class DetailFood extends Component
         <ListView
               title="Similar Foods"
               containerStyle={{ shadowColor: 'black', shadowOpacity: 0.3, elevation: 3,}}
+              navigation = { this.props.navigation }
+              routename={ "Detail" }
         />
 
         </View>

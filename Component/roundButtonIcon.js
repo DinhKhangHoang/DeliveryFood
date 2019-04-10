@@ -23,7 +23,8 @@ export default class RoundButtonIcon extends Component
                       roundButtonStyle.general,
                     { borderRadius: round,
                       backgroundColor: background}]}
-              onPress = { this.props.handleOnPress } >
+              onPress = { this.props.handleOnPress }
+              activeOpacity={ this.props.activeOpacity} >
                <View style={roundButtonIconStyle.general}>
                   <Text style={[roundButtonStyle.text, roundButtonIconStyle.text, {color: textColor}]}>{ text }</Text>
                   <Icon {...iconStyle} size={size} iconStyle={roundButtonIconStyle.icon}/>
@@ -39,6 +40,6 @@ RoundButtonIcon.propTypes = {
   text: PropTypes.string.isRequired,
   background: PropTypes.string,
   round: PropTypes.number,
-  handleOnPress: PropTypes.func.isRequired,
+  //handleOnPress: PropTypes.func.isRequired,
   iconStyle: PropTypes.object.isRequired,
 };
