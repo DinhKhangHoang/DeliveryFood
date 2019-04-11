@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Text, View, Image, FlatList, Modal, TextInput, TouchableHighlight, Alert } from "react-native";
 import { Icon } from "react-native-elements";
 import ListViewMenu from "./ListViewMenu";
-import { accountStyle } from "../Style/style";
 import { FoodManagement, accountStyle, modalAddFoodStyle} from "../Style/style";
 
 export default class FManagement extends Component
