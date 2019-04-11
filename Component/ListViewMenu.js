@@ -86,12 +86,6 @@ class ListViewMenuItem extends Component
                       </View>
                   </View>
               </View>
-              <TouchableHighlight
-                onPress={() => {
-                  this.setState({ViewInfovisible: false});
-                }}>
-                <Text>Hide Modal</Text>
-              </TouchableHighlight>
             </Modal>
             <Modal
               animationType="slide"
@@ -111,6 +105,7 @@ class ListViewMenuItem extends Component
                     <TextInput style = {modalEditInfoStyle.inputname}
                                 onChangeText = {(text) => {this.setState({inputtitle : text});}}
                                 value = {this.state.inputtitle}
+                                underlineColorAndroid = {"light-gray"}
                     />
                   </View>
                   <View style = {modalEditInfoStyle.wrappername}>
@@ -118,15 +113,20 @@ class ListViewMenuItem extends Component
                     <TextInput style = {modalEditInfoStyle.inputname}
                                 onChangeText = {(text) => {this.setState({inputprice : text});}}
                                 value = {this.state.inputprice}
+                                underlineColorAndroid = {"light-gray"}
                     />
                   </View>
               </View>
-              <TouchableHighlight
-                onPress={() => {
-                  this.setState({EditInfovisible: false});
-                }}>
-                <Text>Hide Modal</Text>
-              </TouchableHighlight>
+              <View style = {{justifyContent: 'center', flexDirection: 'row', flex:1}}>
+                <TouchableHighlight
+                  onPress={() => {
+                    this.setState({EditInfovisible: false});
+                  }}>
+                  <View style = {modalEditInfoStyle.apply}>
+                    <Text style = {{fontSize:24, fontWeight:"bold"}}>Apply</Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
             </Modal>
         </View>
       );
