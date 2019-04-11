@@ -1,4 +1,0 @@
-#Tue Apr 09 14:45:34 ICT 2019
-base.0=D\:\\SOFTWARE ENGINEERING\\DeliveryFood\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
-path.0=classes.dex
-renamed.0=classes.dex
