@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, SafeAreaView, ScrollView, Image } from "react-native";
 import { Header, Icon } from "react-native-elements";
-import { notification } from "../Style/style";
+import { notification, flexStyle } from "../Style/style";
 import { createAppContainer, createDrawerNavigator, DrawerItems } from "react-navigation";
 
 
@@ -35,7 +35,11 @@ class Discount extends Component
                         centerComponent={{ text: 'DISCOUNT', style: notification.headerTitle }}
                         backgroundColor="#0078D7"
                   />
-                  <Text>1</Text>
+                  <View   style={ flexStyle.wrapper }>
+                          <Text style={{textAlign: "center"}}>
+                                  This is the information about discount
+                          </Text>
+                  </View>
             </View>
            );
     }
@@ -128,9 +132,6 @@ const customDrawer = (props) => (
                          />
                         <DrawerItems {...props}  />
                 </ScrollView>
-                <View style={ notification.backWrapper }>
-                      <Text style={ notification.back }>Back</Text>
-                </View>
         </SafeAreaView>
 );
 

@@ -933,7 +933,13 @@ export const resInforStyle = StyleSheet.create({
   map:
   {
     width: "100%",
-    height: "52%"
+    height: "52%",
+
+    //--------------------
+      backgroundColor: "rgba(0, 0, 0, 0.2)",
+      
+
+    //--------------------
   },
   button:
   {
