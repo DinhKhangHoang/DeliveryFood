@@ -1070,6 +1070,7 @@ export const modalEditInfoStyle = StyleSheet.create({
     {
         flexDirection:"row",
         paddingVertical: 10,
+        height: 50
     },
     textname:
     {
@@ -1077,12 +1078,71 @@ export const modalEditInfoStyle = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 16,
         width: "20%",
+        height : 50
     },
     inputname:
     {
         width: "80%",
         textAlign: "left",
         fontSize : 16,
-        justifyContent: "center"
+        height: 40
     },
+    apply:
+    {
+        marginBottom: 30,
+         alignItems: 'center',
+         backgroundColor: '#2196F3',
+         marginHorizontal: 100,
+         height: 50,
+         justifyContent: 'center'
+    }
+});
+export const modalAddFoodStyle = StyleSheet.create({
+    item:
+    {
+          height: 400,
+          paddingBottom: 10,
+          backgroundColor: "white",
+          flexDirection : "column",
+
+    },
+    image:
+    {
+        paddingTop: 50,
+        margin: 5,
+        height: "60%",
+        borderWidth: 1,
+        borderColor: "rgba(0, 0, 0, 0.2)",
+        borderRadius: 4
+    },
+    wrappername:
+    {
+        flexDirection:"row",
+        paddingVertical: 10,
+        height: 50
+    },
+    textname:
+    {
+        paddingLeft: 20,
+        fontWeight: "bold",
+        fontSize: 16,
+        width: "20%",
+        height : 50
+    },
+    inputname:
+    {
+        width: "80%",
+        textAlign: "left",
+        fontSize : 16,
+        height: 40
+    },
+    apply:
+    {
+        marginBottom: 30,
+         alignItems: 'center',
+         backgroundColor: '#2196F3',
+         height: 50,
+         justifyContent: 'center',
+         width: 100
+    }
 });
