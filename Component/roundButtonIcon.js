@@ -12,7 +12,8 @@ export default class RoundButtonIcon extends Component
         text, background = "#1F9F5F",
         round = 20 ,
         iconStyle,
-        underlayColor = "transparent"
+        underlayColor = "transparent",
+        size = 40
       } = this.props;
       return(
           <TouchableHighlight
@@ -22,10 +23,11 @@ export default class RoundButtonIcon extends Component
                       roundButtonStyle.general,
                     { borderRadius: round,
                       backgroundColor: background}]}
-              onPress = { this.props.handleOnPress } >
+              onPress = { this.props.handleOnPress }
+              activeOpacity={ this.props.activeOpacity} >
                <View style={roundButtonIconStyle.general}>
                   <Text style={[roundButtonStyle.text, roundButtonIconStyle.text, {color: textColor}]}>{ text }</Text>
-                  <Icon {...iconStyle} size={40} iconStyle={roundButtonIconStyle.icon}/>
+                  <Icon {...iconStyle} size={size} iconStyle={roundButtonIconStyle.icon}/>
                </View>
           </TouchableHighlight>
       );
@@ -38,6 +40,6 @@ RoundButtonIcon.propTypes = {
   text: PropTypes.string.isRequired,
   background: PropTypes.string,
   round: PropTypes.number,
-  handleOnPress: PropTypes.func.isRequired,
+  //handleOnPress: PropTypes.func.isRequired,
   iconStyle: PropTypes.object.isRequired,
 };

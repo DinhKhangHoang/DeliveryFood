@@ -6,11 +6,18 @@ import PropTypes from 'prop-types';
 import MySwiper from './Swiper';
 import ListView from "./ListView";
 import Search from "./Search";
+import {createStackNavigator, createAppContainer} from 'react-navigation';
+import DetailFood from "./DetailFood";
+import RestaurantInfor from "./restaurantInfor";
+import Booking from "./Booking.js";
+import BookingTable from "./BookingTable";
+import Cart from "./Cart";
 
 
 // Define Home class
-export default class HomeCustomer extends Component
+class HomeCustomer_Main extends Component
 {
+  static navigationOptions = {  header: null  };
   constructor(props)
   {
     super(props);
@@ -24,7 +31,6 @@ export default class HomeCustomer extends Component
   {
         if (this.state.searchShow === false)  {  this.setState({...this.state, searchShow: true});  }
   }
-
   back()
   {
         this.setState({...this.state, searchShow: false, searchText: ""});
@@ -41,15 +47,50 @@ export default class HomeCustomer extends Component
     if (this.state.searchShow) {  body = <Search />;  }
     else {   body = (
                 <View>
-                      <MySwiper />
-                      <ListView title="Dessert"/>
+                      <MySwiper
+                            navigation={this.props.navigation}
+                            routename="Detail"
+                      />
+                      <ListView
+                              title="Dessert"
+                              navigation={this.props.navigation}
+                              routename="Detail"
+                      />
                 </View> );
          }
     return(
       <View style={{flex: 1}} >
-          <Header show={this.state.searchShow} onFocus={this.isSearch} back={this.back} onTextChange={this.onTextChange} searchText={this.state.searchText}/>
+          <Header
+                  show={this.state.searchShow}
+                  onFocus={this.isSearch} back={this.back}
+                  onTextChange={this.onTextChange}
+                  searchText={this.state.searchText}
+                  navigation={ this.props.navigation }
+           />
           { body }
       </View>
     );
+  }
+}
+
+
+export default class HomeCustomer extends Component
+{
+
+  render()
+  {
+    const Nav = createAppContainer(createStackNavigator({
+      Home: { screen: HomeCustomer_Main },
+      Detail: { screen: DetailFood },
+      Order: { screen: Booking },
+      Infor: { screen: RestaurantInfor },
+      bookTable: { screen: BookingTable },
+      Cart: { screen: Cart }
+    },
+    {
+      initialRouteName: "Home",
+    }
+  ));
+  return (<Nav />);
   }
 }

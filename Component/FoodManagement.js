@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { Text, View, Image, FlatList, Modal, TextInput, TouchableHighlight, Alert } from "react-native";
 import { Icon } from "react-native-elements";
 import ListViewMenu from "./ListViewMenu";
+<<<<<<< HEAD
 import { FoodManagement, accountStyle, modalAddFoodStyle} from "../Style/style";
+=======
+import { accountStyle } from "../Style/style";
+>>>>>>> e1cbe1524d0f8befe375803115ef2f557a6eca70
 
 export default class FManagement extends Component
 {
@@ -16,7 +20,7 @@ export default class FManagement extends Component
     static navigationOptions = ({navigation})=>{
       return{
                       title: 'Food Management',
-                      headerTitleStyle:  accountStyle.titleStyle,
+                      headerTitleStyle: { ...accountStyle.titleStyle, color: "white" },
                       headerStyle:{
                         backgroundColor: "#227100",
                       },

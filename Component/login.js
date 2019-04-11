@@ -68,7 +68,7 @@ export default class Login extends Component
   render()
   {
     return(
-      <View ref = "rootView" style={[ loginStyle.wrapper, (this.state.orientation === "portrait" ? { width: this.state.width, height: this.state.height - 15 } : { width: this.state.height, height: this.state.width, flexDirection: "row"} ) ] }>
+      <View ref = "rootView" style={[ loginStyle.wrapper, (this.state.orientation === "portrait" ? { width: this.state.width, height: this.state.height - 30 } : { width: this.state.height, height: this.state.width, flexDirection: "row"} ) ] }>
         <ImageBackground source={ require("../Media/wallpaper/login.png") } style={{width: "100%", height: "100%", position: 'absolute'}}  imageStyle={{opacity: 0.1 }} >
          <ScrollView  showsVerticalScrollIndicator={false} contentContainerStyle={{width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}} >
             <Text
@@ -78,11 +78,11 @@ export default class Login extends Component
                         color: "#014D40",
                         fontSize: 40,
                         fontWeight: "bold",
-                        marginTop: 50,
+                        marginTop: 30,
                         display: (this.state.orientation === "portrait" ? "flex" : "none") }}>
                       Food Delivery
               </Text>
-            <View style={{width: '90%', flex: 2 }}>
+            <View style={{width: '90%', flex: 3 }}>
               <Input
                   placeholder="Username"
                   autoCapitalize={"none"}
@@ -119,7 +119,7 @@ export default class Login extends Component
                 />
               </View>
 
-              <View  style={{flex: 2, width: "100%"}}>
+              <View  style={{flex: 3, width: "100%"}}>
               <Text
                 style={{fontSize: 16, color: "#014D40", width: "100%", textAlign: "center"}}>
                 Or connect with

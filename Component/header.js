@@ -42,7 +42,7 @@ export default class Header extends Component
                   type="feather"
                   color="white"
                   underlayColor="transparent"
-                  onPress={()=>{}}
+                  onPress={()=>{ this.props.navigation.push("Cart") }}
               />
               { icon }
           </View>

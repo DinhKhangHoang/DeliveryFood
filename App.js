@@ -11,6 +11,10 @@ import MySwiper from './Component/Swiper';
 import AccountPage from "./Component/Account";
 import ListView from "./Component/ListView";
 import ComponentWithTitle from "./Component/ComponentWithTitle";
+import DetailFood from "./Component/DetailFood";
+import Booking from "./Component/Booking";
+import BookingTable from "./Component/BookingTable";
+import RestaurantInfor from "./Component/restaurantInfor";
 //---------------------------------------------------------------------
 
 export default class App extends Component {
@@ -49,7 +53,5 @@ constructor(props)
             <Main />
     )};
 
-
- // return ( <ComponentWithTitle />);
   }
 }

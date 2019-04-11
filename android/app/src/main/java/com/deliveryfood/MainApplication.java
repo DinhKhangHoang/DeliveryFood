@@ -3,6 +3,7 @@ package com.deliveryfood;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.henninghall.date_picker.DatePickerPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new DatePickerPackage(),
             new RNFirebasePackage(),
             new RNFirebaseAuthPackage(),
             new RNGestureHandlerPackage(),
