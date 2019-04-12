@@ -110,7 +110,7 @@ export default class ListView extends Component
                                                 title={item.title}
                                                 rate={item.rate}
                                                 price={item.price}
-                                                handleOnPress={ ()=> this.props.navigation.push(this.props.routename, {data: item}) }
+                                                handleOnPress={ ()=> this.props.navigation. push(this.props.routename, {data: item}) }
                                           />  }
             />
           </View>

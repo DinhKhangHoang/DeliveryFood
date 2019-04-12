@@ -1011,7 +1011,10 @@ export const listViewMenuItemStyle = StyleSheet.create({
   button:
   {
     marginRight: 20,
-    paddingTop: 10
+    paddingTop: 10,
+    width: 40,
+    height: 40,
+    color: 'white'
   }
 });
 export const modalViewInfoStyle = StyleSheet.create({

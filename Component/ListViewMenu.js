@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput } from "react-native";
+import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput,TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
@@ -57,9 +57,11 @@ class ListViewMenuItem extends Component
                         </View>
                     </View>
                   </View>
-                  <View style = {listViewMenuItemStyle.button}>
-                    <Icon type = "font-awesome" name ="ellipsis-v" color="#227100" size ={35} onPress= {this._onPressProperty}/>
-                  </View>
+                  <TouchableOpacity style = {listViewMenuItemStyle.button} onPress = {this._onPressProperty}>
+                    <View style = {{justifyContent: 'center', alignItems: 'center'}}>
+                      <Icon type = "font-awesome" name ="ellipsis-v" color="#227100" size ={35}/>
+                    </View>
+                  </TouchableOpacity>
             </View>
             <Modal
               animationType="slide"
