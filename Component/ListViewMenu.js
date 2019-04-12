@@ -57,8 +57,8 @@ class ListViewMenuItem extends Component
                         </View>
                     </View>
                   </View>
-                  <TouchableOpacity style = {listViewMenuItemStyle.button} onPress = {this._onPressProperty}>
-                    <View style = {{justifyContent: 'center', alignItems: 'center'}}>
+                  <TouchableOpacity style = {listViewMenuItemStyle.button} onPress = {this._onPressProperty} activeOpacity ={0.7}>
+                    <View style = {{flexDirection: "column", flex: 1, justifyContent: 'center'}}>
                       <Icon type = "font-awesome" name ="ellipsis-v" color="#227100" size ={35}/>
                     </View>
                   </TouchableOpacity>
@@ -123,10 +123,9 @@ class ListViewMenuItem extends Component
                 <TouchableHighlight
                   onPress={() => {
                     this.setState({EditInfovisible: false});
-                  }}>
-                  <View style = {modalEditInfoStyle.apply}>
-                    <Text style = {{fontSize:24, fontWeight:"bold"}}>Apply</Text>
-                  </View>
+                  }}
+                  style = {modalEditInfoStyle.apply}>
+                    <Text style = {{fontSize:24, fontWeight:"bold", color: 'white'}}>Apply</Text>
                 </TouchableHighlight>
               </View>
             </Modal>
