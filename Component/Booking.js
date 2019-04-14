@@ -70,6 +70,7 @@ export default class Booking extends Component
   render()
   {
     const data = this.props.navigation.getParam("data");
+    //const data = {key: require("../Media/listView/1.jpg"), title: "Title 1: test for long long long long text", rate: 4.5, price: 12000};
     const price = (this.state.price * this.state.count);
     let interval;
     if ( Platform.OS === 'android' ) {
@@ -84,14 +85,16 @@ export default class Booking extends Component
                       source={ data.key }
                       style={ bookingStyle.image }
                  />
-                 <View style={{display: "flex", justifyContent: "center", alignItems: "center", width: "70%"}}>
+                 <View style={{display: "flex", justifyContent: "center", alignItems: "center", width: "67%", height: "100%"}}>
                         <Text
+                                numberOfLines={2}
                                 style={{
                                           fontSize: 20,
                                           fontWeight: "bold",
                                           textAlign: "left",
                                           color: "#227100",
-                                          width: "80%"
+                                          width: "80%",
+                                          paddingRight: 10
                                      }}>
                                 { data.title }
                         </Text>
@@ -217,22 +220,20 @@ export default class Booking extends Component
                       placeholder="Enter your address here..."
                       inputStyle={{ fontSize: 14, paddingVertical: 0, paddingHorizontal: 10}}
                       inputContainerStyle={{ borderWidth: 1, borderColor: "rgba(0, 0, 0, 0.2)", borderRadius: 5, width: "90%", marginLeft: "5%"}}
-                      multiline
                 />
            </View>
            <View style={ bookingStyle.confirm }>
-                <Text style={{fontSize: 20, fontWeight: "bold", color: "#911111"}}>{   new Intl.NumberFormat('en').format(data.price * this.state.count ) + " đ" }</Text>
+                <Text style={{fontSize: 20, fontWeight: "bold", color: "#911111", width: "50%", textAlign: "center"}}>{   new Intl.NumberFormat('en').format(data.price * this.state.count ) + " đ" }</Text>
                 <RoundButton
                     text="ORDER NOW"
-                    round={10}
+                    round={0}
                     textColor="white"
-                    background="#227100"
-                    boxStyle={{ width: "50%" }}
+                    background="green"
+                    boxStyle={{ width: "50%", height: "100%", borderWidth: 1, borderColor: "green"}}
                     handleOnPress={ ()=>{} }
                     underlayColor="#227100"
                 />
            </View>
-
       </View>
   </View>
     );

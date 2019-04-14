@@ -15,6 +15,8 @@ import DetailFood from "./Component/DetailFood";
 import Booking from "./Component/Booking";
 import BookingTable from "./Component/BookingTable";
 import RestaurantInfor from "./Component/restaurantInfor";
+import GridView from "./Component/GridView";
+import { NotificationItem } from "./Component/Notification";
 //---------------------------------------------------------------------
 
 export default class App extends Component {
@@ -35,7 +37,6 @@ constructor(props)
 
 
   render() {
-
     if (this.state.isLoaded === false)
     {
       // Load data from database...
@@ -52,6 +53,12 @@ constructor(props)
       return (
             <Main />
     )};
-
+/*
+   return (
+       <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+            <NotificationItem  />
+      </View>
+      );
+*/
   }
 }

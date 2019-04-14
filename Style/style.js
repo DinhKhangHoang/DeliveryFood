@@ -125,10 +125,9 @@ export const loginStyle = StyleSheet.create({
     backgroundColor: "transparent",
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    position: "absolute",
-    height: height - 30,
-    width
+    justifyContent: 'space-between',
+    height: "90%",
+    width: "100%"
   },
   text:
   {
@@ -140,13 +139,19 @@ export const loginStyle = StyleSheet.create({
   },
   title:
   {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
       color: "#014D40",
       fontSize: 40,
       fontWeight: "bold",
-      marginTop: 30,
+      width: "100%",
+      textAlign: 'center',
+  },
+  titleWrapper:
+  {
+    width: "100%",
+    height: "20%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: 'center'
   },
   scrollView:
   {
@@ -155,6 +160,15 @@ export const loginStyle = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
+  },
+  buttonWrapper:
+  {
+      width: "100%",
+      height: "39%",
+      display: "flex",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      marginTop: "5%"
   }
 });
 
@@ -163,12 +177,17 @@ export const registerStyle = StyleSheet.create({
   wrapper:
   {
       backgroundColor: "transparent",
-      display: "flex",
+      flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      position: "absolute",
-      height,
-      width
+      height: '90%',
+      width: "100%"
+  },
+  titleWrapper:
+  {
+      width: "100%",
+      height: "20%",
+      ...flexStyle.wrapper,
   },
   text:
   {
@@ -177,15 +196,15 @@ export const registerStyle = StyleSheet.create({
       textAlign: "center",
       width: "100%",
       justifyContent: "center",
-      marginTop: 50,
-      marginBottom: 70,
       fontWeight: "bold"
   },
   form:
   {
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: "flex-start",
+    alignItems: "center",
+    width: "80%",
+    height: "50%",
   },
   picker:
   {
@@ -193,7 +212,45 @@ export const registerStyle = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 5
+    width: "100%",
+  },
+  imageContentStyle:
+  {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  buttonWrapper:
+  {
+     width: "90%",
+     height: "25%",
+     display: "flex",
+     alignItems: "center",
+     marginTop: "5%"
+  },
+  pickerWrapper:
+  {
+    width: "50%",
+    borderColor: "rgba(0, 0, 0, 0.2)",
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: "white",
+    marginTop: "2%"
+  },
+  bottomWrapper:
+  {
+      height: "60%",
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+
+  },
+  notification:
+  {
+    color: "#014D40"
   }
 });
 
@@ -320,7 +377,9 @@ export const listViewStyle = StyleSheet.create({
           backgroundColor: "white",
           borderWidth: 1,
           borderColor: "rgba(0, 0, 0, 0.2)",
-          borderRadius: 4
+          borderRadius: 4,
+          display: "flex",
+          alignItems: "center"
     },
     wrapper:
     {
@@ -341,7 +400,8 @@ export const listViewStyle = StyleSheet.create({
         textAlign: "center",
         fontWeight: "bold",
         fontSize: 16,
-        paddingVertical: 10
+        paddingVertical: 10,
+        width: "90%"
     },
     rateWrapper:
     {
@@ -405,6 +465,45 @@ export const notification = StyleSheet.create({
           borderRadius: 60,
           paddingLeft: 20,
           paddingBottom: 22
+    },
+    itemContainer:
+    {
+      width: "85%",
+      //borderWidth: 1,
+      //borderColor: "rgba(0, 0, 0, 0.2)",
+      backgroundColor: "white",
+      borderRadius: 10,
+      padding: 15,
+      marginBottom: 20,
+      shadowOffset: { width: 10, height: 10 },
+      shadowColor: 'black',
+      shadowOpacity: 0.3,
+      elevation: 3,
+    },
+    titleItemWrapper:
+    {
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          borderBottomWidth: 1,
+          borderBottomColor: "rgba(0, 0, 0, 0.2)",
+          paddingBottom: 10
+    },
+    titleText:
+    {
+      fontSize: 13,
+      fontWeight: "bold",
+      color: "black"
+    },
+    timeText:
+    {
+      fontSize: 11
+    },
+    contentItem:
+    {
+      paddingTop: 10,
     }
 });
 
@@ -457,7 +556,7 @@ export const detailFood = StyleSheet.create({
         shadowOpacity: 0.3,
         elevation: 3,
         backgroundColor: "white",
-        width: "100%"
+        width: "100%",
 
     },
     statusFood:
@@ -707,73 +806,71 @@ export const componentWithTitle = StyleSheet.create({
 export const bookingStyle = StyleSheet.create({
   container:
   {
-      width: "100%",
-      height: "100%",
-      display: "flex",
+      width,
+      height,
+      flex: 1,
       justifyContent: "center",
       alignItems: "center"
   },
   wrapper:
   {
         width: "85%",
-        height: "80%",
-        display: "flex",
-        justifyContent: "flex-start",
-        alignItems: "center",
+        height: "75%",
+        ...flexStyle.wrapper,
         shadowOffset: { width: 10, height: 10 },
         shadowColor: 'black',
         shadowOpacity: 0.3,
         elevation: 3,
         backgroundColor: "white",
-        padding: 10,
-        borderRadius: 10,
+
 
   },
   image:
   {
-          width: 100,
-          height: 100,
+          width: 80,
+          height: 80,
           borderRadius: 50,
-          marginLeft: 10
+          top: 5,
+          left: 5
   },
   name:
   {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          width: "100%",
+          width: "90%",
+          height: "20%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "row",
-          backgroundColor: "#F2FDE0",
+          marginTop: "7%",
+          //backgroundColor: "#F2FDE0",
           borderRadius: 50,
-          marginTop: 20
   },
   count:
   {
-        marginVertical: 5,
         marginHorizontal: 4,
-        width: "100%"
-
+        width: "90%",
+        height: "20%",
   },
   address:
   {
-      marginVertical: 5,
       marginHorizontal: 4,
-      width: "100%"
+      width: "90%",
+      height: "20%",
   },
   confirm:
   {
         borderTopWidth: 1,
         borderTopColor: "rgba(0, 0, 0, 0.2)",
-        marginTop: 10,
         width: "100%",
+        height: "15%",
+        marginTop: "5%",
         display: "flex",
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         alignItems: "center",
         flexDirection: "row",
-        paddingVertical: 10
   },
   adjustCount:
   {
@@ -791,16 +888,16 @@ export const bookingStyle = StyleSheet.create({
   {
     fontSize: 16,
     fontWeight: "bold",
-    padding: 5,
+    paddingHorizontal: 5,
     paddingVertical: 10,
     textAlign: 'left',
     width: "100%"
   },
   time:
   {
-      marginVertical: 5,
       marginHorizontal: 4,
-      width: "100%"
+      width: "90%",
+      height: "20%",
   },
   TouchableOpacity:
   {
@@ -902,7 +999,8 @@ export const resInforStyle = StyleSheet.create({
   wrapper:
   {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: "center"
   },
   wrapperText:
   {
@@ -911,7 +1009,8 @@ export const resInforStyle = StyleSheet.create({
     width: "90%",
     borderBottomWidth: 1,
     borderColor: "rgba(0, 0, 0, 0.2)",
-    padding: 5
+    padding: 5,
+    height: "20%"
   },
   icon:
   {
@@ -928,7 +1027,8 @@ export const resInforStyle = StyleSheet.create({
   infor:
   {
     display: "flex",
-    alignItems: 'center'
+    alignItems: 'center',
+    height: "48%"
   },
   map:
   {
@@ -937,7 +1037,7 @@ export const resInforStyle = StyleSheet.create({
 
     //--------------------
       backgroundColor: "rgba(0, 0, 0, 0.2)",
-      
+
 
     //--------------------
   },
@@ -947,7 +1047,7 @@ export const resInforStyle = StyleSheet.create({
     borderColor: "#1F9F5F",
     marginTop: -1,
     width: width,
-    height: 65
+    height: "20%"
   }
 });
 
@@ -1177,4 +1277,84 @@ export const modalAddFoodStyle = StyleSheet.create({
          justifyContent: 'center',
          width: 100
     }
+});
+
+
+export const gridStyle = StyleSheet.create({
+      container:
+      {
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            shadowOffset: { width: 10, height: 10 },
+            shadowColor: 'black',
+            shadowOpacity: 0.3,
+            elevation: 3,
+            backgroundColor: "white",
+            borderWidth: 1,
+            borderTopWidth: 0,
+            borderColor: "rgba(0, 0, 0, 0.2)",
+      },
+      wrapper:
+      {
+          width: "96%",
+
+      },
+      image:
+      {
+            width: "100%",
+            height: "75%",
+            borderRadius: 5
+      },
+      title:
+      {
+            fontSize: 20,
+            fontWeight: "bold",
+            padding: 10,
+            paddingLeft: 15
+      },
+      titleWrapper:
+      {
+              width: "100%",
+              marginBottom: 8
+      },
+      wrapperItem:
+      {
+        width: "48%",
+        height: 230,
+        borderColor: "rgba(0, 0, 0, 0.2)",
+        borderWidth: 1,
+        borderRadius: 8,
+        marginBottom: "2%"
+      },
+      inforItem:
+      {
+            width: "90%",
+            marginLeft: "5%"
+      },
+      titleItem:
+      {
+          fontSize: 16,
+          textAlign: "center",
+          paddingVertical: 5,
+          fontWeight: "bold"
+      },
+      priceItem:
+      {
+          textAlign: "center",
+          color: "green",
+          fontWeight: "bold"
+      },
+      listWrapper:
+      {
+          width: "100%",
+          display: "flex",
+          flexWrap: 'wrap',
+          justifyContent: "space-around",
+          flexDirection: "row"
+/*
+          borderColor: "black",
+          borderWidth: 1
+*/
+      }
 });

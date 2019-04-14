@@ -34,15 +34,14 @@ class ListViewItem extends Component
                     style={ listViewStyle.image }
                     resizeMode='cover'
                 />
-                <Text style={ listViewStyle.text }>{ title }</Text>
+                <Text style={ listViewStyle.text } numberOfLines={1}>{ title }</Text>
                 <View style={ listViewStyle.wrapperRateAndPrice }>
                     <View style={ listViewStyle.rateWrapper }>
                         <Icon name="star" type="antdesign" color="white" size={15} />
                         <Text style={{color: "white", fontSize: 10, marginLeft: 5}}>{ rate }</Text>
                     </View>
                     <View style={ listViewStyle.priceWrapper }>
-                        <Icon type="font-awesome" name="dollar" color="#227100" size={15} />
-                        <Text style={{fontSize: 15, color: "#227100", marginLeft: 5, fontWeight: "bold"}}>{ new Intl.NumberFormat('en').format(price) }</Text>
+                        <Text style={{fontSize: 15, color: "#227100", marginLeft: 5, fontWeight: "bold"}}>{ new Intl.NumberFormat('en').format(price) + " đ"}</Text>
                     </View>
                 </View>
           </TouchableOpacity>
@@ -70,7 +69,7 @@ export default class ListView extends Component
     this.state = {
       data:
       [
-          {key: require("../Media/listView/1.jpg"), title: "Title 1", rate: 4.5, price: 12000},
+          {key: require("../Media/listView/1.jpg"), title: "Title 1: test for long long long long text", rate: 4.5, price: 12000},
           {key: require("../Media/listView/2.jpg"), title: "Title 2", rate: 5, price: 40000},
           {key: require("../Media/listView/3.jpg"), title: "Title 3", rate: 3, price: 20000},
           {key: require("../Media/listView/4.jpg"), title: "Title 4", rate: 4.5, price: 23000},
@@ -93,7 +92,7 @@ export default class ListView extends Component
     return (
           <View style={ [{width: "100%", backgroundColor: "white"}, containerStyle ]}>
             <View style={ listViewStyle.wrapper } >
-                <Text style={{fontWeight: "bold", fontSize: 16, width: "65%", padding: 10, marginLeft: 15}} >{ title }</Text>
+                <Text style={{fontWeight: "bold", fontSize: 20, width: "65%", padding: 10, marginLeft: 15}} >{ title }</Text>
                 <Anchor
                       text={"See more"}
                       wrapperStyle={{width: "30%"}}

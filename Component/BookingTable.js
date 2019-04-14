@@ -9,7 +9,7 @@ import { bookTableStyle, flexStyle, bookingStyle, accountStyle } from "../Style/
 export default class BookingTable extends Component
 {
   static navigationOptions = {
-          title: "Booking Food",
+          title: "Booking Table",
           headerTitleStyle:  accountStyle.titleStyle
   };
   constructor(props)
@@ -132,6 +132,7 @@ validateTime()
                                                         inputContainerStyle={{borderWidth: 1, borderColor: "rgba(0,0,0,0.2)", borderRadius: 5, marginVertical: 20, width: "40%", marginLeft: "30%"}}
                                                         onChangeText={ (text) => this.setState({...this.state, numberInput: text}) }
                                                         inputStyle={{fontSize: 14, paddingVertical: 0}}
+                                                        autoFocus={true}
                                                  />
                                                  <Text style={{padding: 5, marginLeft: 10, marginBottom: 10, color: "red", display: this.state.display}}>You must enter a number.</Text>
                                                  <RoundButton

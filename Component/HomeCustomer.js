@@ -12,7 +12,7 @@ import RestaurantInfor from "./restaurantInfor";
 import Booking from "./Booking.js";
 import BookingTable from "./BookingTable";
 import Cart from "./Cart";
-
+import GridView from "./GridView";
 
 // Define Home class
 class HomeCustomer_Main extends Component
@@ -46,17 +46,25 @@ class HomeCustomer_Main extends Component
     let body;
     if (this.state.searchShow) {  body = <Search />;  }
     else {   body = (
-                <View>
+                <ScrollView
+                      showsVerticalScrollIndicator={false}
+                >
                       <MySwiper
                             navigation={this.props.navigation}
                             routename="Detail"
                       />
                       <ListView
                               title="Dessert"
+                              containerStyle={{ elevation: 3 }}
                               navigation={this.props.navigation}
                               routename="Detail"
                       />
-                </View> );
+                      <GridView
+                              navigation={this.props.navigation}
+                              routename="Detail"
+                      />
+
+                </ScrollView> );
          }
     return(
       <View style={{flex: 1}} >

@@ -13,7 +13,8 @@ export default class RoundButtonIcon extends Component
         round = 20 ,
         iconStyle,
         underlayColor = "transparent",
-        size = 40
+        size = 40,
+        disabled = false
       } = this.props;
       return(
           <TouchableHighlight
@@ -24,7 +25,8 @@ export default class RoundButtonIcon extends Component
                     { borderRadius: round,
                       backgroundColor: background}]}
               onPress = { this.props.handleOnPress }
-              activeOpacity={ this.props.activeOpacity} >
+              activeOpacity={ this.props.activeOpacity} 
+              disabled={ disabled }>
                <View style={roundButtonIconStyle.general}>
                   <Text style={[roundButtonStyle.text, roundButtonIconStyle.text, {color: textColor}]}>{ text }</Text>
                   <Icon {...iconStyle} size={size} iconStyle={roundButtonIconStyle.icon}/>

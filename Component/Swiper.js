@@ -32,7 +32,7 @@ class SwiperItem extends Component
               onPress={ (!this.state.disabled && this.handleOnPress) }
       >
           <Image resizeMode='cover' source={this.props.imageURL}  style={this.props.imageStyle}  />
-          <Text style={swiperStyle.textOnSwiper}>{this.props.text}</Text>
+          <Text numberOfLines={1} style={swiperStyle.textOnSwiper}>{this.props.text}</Text>
       </TouchableOpacity>
     );
   }
@@ -54,7 +54,7 @@ export default class MySwiper extends Component
     super(props);
     this.state = {
       data: [
-      { key: require("../Media/swiper/1.jpg"), title: "One Food Over A Day", price: 10000, rate: 4.2},
+      { key: require("../Media/swiper/1.jpg"), title: "One Food Over A Day 123456789", price: 10000, rate: 4.2},
       { key: require("../Media/swiper/2.jpg"), title: "Two", price: 12000, rate: 3.6},
       { key: require("../Media/swiper/3.jpg"), title: "Three", price: 22000, rate: 4.6 }
      ]
