@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, SafeAreaView, ScrollView, Image } from "react-native";
+import { Text, View, SafeAreaView, ScrollView, Image, TouchableOpacity } from "react-native";
 import { Header, Icon } from "react-native-elements";
 import { notification, flexStyle } from "../Style/style";
 import { createAppContainer, createDrawerNavigator, DrawerItems } from "react-navigation";
@@ -154,12 +154,14 @@ class ShoppingCart extends Component
    }
 }
 
-
 // -------------- Drawer navigation -------------------------------------
 
-const customDrawer = (props) => (
+const customDrawer = function(props) {
+  return (
         <SafeAreaView  style={{flex: 1}}>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                        <View style={ notification.closeButton }>
+                        </View>
                         <Text style={ notification.drawerTitle }>N</Text>
                         <Image
                               source={  require("../Media/drawer/1.png") }
@@ -169,6 +171,8 @@ const customDrawer = (props) => (
                 </ScrollView>
         </SafeAreaView>
 );
+}
+
 
 //--------------------------------------------------------------------------
 
@@ -176,7 +180,7 @@ export default class NotificationPage extends Component
 {
   render()
   {
-
+    //----------------------------------------------------------------------------------------
     const MyDrawerNavigator = createAppContainer(createDrawerNavigator(
         {
             Discount: { screen: Discount },
@@ -191,7 +195,7 @@ export default class NotificationPage extends Component
             order: ["Discount", "Activity", "ShoppingCart"],
         }));
     return(
-          <MyDrawerNavigator />
+            <MyDrawerNavigator />
     );
   }
 }

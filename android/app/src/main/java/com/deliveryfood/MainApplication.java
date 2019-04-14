@@ -3,6 +3,7 @@ package com.deliveryfood;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.henninghall.date_picker.DatePickerPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new NetInfoPackage(),
             new DatePickerPackage(),
             new RNFirebasePackage(),
             new RNFirebaseAuthPackage(),

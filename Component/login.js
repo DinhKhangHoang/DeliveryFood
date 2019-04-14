@@ -6,7 +6,7 @@ import RoundButtonIcon from './roundButtonIcon';
 import { SkypeIndicator } from 'react-native-indicators';
 import Anchor from './anchor';
 import { loginStyle, accountStyle } from '../Style/style.js';
-
+import NetInfo from "@react-native-community/netinfo";
 
 export default class Login extends Component
 {
@@ -47,7 +47,16 @@ export default class Login extends Component
     {
       firebase.auth().signInWithEmailAndPassword( name, password )
         .then(()=>this.setState({ error: false, disabled: true})
-      ).catch(()=>this.setState({ error: true, disabled: false})
+      ).catch(()=>{
+                      NetInfo.getConnectionInfo().then( (data)=>{
+                            if (data.type === "unknown" || data.type === "none")
+                                  this.setState( {errorMessage: "Please check your internet connecttion."} );
+                            else {
+                              this.setState( {errorMessage: "Username or password is incorrect."} );
+                            }
+                      } );
+                      this.setState({ error: true, disabled: false });
+                }
         );
     }
   }

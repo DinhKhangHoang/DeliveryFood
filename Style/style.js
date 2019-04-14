@@ -504,6 +504,14 @@ export const notification = StyleSheet.create({
     contentItem:
     {
       paddingTop: 10,
+    },
+    closeButton:
+    {
+      position: "absolute",
+      zIndex: 10,
+      elevation: 5,
+      top: "2%",
+      left: "85%"
     }
 });
 
