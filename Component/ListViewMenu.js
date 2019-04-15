@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput } from "react-native";
+import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput,TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
@@ -57,9 +57,11 @@ class ListViewMenuItem extends Component
                         </View>
                     </View>
                   </View>
-                  <View style = {listViewMenuItemStyle.button}>
-                    <Icon type = "font-awesome" name ="ellipsis-v" color="#227100" size ={35} onPress= {this._onPressProperty}/>
-                  </View>
+                  <TouchableOpacity style = {listViewMenuItemStyle.button} onPress = {this._onPressProperty} activeOpacity ={0.7}>
+                    <View style = {{flexDirection: "column", flex: 1, justifyContent: 'center'}}>
+                      <Icon type = "font-awesome" name ="ellipsis-v" color="#227100" size ={35}/>
+                    </View>
+                  </TouchableOpacity>
             </View>
             <Modal
               animationType="slide"
@@ -121,10 +123,9 @@ class ListViewMenuItem extends Component
                 <TouchableHighlight
                   onPress={() => {
                     this.setState({EditInfovisible: false});
-                  }}>
-                  <View style = {modalEditInfoStyle.apply}>
-                    <Text style = {{fontSize:24, fontWeight:"bold"}}>Apply</Text>
-                  </View>
+                  }}
+                  style = {modalEditInfoStyle.apply}>
+                    <Text style = {{fontSize:24, fontWeight:"bold", color: 'white'}}>Apply</Text>
                 </TouchableHighlight>
               </View>
             </Modal>
