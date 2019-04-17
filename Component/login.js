@@ -7,6 +7,7 @@ import { SkypeIndicator } from 'react-native-indicators';
 import Anchor from './anchor';
 import { loginStyle, accountStyle } from '../Style/style.js';
 import NetInfo from "@react-native-community/netinfo";
+import Message from "./Message";
 
 export default class Login extends Component
 {
@@ -24,7 +25,6 @@ export default class Login extends Component
     this.validate = this.validate.bind(this);
     this.disable = this.disable.bind(this);
   }
-
   // Show or hide password
   togglePassword() { this.setState({ isShow: !this.state.isShow }) }
 
@@ -46,8 +46,12 @@ export default class Login extends Component
     else
     {
       firebase.auth().signInWithEmailAndPassword( name, password )
-        .then(()=>this.setState({ error: false, disabled: true})
-      ).catch(()=>{
+        .then(()=>{
+          // ----- Success login -------------------------------------------------------------------------------------
+                        this.setState({ error: false, disabled: true});
+          //-----------------------------------------------------------------------------------------------------------
+      }).catch(()=>{
+        // -------- Error catching ------------------------------------------------------------------------------------
                       NetInfo.getConnectionInfo().then( (data)=>{
                             if (data.type === "unknown" || data.type === "none")
                                   this.setState( {errorMessage: "Please check your internet connecttion."} );
@@ -57,19 +61,23 @@ export default class Login extends Component
                       } );
                       this.setState({ error: true, disabled: false });
                 }
+          // ----------------------------------------------------------------------------------------------------------
         );
     }
+    // ----------- End if ---------------------------------------------------------------------------------------------
   }
 
 
 
   render()
   {
+    const message = (this.state.error ? <Message text={this.state.errorMessage} /> : null);
+    const { showRes = true } = this.props;
     return(
       <View style={ loginStyle.wrapper }>
         <ImageBackground source={ require("../Media/wallpaper/login.png") } style={ loginStyle.scrollView } imageStyle={{opacity: 0.1 }} >
             <View style={ loginStyle.titleWrapper }>
-                  <Text style={ loginStyle.title }>Food Delivery</Text>
+                  <Text style={ loginStyle.title }>Log In</Text>
             </View>
             <View style={{width: '90%', height: "50%", display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
               <View style={{width: "100%", height: "56%"}}>
@@ -88,8 +96,8 @@ export default class Login extends Component
                           leftIcon={{ type: 'font-awesome', name: 'lock', color:'#014D40', width: 30 }}
                           inputStyle={{ fontSize: 14, color: '#014D40', paddingLeft: 20 }}
                           secureTextEntry={!this.state.isShow}
-                          errorMessage={ this.state.error ? this.state.errorMessage : ""}
-                          errorStyle={{color: "white", fontSize: 15, borderRadius: 10, backgroundColor: "#F93D5C", padding: 8}}
+                          /* errorMessage={ this.state.error ? this.state.errorMessage : ""}
+                          errorStyle={{color: "white", fontSize: 15, borderRadius: 10, backgroundColor: "#F93D5C", padding: 8}} */
                           onChangeText={ (pass) => this.setState({  password: pass}) }
                           value={this.state.password}
                         />
@@ -136,12 +144,16 @@ export default class Login extends Component
                           textStyle={{color: "#014D40", fontSize: 14}}
                           handleOnPress={()=>{}}
                     />
+                    {
+                      showRes ?
                     <Anchor
                           text="Don't have an acount?"
                           textStyle={{color: "#014D40", fontSize: 14}}
                           handleOnPress={()=>{ this.props.navigation.navigate("SignUp"); }}
-                    />
+                    /> : null
+                  }
           </View>
+          { message }
         </ImageBackground>
     </View>
     );

@@ -7,9 +7,9 @@ export default class Anchor extends Component
 {
   render()
   {
-    const { text, textStyle, wrapperStyle } = this.props;
+    const { text, textStyle, wrapperStyle, underlayColor = "transparent" } = this.props;
     return(
-      <TouchableHighlight onPress={this.props.handleOnPress} style={wrapperStyle} underlayColor="transparent">
+      <TouchableHighlight onPress={this.props.handleOnPress} style={wrapperStyle} underlayColor={underlayColor}>
           <Text style={ [ textStyle, anchorStyle.text] }>{ text }</Text>
       </TouchableHighlight>
     );

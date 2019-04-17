@@ -4,6 +4,7 @@ import { Icon, Input } from 'react-native-elements';
 import RoundButtonIcon from './roundButtonIcon';
 import { registerStyle, accountStyle } from '../Style/style.js';
 import Anchor from './anchor';
+import Message from "./Message";
 
 export default class Register extends Component
 {
@@ -15,7 +16,7 @@ export default class Register extends Component
   constructor(props)
   {
       super(props);
-      this.state = { password: "", confirmPass: "", isShow: false, notification: false };
+      this.state = { password: "", confirmPass: "", isShow: false, notification: false, message: 'You have created account successfully' };
       this.createAccount = this.createAccount.bind(this);
   }
 
@@ -29,13 +30,14 @@ export default class Register extends Component
 
   render()
   {
+  const message = (this.state.notification ? <Message text={this.state.message} /> : null);
   const { password, confirmPass, isShow } = this.state;
   const isEqual = (password === confirmPass && password !== "" ? true : false);
   return(
     <View style={ registerStyle.wrapper } >
       <ImageBackground source={ require("../Media/wallpaper/login.png") } style={ registerStyle.imageContentStyle }  imageStyle={{opacity: 0.1 }} >
             <View style={ registerStyle.titleWrapper }>
-                    <Text style={registerStyle.text}>Registration</Text>
+                    <Text style={registerStyle.text}>Sign Up</Text>
             </View>
            <View style={ registerStyle.form }>
               <Input
@@ -71,7 +73,7 @@ export default class Register extends Component
                   inputStyle={{fontSize: 14, color: '#014D40', paddingLeft: 20}}
               />
               <View style={registerStyle.picker} >
-                        <Text style={{color: "#014D40", width: "40%"}}>Type of account: </Text>
+                        <Text style={{color: "#014D40", width: "40%", height: "100%", textAlignVertical: 'center'}}>Type of account: </Text>
                         <View style={ registerStyle.pickerWrapper }>
                                 <Picker
                                       style={{width:150, height: 50, color: "#014D40"}}
@@ -86,23 +88,16 @@ export default class Register extends Component
             <View style={ registerStyle.buttonWrapper }>
               <RoundButtonIcon
                   textColor="white"
-                  text="SIGN IN"
+                  text="SIGN UP"
                   background="#0A7966"
                   round={5}
                   handleOnPress= { this.createAccount }
                   iconStyle={{name:"chevron-circle-right", type: "font-awesome", color: "white"}}
-                  style={{ width: '80%', borderColor: "white", borderWidth: 1, height: "35%"}}
+                  style={{ width: '80%', borderColor: "white", borderWidth: 1, height: 55}}
                   underlayColor="#27AB83"
               />
-              <View style={ [registerStyle.bottomWrapper, { display: (this.state.notification ? "flex" : 'none') }]}>
-                    <Text style={ registerStyle.notification }>You have created account successful</Text>
-                    <Anchor
-                          text="Click here to log in"
-                          textStyle={{ color: "#014D40", fontWeight: "bold" }}
-                          handleOnPress={ () => this.props.navigation.navigate("LogIn") }
-                    />
-              </View>
            </View>
+          { message }
       </ImageBackground>
     </View>
      );

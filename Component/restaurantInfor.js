@@ -63,14 +63,25 @@ export default class RestaurantInfor extends Component
                   icon={{type: "material", name: "access-time", color:"#6733BA", size: 30}}
                   text="7h00 - 22h00"
             />
-            <RoundButton
-                  text="BOOKING TABLE NOW"
-                  round={0}
-                  boxStyle={ resInforStyle.button }
-                  textColor="white"
-                  handleOnPress={ ()=> { this.props.navigation.push("bookTable")} }
-                  underlayColor="#227100"
-            />
+            <View style={ resInforStyle.buttonWrapper }>
+                      <RoundButton
+                            text="BOOK TABLE"
+                            round={0}
+                            boxStyle={ resInforStyle.button }
+                            textColor="white"
+                            handleOnPress={ ()=> { this.props.navigation.push("bookTable")} }
+                            underlayColor="#227100"
+                      />
+                      <RoundButton
+                            text="SEE MENU"
+                            textColor="#1F9F5F"
+                            round={0}
+                            boxStyle={ resInforStyle.button }
+                            background="white"
+                            handleOnPress={ ()=> {} }
+                            underlayColor="#F2FDE0"
+                      />
+            </View>
           </View>
       </View>
     );

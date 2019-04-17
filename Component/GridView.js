@@ -59,7 +59,7 @@ export default class GridView extends Component
       <View style={ gridStyle.container }>
             <View style={ gridStyle.wrapper }>
                 <View style={ gridStyle.titleWrapper }>
-                      <Text style={ gridStyle.title }>What today ?</Text>
+                      <Text style={ gridStyle.title }>{ this.props.title }</Text>
                 </View>
                 <View style={ gridStyle.listWrapper }>
                       {

@@ -17,6 +17,7 @@ import BookingTable from "./Component/BookingTable";
 import RestaurantInfor from "./Component/restaurantInfor";
 import GridView from "./Component/GridView";
 import { NotificationItem } from "./Component/Notification";
+import Message from "./Component/Message";
 //---------------------------------------------------------------------
 
 export default class App extends Component {
@@ -26,10 +27,13 @@ constructor(props)
   this.state = {
       isAuth: false,
       isLoaded: false,
-      user: firebase.auth().currentUser
+      user: firebase.auth().currentUser,
   };
 }
+
+
  componentDidMount() {
+
     this.unsubscriber = firebase.auth().onAuthStateChanged((puser) => {
             this.setState({ ...this.state, user: puser });
       });
@@ -37,6 +41,8 @@ constructor(props)
 
 
   render() {
+
+    // -------- Loading and splashscreen -------------------------------------
     if (this.state.isLoaded === false)
     {
       // Load data from database...
@@ -53,11 +59,10 @@ constructor(props)
       return (
             <Main />
     )};
+
 /*
    return (
-       <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-            <NotificationItem  />
-      </View>
+     <Booking />
       );
 */
   }

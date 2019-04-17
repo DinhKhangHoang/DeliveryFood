@@ -5,6 +5,11 @@ import DatePicker from 'react-native-date-picker';
 import Modal from "react-native-modal";
 import RoundButton from "./roundButton";
 import { bookingStyle, flexStyle, accountStyle } from "../Style/style";
+import firebase from 'react-native-firebase';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
+import NetInfo from "@react-native-community/netinfo";
+import Message from "./Message";
+
 
 export default class Booking extends Component
 {
@@ -19,12 +24,27 @@ export default class Booking extends Component
         let date = new Date();
         date.setMinutes(date.getMinutes() + 30);
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        this.state = { count: 1, date: date, isShow: false, adjustDate: date, error: false, isCountDialogShow: false, display: "none", numberInput: "", errorMess: ""};
+        this.state = {
+                count: 1,
+                date: date,
+                isShow: false,
+                adjustDate: date,
+                error: false,
+                isCountDialogShow: false,
+                display: "none",
+                numberInput: "",
+                errorMess: "",
+                user: firebase.auth().currentUser,
+                showMessage: false,
+                message: ""
+            };
         this.increase = this.increase.bind(this);
         this.decrease = this.decrease.bind(this);
         this.validateTime = this.validateTime.bind(this);
         this.validateNumber = this.validateNumber.bind(this);
+        this.orderConfig = this.orderConfig.bind(this);
   }
+
 
   increase() { this.setState({...this.state, count: this.state.count + 1}); }
   decrease()
@@ -67,10 +87,36 @@ export default class Booking extends Component
           }
   }
 
+  orderConfig()
+  {
+        if (this.state.user)
+        {
+           // Test for internet connect
+           NetInfo.getConnectionInfo().then( (data)=>{
+                 if (data.type === "unknown" || data.type === "none")
+                 {
+                        this.setState({showMessage: false})
+                       setTimeout(()=>this.setState( {message: "Please check your internet connecttion.", showMessage: true} ), 20);
+                  }
+                 else {
+                    // Processing the booking cart
+                 }
+           } );
+        }
+        else
+        {
+          this.props.navigation.navigate("LogIn");
+        }
+  }
+
+
   render()
   {
-    const data = this.props.navigation.getParam("data");
-    //const data = {key: require("../Media/listView/1.jpg"), title: "Title 1: test for long long long long text", rate: 4.5, price: 12000};
+    //-------Message -------------------------------------------------------------------
+    const message = (this.state.showMessage ? <Message text={this.state.message} /> : null);
+    //----------------------------------------------------------------------------------
+    // const data = this.props.navigation.getParam("data");
+    const data = {key: require("../Media/listView/1.jpg"), title: "Title 1: test for long long text", rate: 4.5, price: 12000};
     const price = (this.state.price * this.state.count);
     let interval;
     if ( Platform.OS === 'android' ) {
@@ -230,11 +276,12 @@ export default class Booking extends Component
                     textColor="white"
                     background="green"
                     boxStyle={{ width: "50%", height: "100%", borderWidth: 1, borderColor: "green"}}
-                    handleOnPress={ ()=>{} }
+                    handleOnPress={this.orderConfig}
                     underlayColor="#227100"
                 />
            </View>
       </View>
+      {message}
   </View>
     );
   }

@@ -186,7 +186,7 @@ export const registerStyle = StyleSheet.create({
   titleWrapper:
   {
       width: "100%",
-      height: "20%",
+      height: "15%",
       ...flexStyle.wrapper,
   },
   text:
@@ -213,6 +213,7 @@ export const registerStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: "100%",
+    marginTop: "5%"
   },
   imageContentStyle:
   {
@@ -225,10 +226,10 @@ export const registerStyle = StyleSheet.create({
   buttonWrapper:
   {
      width: "90%",
-     height: "25%",
+     height: "15%",
      display: "flex",
      alignItems: "center",
-     marginTop: "5%"
+     marginTop: "10%"
   },
   pickerWrapper:
   {
@@ -237,20 +238,6 @@ export const registerStyle = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: "white",
-    marginTop: "2%"
-  },
-  bottomWrapper:
-  {
-      height: "60%",
-      width: "100%",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-
-  },
-  notification:
-  {
-    color: "#014D40"
   }
 });
 
@@ -512,13 +499,27 @@ export const notification = StyleSheet.create({
       elevation: 5,
       top: "2%",
       left: "85%"
+    },
+    noLoginText:
+    {
+      fontSize: 20,
+      fontWeight: "bold",
+      padding: 10
     }
 });
 
 
 
 export const  CartStyle = StyleSheet.create({
-
+      textNotLogin:
+      {
+          fontSize: 22,
+          padding: 5,
+          fontWeight: "bold",
+          textAlign: "center",
+          width: "90%",
+          marginBottom: "5%"
+      }
 });
 
 
@@ -1053,9 +1054,18 @@ export const resInforStyle = StyleSheet.create({
   {
     borderWidth: 1,
     borderColor: "#1F9F5F",
-    marginTop: -1,
-    width: width,
-    height: "20%"
+    marginTop: -2,
+    width: "50%",
+    height: "100%"
+  },
+  buttonWrapper:
+  {
+        height: "20%",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row"
   }
 });
 
@@ -1365,4 +1375,44 @@ export const gridStyle = StyleSheet.create({
           borderWidth: 1
 */
       }
+});
+
+
+export const loginAndRegister = StyleSheet.create({
+      wrapper:
+      {
+          flex: 1,
+          justifyContent: 'flex-start',
+          alignItems: 'center'
+      },
+      button:
+      {
+            height: "8%",
+            width: "100%",
+            marginTop: -2
+      }
+});
+
+
+export const messageStyle = StyleSheet.create({
+  wrapper:
+  {
+    width: "90%",
+    backgroundColor: "#3B3B3B",
+    marginLeft: "5%",
+    borderRadius: 40,
+    display: "flex",
+    flexDirection: 'row',
+    position: "absolute",
+    top: "90%",
+    elevation: 4
+  },
+  text:
+  {
+    padding: 10,
+    paddingLeft: 20,
+    color: "white",
+    width: "85%"
+
+  }
 });

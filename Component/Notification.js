@@ -1,38 +1,88 @@
 import React, { Component } from "react";
-import { Text, View, SafeAreaView, ScrollView, Image, TouchableOpacity } from "react-native";
+import { Text, View, SafeAreaView, ScrollView, Image, TouchableOpacity, ImageBackground } from "react-native";
 import { Header, Icon } from "react-native-elements";
-import { notification, flexStyle } from "../Style/style";
-import { createAppContainer, createDrawerNavigator, DrawerItems } from "react-navigation";
+import Anchor from "./anchor";
+import Login from "./login";
+import Register from "./register";
+import firebase from 'react-native-firebase';
+import { notification, flexStyle, loginStyle, CartStyle, accountStyle } from "../Style/style";
+import { createStackNavigator, createAppContainer, createDrawerNavigator, DrawerItems } from "react-navigation";
+import NetInfo from "@react-native-community/netinfo";
+import { SkypeIndicator } from 'react-native-indicators';
 
+// ------------Notification if not login ----------------------------------------------------------------
+class NotLogIn extends Component
+{
+  static navigationOptions = {
+                  header: null
+          };
+    render()
+    {
+        return (
+          <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
+                <Image
+                    source={require("../Media/icon/bell.png")}
+                    style={{width: 100, height: 100, marginBottom: "2%"}}
+                 />
+                <Text>Have account?</Text>
+                <Anchor
+                    text="Click here to login"
+                    textStyle={{fontWeight: "bold", color: "white"}}
+                    wrapperStyle={{ borderRadius: 5, backgroundColor: "gray", marginTop: "3%"}}
+                    underlayColor="rgba(0, 0, 0, 0.6)"
+                    handleOnPress={ ()=> {this.props.navigation.navigate("Login")} }
+                />
+          </View>
+        );
+    }
+}
 
-export class NotificationItem extends Component
+class NotLogInNav extends Component
 {
   render()
   {
-    return (
-      <View style={ notification.itemContainer }>
-          <View style={ notification.titleItemWrapper }>
-                <Icon
-                      type="material-community"
-                      name="android-messages"
-                      color="#0078D7"
-                      size={30}
-                      style={{width:"20%"}}
-                />
-                <View style={{width: "75%", marginLeft: "5%"}}>
-                        <Text style={ notification.titleText }>Title of notification</Text>
-                        <Text style={ notification.timeText }>12 Apr 2019 16:47</Text>
-                </View>
-          </View>
-          <View style={ notification.contentItem }>
-                <Text>[QC] GOI DIEN THOAI GIA RE co ngay 100 phut goi noi mang su dung trong 30 ngay chi voi 29.000d (gia han sau 30 ngay). Dang ky, soan KM29 gui 109. CT ap dung cho TB nhan duoc tin nhan. Chi tiet LH 198 (0d). Tu choi QC, soan TC2 gui 199.</Text>
-          </View>
-      </View>
-    );
+        const Nav = createAppContainer(createStackNavigator({
+              Home: { screen: NotLogIn },
+              Login: { screen: Login },
+              SignUp: { screen: Register }
+          },
+          {
+              initialRouteName: "Home",
+          }));
+          return (<Nav />);
   }
 }
+//--------------- Item -----------------------------------------------------------------------------------
+export class NotificationItem extends Component
+{
 
 
+  render()
+  {
+            return (
+              <View style={ notification.itemContainer }>
+                  <View style={ notification.titleItemWrapper }>
+                        <Icon
+                              type="material-community"
+                              name="android-messages"
+                              color="#0078D7"
+                              size={30}
+                              style={{width:"20%"}}
+                        />
+                        <View style={{width: "75%", marginLeft: "5%"}}>
+                                <Text style={ notification.titleText }>Title of notification</Text>
+                                <Text style={ notification.timeText }>12 Apr 2019 16:47</Text>
+                        </View>
+                  </View>
+                  <View style={ notification.contentItem }>
+                        <Text>[QC] GOI DIEN THOAI GIA RE co ngay 100 phut goi noi mang su dung trong 30 ngay chi voi 29.000d (gia han sau 30 ngay). Dang ky, soan KM29 gui 109. CT ap dung cho TB nhan duoc tin nhan. Chi tiet LH 198 (0d). Tu choi QC, soan TC2 gui 199.</Text>
+                  </View>
+              </View>
+          );
+    }
+}
+
+// -------- this is discount page ------------------------------------------------------------------------------------------------------
 class Discount extends Component
 {
       static navigationOptions = {
@@ -45,39 +95,70 @@ class Discount extends Component
                     />
                 ),
       };
-
+      constructor(props)
+      {
+            super(props);
+            this.state = {
+              user: firebase.auth().currentUser,
+              isConnected: false
+            }
+      }
+      componentDidMount()
+      {
+        NetInfo.addEventListener('connectionChange', (data)=>{
+          if (data.type === "unknown" || data.type === "none")
+                  { this.setState({isConnected: false}); }
+          else { this.setState({isConnected: true}); }
+        });
+      }
       render() {
-          return (
-            <View>
-                  <Header
-                        leftComponent={
-                              <Icon
-                                    name="menu"
-                                    type="entypo"
-                                    color="white"
-                                    underlayColor="transparent"
-                                    size={34}
-                                    onPress={ ()=> this.props.navigation.toggleDrawer() }
-                              />
-                        }
-                        centerComponent={{ text: 'DISCOUNT', style: notification.headerTitle }}
-                        backgroundColor="#5B9642"
-                  />
-                  <View style={{ width: "100%", height: "87%"}}>
-                        <ScrollView
-                              contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
-                              showsVerticalScrollIndicator={false}>
-                                <NotificationItem />
-                                <NotificationItem />
-                                <NotificationItem />
-                                <NotificationItem />
-                                <NotificationItem />
-                                <NotificationItem />
-                        </ScrollView>
+        if (this.state.user)
+        {
+          if (this.state.isConnected)
+              return (
+                <View>
+                      <Header
+                            leftComponent={
+                                  <Icon
+                                        name="menu"
+                                        type="entypo"
+                                        color="white"
+                                        underlayColor="transparent"
+                                        size={34}
+                                        onPress={ ()=> this.props.navigation.toggleDrawer() }
+                                  />
+                            }
+                            centerComponent={{ text: 'DISCOUNT', style: notification.headerTitle }}
+                            backgroundColor="#5B9642"
+                      />
+                      <View style={{ width: "100%", height: "87%"}}>
+                            <ScrollView
+                                  contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
+                                  showsVerticalScrollIndicator={false}>
+                                    <NotificationItem />
+                                    <NotificationItem />
+                                    <NotificationItem />
+                                    <NotificationItem />
+                                    <NotificationItem />
+                                    <NotificationItem />
+                            </ScrollView>
+                    </View>
                 </View>
-            </View>
-           );
+               );
+        else
+        {
+          return (
+          <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                <View style={{width: "20%", height: "20%"}}>
+                           <SkypeIndicator  />
+                </View>
+                <Text style={{ fontWeight: "bold", fontSize: 18}}>It seems you haven't connected internet</Text>
+          </View>
+         );
+        }
     }
+    else  { return (<NotLogInNav />); }
+  }
 }
 
 
