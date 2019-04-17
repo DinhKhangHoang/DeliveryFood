@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Text, View, Image, FlatList, Modal, TextInput, TouchableHighlight, Alert } from "react-native";
+import { Text, View, Image, FlatList, Modal, TextInput, TouchableHighlight, Alert, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 import ListViewMenu from "./ListViewMenu";
-import { FoodManagement, accountStyle, modalAddFoodStyle} from "../Style/style";
+import { FoodManagement, accountStyle, modalAddFoodStyle, listViewMenuItemStyle} from "../Style/style";
 
 export default class FManagement extends Component
 {
@@ -21,16 +21,19 @@ export default class FManagement extends Component
                         backgroundColor: "#227100",
                       },
                       headerRight: (
-                        <View style = {{paddingRight:10} }>
-                          <Icon
-                            onPress = {navigation.getParam("_onPressAdd")}
-                            type = "font-awesome"
-                            name ="plus"
-                            color="white"
-                            size ={30}
-                            underlayColor="transparent"
-                          />
-                        </View>
+                        <TouchableOpacity style = {listViewMenuItemStyle.button}
+                                          onPress = {navigation.getParam("_onPressAdd")}
+                                          activeOpacity ={0.7}>
+                          <View style = {{flexDirection: "column", flex: 1, justifyContent: 'center'} }>
+                            <Icon
+                              type = "font-awesome"
+                              name ="plus"
+                              color="white"
+                              size ={30}
+                              underlayColor="transparent"
+                            />
+                          </View>
+                        </TouchableOpacity>
                       )
             };
     };
@@ -79,10 +82,9 @@ export default class FManagement extends Component
                  onPress={() => {
                    this.setState({AddFoodvisible: false});
                  }}
+                 style = {modalAddFoodStyle.apply}
                 >
-                 <View style = {modalAddFoodStyle.apply}>
                    <Text style = {{fontSize:24, fontWeight:"bold",color: 'white'}}>Add</Text>
-                 </View>
                </TouchableHighlight>
              </View>
            </Modal>
