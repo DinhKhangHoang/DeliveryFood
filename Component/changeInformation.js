@@ -1,68 +1,81 @@
 import React, { Component } from "react";
 import { Alert, AppRegistry, Text, View, TextInput, StyleSheet, color, Button } from "react-native";
-import { PersonalInfor, accountStyle } from "../Style/style";
+import { accountStyle } from "../Style/style";
+import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { StackNavigator } from 'react-navigation';
+import ChangeInformation_1 from './changeInformation_1'
+
+class ChangeInformation extends Component {
+	static navigationOptions = {
+		header: null
+	};
+	render() {
+		return (
+			<View style={styles.container}>
+				<View style={styles.textMessage}>
+					<Text> Users name: </Text> 
+					<Text>Nguyen Van A</Text>
+				</View>
+				<View style={styles.textMessage}>
+					<Text> Phone Number: </Text>
+					<Text>0123456789</Text>
+				</View>
+				<View style={styles.textMessage}>
+					<Text> Address: </Text>
+					<Text>Ki tuc xa khu A</Text>
+				</View>
+				<View style={{ width: "100%", marginTop: 20 }}>
+					<Button
+						title="Change Information"
+						onPress={() => this.props.navigation.navigate('ChangeInformation_1')}
+						color="blue"
+					/>
+				</View>
+			</View>
+		);
+	}
+}
 
 
 export default class ChangeInfor extends Component
 {
   static navigationOptions = {
                     title: 'Personal Information',
-                    headerTitleStyle:  accountStyle.titleStyle
+                    headerTitleStyle:  { ...accountStyle.titleStyle, color: "white" },
+                    headerStyle:{
+                          backgroundColor: "#0078D7",
+                    },
   };
-	_onPressButton() {
-		Alert.alert('Data is saved')
-	}
   render()
   {
-    return(
-		<View style={styles.container}>
-			<Text style={styles.textMessage}>Users name:</Text>
-			<TextInput style={styles.input}
-				underlineColorAndroid="transparent"
-				placeholder="Nguyen Van A"
-				placeholderTextColor="#00008b"
-				autoCapitalize="none"
-			/>	
-			<Text style={styles.textMessage}>Phone Number:</Text>
-			<TextInput style={styles.input}
-				underlineColorAndroid="transparent"
-				placeholder="0123456789"
-				placeholderTextColor="#00008b"
-				autoCapitalize="none"
-			/>	
-			<Text style={styles.textMessage}>Address:</Text>
-			<TextInput style={styles.input}
-				underlineColorAndroid="transparent"
-				placeholder="Linh Trung,Thu Duc"
-				placeholderTextColor="#00008b"
-				autoCapitalize="none"
-			/>	
-			<Button
-				title="Save"
-				color="green"
-				onPress={this._onPressButton}
-			/>
-		</View>
-    );
+	  const Nav = createAppContainer(createStackNavigator({
+		  ChangeInformation: { screen: ChangeInformation },
+		  ChangeInformation_1: { screen: ChangeInformation_1 },
+	  },
+		  {
+			  initialRouteName: "ChangeInformation"
+		  }
+	  ));
+	  return (<Nav />);
   }
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flexDirection: 'column',
-		justifyContent: 'flex-start',
-		paddingTop: 30
-	},
-	input: {
-		margin: 15,
-		height: 40,
-		borderColor: '#7a42f4',
-		borderWidth: 1
+    flex: 1,
+	paddingTop: 30,
+    width: "90%",
+    alignItems: "center",
+	marginLeft: "5%",
+	flexDirection: 'column',
 	},
 	textMessage: {
-		marginTop: 16,
-		fontSize: 20,
-		color: 'green'
+	marginTop: 16,
+	fontSize: 50,
+    fontWeight: "bold",
+	paddingLeft: 15,
+	color: '#0078D7',
+	width: "100%",
+	flexDirection: 'row',
 	},
 })
-
