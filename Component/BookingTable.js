@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity, Picker, Platform } from "react-native";
+import { Text, View, TouchableOpacity, Picker, Platform, ImageBackground } from "react-native";
 import { Input, Icon } from "react-native-elements";
 import DatePicker from 'react-native-date-picker';
 import Modal from "react-native-modal";
@@ -121,7 +121,7 @@ orderConfig()
             require('intl/locale-data/jsonp/en');
     }
     return(
-      <View style={ [flexStyle.wrapper, bookTableStyle.container] }>
+    <ImageBackground source={ require("../Media/wallpaper/homeNotLogIn.jpg") } style={ [flexStyle.wrapper, bookTableStyle.container] } imageStyle={{opacity: 0.6 }} >
             <View style={ bookTableStyle.wrapper }>
                   <View style={ bookTableStyle.titleWrapper }>
                           <Text style={ bookTableStyle.title} >Booking Table</Text>
@@ -270,7 +270,7 @@ orderConfig()
                     </View>
              </View>
            {message}
-      </View>
+      </ImageBackground>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Image, TouchableOpacity, Platform } from "react-native";
+import { Text, View, Image, TouchableOpacity, Platform, ImageBackground} from "react-native";
 import { Input, Icon } from "react-native-elements";
 import DatePicker from 'react-native-date-picker';
 import Modal from "react-native-modal";
@@ -124,7 +124,7 @@ export default class Booking extends Component
             require('intl/locale-data/jsonp/en');
     }
     return (
-  <View style={ bookingStyle.container }>
+  <ImageBackground source={ require("../Media/wallpaper/login.png") } style={ bookingStyle.container } imageStyle={{opacity: 0.6 }} >
       <View style={ bookingStyle.wrapper }>
            <View style={ bookingStyle.name }>
                  <Image
@@ -282,7 +282,7 @@ export default class Booking extends Component
            </View>
       </View>
       {message}
-  </View>
+  </ImageBackground>
     );
   }
 }
