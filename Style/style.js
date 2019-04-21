@@ -271,18 +271,37 @@ export const accountStyle = StyleSheet.create({
       {
         display: "flex",
         flexDirection: "row",
-        paddingHorizontal: 20,
-        paddingBottom: 40,
-        width,
-        height: height * 0.2,
+        width: "100%",
+        height: "20%",
         backgroundColor: "#6733B9",
-        alignItems: 'flex-end'
+        alignItems: 'center'
       },
       username:
       {
         color: "white",
-        fontSize: 18,
-        marginLeft: 30
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: 'left',
+      },
+      type:
+      {
+        color: "rgba(255, 255, 255, 0.7)",
+        fontSize: 15,
+        textAlign: 'left',
+      },
+      avatarWrapper:
+      {
+        ...flexStyle.wrapper,
+        width: "30%",
+        height: "60%",
+        marginLeft: "5%"
+      },
+      nameTitleWrapper:
+      {
+        ...flexStyle.wrapper,
+        height: "60%",
+        width: "60%",
+        marginLeft: "5%"
       }
 });
 
@@ -1417,4 +1436,14 @@ export const messageStyle = StyleSheet.create({
     width: "85%"
 
   }
+});
+
+
+export const LikeFoodStyle = StyleSheet.create({
+
+});
+
+
+export const CartCustomerStyle = StyleSheet.create({
+
 });

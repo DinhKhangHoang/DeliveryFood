@@ -28,35 +28,36 @@ class ChangeInformation extends Component {
 	static navigationOptions = {
 		header: null
 	};
-// ---- Constructor of the class ----------------------------------------------------------------------------------------------
-	constructor(props)
-	{
-		super(props);
-		this.ref = firebase.firestore();
-		this.state = {key : "", data: ""};
-	}
-
-// ---- After loading UI ------------------------------------------------------------------------------------------------------
-componentWillMount()
+// ---- Constructor -----------------------------------------------------------------------------------------------------------
+constructor(props)
 {
-	this.ref.collection("Customers").doc( firebase.auth().currentUser.uid ).get().then(
-			(info)=>{
-					if (info.exists)
-							this.setState({ key: info.id, data: info.data() });
-			}
-	);
-
+	super(props);
+	this.state = { data: global.info.data, key: global.info.key }
 }
-
+// ---- After loading UI ------------------------------------------------------------------------------------------------------
+componentDidMount()
+{
+	if (global.UserType === "Customer")
+	  firebase.firestore().collection("Customers").doc( this.state.key ).onSnapshot( docSnapshot=> this.setState({ key: docSnapshot.id, data: docSnapshot.data() }) );
+  else
+	  firebase.firestore().collection("Restaurants").doc( this.state.key ).onSnapshot( docSnapshot=> this.setState({ key: docSnapshot.id, data: docSnapshot.data() }) );
+}
 // ---- Render function -------------------------------------------------------------------------------------------------------
 	render() {
-		const changeValue = {
-						"User name": "NameCUS",
-						"Phone number": "PhoneNumber",
-						"Birthday": "Birthday",
-						"Email": "Email",
-						"Address": "Address"
-		}
+		const changeValue = ( global.UserType === "Restaurant" ?
+						{
+							"User name": "NameRES",
+							"Phone number": "PhoneNumber",
+							"Email": "Email",
+							"Address": "Address"
+						} : {
+							"User name": "NameCUS",
+							"Phone number": "PhoneNumber",
+							"Birthday": "Birthday",
+							"Email": "Email",
+							"Address": "Address"
+						}
+			);
 		return (
 			<ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
 							<View style={{width: "100%", height: "30%", display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -97,7 +98,7 @@ componentWillMount()
 export default class ChangeInfor extends Component
 {
   static navigationOptions = {
-                    title: 'Personal Information',
+                    title: ( global.UserType == "Restaurant" ? "Restaurant Information" : 'Personal Information'),
                     headerTitleStyle:  { ...accountStyle.titleStyle, color: "white" },
                     headerStyle:{
                           backgroundColor: "#0078D7",

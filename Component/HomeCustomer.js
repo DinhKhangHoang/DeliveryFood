@@ -21,6 +21,9 @@ import ListDeliveried from "./ListDeliveried.js"
 import Login from './login';
 import Register from './register';
 import Message from "./Message";
+import LikedFood from "./LikeFood.js";
+import CartCustomer from "./CartCustomer.js";
+
 
 
 // Define Home class
@@ -131,7 +134,9 @@ export default class HomeCustomer extends Component
       ListDiscarded: { screen: ListDiscarded },
       ListDeliveried: {screen: ListDeliveried},
       LogIn: { screen: Login },
-      SignUp: { screen: Register }
+      SignUp: { screen: Register },
+      LikedFood: { screen: LikedFood },
+      CartCustomer: { screen: CartCustomer },
     },
     {
       initialRouteName: "Home",
