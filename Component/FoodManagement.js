@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {View, Icon, TouchableOpacity} from "react-native";
+import {View, TouchableOpacity} from "react-native";
 import { Icon } from "react-native-elements";
 import ListViewMenu from "./ListViewMenu";
 import { FoodManagement, accountStyle, listViewMenuItemStyle} from "../Style/style";

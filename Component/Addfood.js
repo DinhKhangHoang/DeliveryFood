@@ -22,7 +22,18 @@ export default class Addfood extends Component
     this.ref = firebase.firestore().collection('Food');
   }
   _onPressApply(){
-
+    this.ref.add({
+          Name : this.state.inputtitle,
+          Price: Number(this.state.inputprice),
+          Information: this.state.inputdescription,
+          TypeOfFood: this.state.typefood,
+          State: this.state.statefood,
+          rating: 0,
+          FoodID: " ",
+          ID_RES: firebase.auth().currentUser.uid,
+        }).then((ref) => {ref.set({FoodID: ref.id},{merge : true});});
+    //id = doc.id;
+    //doc.set({FoodID: id}, {merge : true});
     Alert.alert("Data saved!");
     this.props.navigation.goBack();
   }
