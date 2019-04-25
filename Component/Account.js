@@ -11,10 +11,11 @@ import AnchorIcon from './anchorIcon';
 import ChangeInfor from "./changeInformation";
 import FManagement from "./FoodManagement";
 import Cart from "./Cart";
-import ListAccepted from "./ListAccepted.js"
-import ListNonChecked from "./ListNonChecked.js"
-import ListDiscarded from "./ListDiscarded.js"
-import ListDeliveried from "./ListDeliveried.js"
+import ListAccepted from "./ListAccepted.js";
+import ListNonChecked from "./ListNonChecked.js";
+import ListDiscarded from "./ListDiscarded.js";
+import ListDeliveried from "./ListDeliveried.js";
+import Addfood from "./Addfood.js";
 
 
 // Define a home class for account that haven't logged in yet.
@@ -132,7 +133,8 @@ class AccountLogIn extends Component
             ListAccepted: { screen: ListAccepted },
             ListNonChecked: { screen: ListNonChecked },
             ListDiscarded: { screen: ListDiscarded },
-            ListDeliveried: {screen: ListDeliveried}
+            ListDeliveried: {screen: ListDeliveried},
+            Addfood: {screen: Addfood}
           },
           {
             initialRouteName: "Home"

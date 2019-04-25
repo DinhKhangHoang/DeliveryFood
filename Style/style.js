@@ -1262,7 +1262,7 @@ export const modalAddFoodStyle = StyleSheet.create({
     {
         paddingTop: 50,
         margin: 5,
-        height: "60%",
+        height: 300,
         borderWidth: 1,
         borderColor: "rgba(0, 0, 0, 0.2)",
         borderRadius: 4
@@ -1296,6 +1296,12 @@ export const modalAddFoodStyle = StyleSheet.create({
          height: 50,
          justifyContent: 'center',
          width: 100
+    },
+    pickerType:
+    {
+        width:"40%",
+        height: 40,
+        color: "gray"
     }
 });
 
