@@ -1265,7 +1265,8 @@ export const modalAddFoodStyle = StyleSheet.create({
         height: 300,
         borderWidth: 1,
         borderColor: "rgba(0, 0, 0, 0.2)",
-        borderRadius: 4
+        borderRadius: 4,
+        justifyContent: 'center'
     },
     wrappername:
     {
