@@ -1,9 +1,37 @@
 import React, { Component } from "react";
-import { Text, View, Image, FlatList, Modal, TextInput, TouchableHighlight, Alert, TouchableOpacity, Picker, ScrollView } from "react-native";
+import { Text, View, Image, FlatList, Modal, TextInput, TouchableHighlight, Alert, TouchableOpacity, Picker, ScrollView, Platform } from "react-native";
 import { Icon } from "react-native-elements";
+import ImagePicker from 'react-native-image-picker';
 import ListViewMenu from "./ListViewMenu";
 import { FoodManagement, accountStyle, modalAddFoodStyle, listViewMenuItemStyle} from "../Style/style";
 import firebase from 'react-native-firebase';
+
+var options = {
+  title: 'Select Avatar',
+  customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
+
+const UploadImage = (uri,sessionID, mime = 'application/octet-stream')=>{
+  return new Promise((resolve, reject)=>{
+    const uploadUri = Platform.OS==='ios' ? uri.replace('file://', ''):uri;
+    const imageRef = firebase.storage().ref('FoodImage').child(sessionID+'.jpg');
+    return imageRef.put(uri, {contentType: mime})
+    .then(()=>{
+      return imageRef.getDownloadURl();
+    })
+    .then((url)=>{
+      resolve(url)
+    })
+    .catch((error)=>{
+      reject(error)
+    })
+  })
+}
+
 export default class Addfood extends Component
 {
   static navigationOptions = {
@@ -17,33 +45,55 @@ export default class Addfood extends Component
                  inputprice: "",
                  inputdescription: "",
                  typefood: 'maincourse',
-                  statefood: true,};
+                  statefood: true,
+                  imageSource: null
+                };
     this._onPressApply = this._onPressApply.bind(this);
+    this.picker = this.picker.bind(this);
     this.ref = firebase.firestore().collection('Food');
   }
   _onPressApply(){
-    this.ref.add({
+    const ref = this.ref.doc();
+    ref.set({
           Name : this.state.inputtitle,
           Price: Number(this.state.inputprice),
           Information: this.state.inputdescription,
           TypeOfFood: this.state.typefood,
           State: this.state.statefood,
           rating: 0,
-          FoodID: " ",
+          FoodID: ref.id,
           ID_RES: firebase.auth().currentUser.uid,
-        }).then((ref) => {ref.set({FoodID: ref.id},{merge : true});});
-    //id = doc.id;
-    //doc.set({FoodID: id}, {merge : true});
+        }, {merge: true});
+    UploadImage(this.state.imageSource.uri, ref.id)
+    .then(url=>this.setState({imageSource: url}))
+    .catch(error=>console.log(error));
     Alert.alert("Data saved!");
     this.props.navigation.goBack();
+  }
+  picker(){
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+
+      } else if (response.error) {
+
+      } else if (response.customButton) {
+
+      } else {
+        let source = { uri: response.uri };
+        this.setState({
+          imageSource: source,
+        });
+      }
+    });
   }
   render(){
     const {goBack} = this.props.navigation;
     return(
       <ScrollView>
-            <View style = {modalAddFoodStyle.image}>
-               <Icon type ='font-awesome' name = "upload" size ={100}/>
-            </View>
+            <TouchableOpacity style = {modalAddFoodStyle.image}
+                              onPress = {this.picker}>
+              <Image source = {this.state.imageSource} style = {{height: '100%', width: '100%'}}/>
+            </TouchableOpacity>
             <View style = {modalAddFoodStyle.wrappername}>
               <Text style={ modalAddFoodStyle.textname }>Name :</Text>
               <TextInput style = {modalAddFoodStyle.inputname}
