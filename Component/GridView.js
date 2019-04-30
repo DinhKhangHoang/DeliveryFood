@@ -5,17 +5,31 @@ import { gridStyle } from "../Style/style";
 
 class GridItem extends Component
 {
+  constructor(props)
+  {
+        super(props);
+        this.state = { disabled: false };
+        this.handleOnPress = this.handleOnPress.bind(this);
+  }
+  // ================================================================================
+  handleOnPress()
+  {
+    setTimeout( ()=>this.setState( { disabled:false } ), 1000);
+    this.props.handleOnPress();
+    this.setState( { disabled: true } );
+  }
+ // ==================================================================================
+
   render()
   {
-    const { imgURL, title, price, handleOnPress } = this.props;
+    const { imgURL, title, price } = this.props;
 
     if ( Platform.OS === 'android' ) {
             require('intl');
             require('intl/locale-data/jsonp/en');
     }
-
     return(
-      <TouchableOpacity  onPress={ handleOnPress } activeOpacity={0.7} style={ gridStyle.wrapperItem }>
+      <TouchableOpacity  onPress={ (!this.state.disabled && this.handleOnPress) } activeOpacity={0.7} style={ gridStyle.wrapperItem }>
             <Image
                     source={ imgURL }
                     style={ gridStyle.image }

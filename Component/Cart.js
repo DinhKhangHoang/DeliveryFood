@@ -9,7 +9,7 @@ import AnchorIcon from "./anchorIcon";
 export default class Cart extends Component
 {
   static navigationOptions = {
-                    title: 'Shopping Cart',
+                    title: 'Orders List',
                     headerTitleStyle:  { ...accountStyle.titleStyle, color: "white" },
                     headerStyle:{
                           backgroundColor: "#FF9900",

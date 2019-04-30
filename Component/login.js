@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
+import { Text, View, TextInput, ScrollView, TouchableOpacity, ImageBackground, Keyboard, TouchableWithoutFeedback  } from 'react-native';
 import { Icon, Input, Avatar, SocialIcon } from 'react-native-elements';
 import firebase from 'react-native-firebase';
 import RoundButtonIcon from './roundButtonIcon';
@@ -41,6 +41,7 @@ export default class Login extends Component
 
   validate()
   {
+    Keyboard.dismiss();
     const { name, password } = this.state;
     if (!name || !password) {  this.setState({  error: true, disabled: false});  }
     else
@@ -74,7 +75,7 @@ export default class Login extends Component
     const message = (this.state.error ? <Message text={this.state.errorMessage} /> : null);
     const { showRes = true } = this.props;
     return(
-      <View style={ loginStyle.wrapper }>
+      <TouchableWithoutFeedback style={ loginStyle.wrapper } onPress={ ()=>Keyboard.dismiss() }>
         <ImageBackground source={ require("../Media/wallpaper/login.png") } style={ loginStyle.scrollView } imageStyle={{opacity: 0.1 }} >
             <View style={ loginStyle.titleWrapper }>
                   <Text style={ loginStyle.title }>Log In</Text>
@@ -155,7 +156,7 @@ export default class Login extends Component
           </View>
           { message }
         </ImageBackground>
-    </View>
+    </TouchableWithoutFeedback>
     );
   }
 }

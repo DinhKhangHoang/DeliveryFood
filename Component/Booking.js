@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Image, TouchableOpacity, Platform } from "react-native";
+import { Text, View, Image, TouchableOpacity, Platform, ImageBackground, Keyboard } from "react-native";
 import { Input, Icon } from "react-native-elements";
 import DatePicker from 'react-native-date-picker';
 import Modal from "react-native-modal";
@@ -46,12 +46,12 @@ export default class Booking extends Component
   }
 
 
-  increase() { this.setState({...this.state, count: this.state.count + 1}); }
+  increase() { this.setState({ count: this.state.count + 1}); }
   decrease()
   {
     if (this.state.count > 1)
     {
-      this.setState({...this.state, count: this.state.count - 1});
+      this.setState({ count: this.state.count - 1});
     }
   }
 
@@ -61,29 +61,25 @@ export default class Booking extends Component
     {
       if ( this.state.adjustDate.getHours() < 20 && this.state.adjustDate.getHours() > 6)
       {
-          this.setState({...this.state, date: this.state.adjustDate, isShow: false});
+          this.setState({ date: this.state.adjustDate, isShow: false });
       }
       else {
-      this.setState({...this.state, error: true, errorMess: "Sorry, we don't work on your picking time."});
+      this.setState({ error: true, errorMess: "Sorry, we don't work on your picking time."});
       }
     }
     else
     {
-        this.setState( {...this.state, error: true, errorMess: "Please choose the time being at least 30 minutes after now."} );
+        this.setState( {  error: true, errorMess: "Please choose the time being at least 30 minutes after now."} );
     }
   }
 
   validateNumber()
   {
-          if (isNaN(this.state.numberInput))
-          {
-            this.setState({...this.state, display: "flex"});
-          }
+          if (isNaN(this.state.numberInput) | !Number.isInteger(Number(this.state.numberInput))) { this.setState({ display: "flex"}); }
           else {
-            let count =  Number(this.state.numberInput);
-            if (count <= 0) { count = 1; }
-
-           this.setState({...this.state, count: count, isCountDialogShow: false});
+                let count =  Number(this.state.numberInput);
+                if (count <= 0) { count = 1; }
+                this.setState({ count: count, isCountDialogShow: false});
           }
   }
 
@@ -124,8 +120,12 @@ export default class Booking extends Component
             require('intl/locale-data/jsonp/en');
     }
     return (
-  <View style={ bookingStyle.container }>
-      <View style={ bookingStyle.wrapper }>
+  <ImageBackground source={ require("../Media/wallpaper/login.png") } style={ bookingStyle.container } imageStyle={{opacity: 0.6 }} >
+      <TouchableOpacity
+            style={ bookingStyle.wrapper }
+            activeOpacity={1}
+            onPress={()=>Keyboard.dismiss()}
+      >
            <View style={ bookingStyle.name }>
                  <Image
                       source={ data.key }
@@ -188,7 +188,7 @@ export default class Booking extends Component
                                               inputStyle={{fontSize: 14, paddingVertical: 0}}
                                               autoFocus={true}
                                        />
-                                       <Text style={{padding: 5, marginLeft: 10, marginBottom: 10, color: "red", display: this.state.display}}>You must enter a number.</Text>
+                                       <Text style={{padding: 5, marginLeft: 10, marginBottom: 10, color: "red", display: this.state.display}}>You must enter a positive integer number.</Text>
                                        <RoundButton
                                               text="Confirm"
                                               round={0}
@@ -269,7 +269,10 @@ export default class Booking extends Component
                 />
            </View>
            <View style={ bookingStyle.confirm }>
-                <Text style={{fontSize: 20, fontWeight: "bold", color: "#911111", width: "50%", textAlign: "center"}}>{   new Intl.NumberFormat('en').format(data.price * this.state.count ) + " đ" }</Text>
+                <View style={ bookingStyle.priceWrapper }>
+                        <Text style={bookingStyle.price}>{  new Intl.NumberFormat('en').format(data.price * this.state.count + 20000 ) + " đ" }</Text>
+                        <Text style={ bookingStyle.note }>Delivery fee: 20.000 đ</Text>
+                </View>
                 <RoundButton
                     text="ORDER NOW"
                     round={0}
@@ -280,9 +283,9 @@ export default class Booking extends Component
                     underlayColor="#227100"
                 />
            </View>
-      </View>
+      </TouchableOpacity>
       {message}
-  </View>
+  </ImageBackground>
     );
   }
 }

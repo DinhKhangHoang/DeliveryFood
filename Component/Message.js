@@ -39,7 +39,7 @@ export default class Message extends Component
               useNativeDriver: true,
             }).start();
             this.setState( {isClosed: false} );
-            setTimeout(this.closed, 15000);
+            setTimeout(this.closed, 5000);
     }
   }
 
@@ -50,15 +50,28 @@ export default class Message extends Component
 
   render()
   {
+    const {
+             round = 40,
+             top = "90%",
+             padding = 0,
+             secondText = null,
+             backgroundColor = "#3B3B3B",
+             icon = {name: "closecircle", type: "antdesign", color: "white", onPress: this.closed },
+             color = "white",
+             textStyle
+     } = this.props;
     return(
-      <Animated.View style={ [messageStyle.wrapper, {opacity: this.fadeAnimation}] }>
-          <Text style={ messageStyle.text }>{ this.props.text }</Text>
+      <Animated.View style={ [messageStyle.wrapper, {opacity: this.fadeAnimation, borderRadius: round, backgroundColor: backgroundColor, top: top, padding: padding}] }>
+          <View style={{ width: "85%" }}>
+                <Text style={ [messageStyle.text, {color: color, ...textStyle }] }>{ this.props.text }</Text>
+                { secondText }
+          </View>
           <View style={{...flexStyle.wrapper, width: "15%"}}>
                 <Icon
-                      name="closecircle"
-                      type="antdesign"
-                      color="white"
-                      onPress={ this.closed }
+                      name={icon.name}
+                      type={icon.type}
+                      color={icon.color}
+                      onPress={ icon.onPress }
                       underlayColor="transparent"
                   />
             </View>
