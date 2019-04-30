@@ -19,7 +19,10 @@ import RestaurantInfor from "./Component/restaurantInfor";
 import GridView from "./Component/GridView";
 import { NotificationItem } from "./Component/Notification";
 import Message from "./Component/Message";
+import LikedFood from "./Component/LikeFood";
 */
+
+import CartCustomer from "./Component/CartCustomer";
 //---------------------------------------------------------------------
 
 export default class App extends Component {

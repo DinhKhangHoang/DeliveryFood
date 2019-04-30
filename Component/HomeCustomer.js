@@ -26,6 +26,8 @@ import CartCustomer from "./CartCustomer.js";
 
 
 
+import firebase from "react-native-firebase";
+
 // Define Home class
 class HomeCustomer_Main extends Component
 {
@@ -36,7 +38,8 @@ class HomeCustomer_Main extends Component
     this.state = {
                       searchShow: false,
                       searchText: "",
-                      isShowNotification: false
+                      isShowNotification: false,
+                      signUpSuccess: false
                  };
 
     this.isSearch = this.isSearch.bind(this);
@@ -46,35 +49,62 @@ class HomeCustomer_Main extends Component
 
   isSearch()
   {
-        if (this.state.searchShow === false)  {  this.setState({...this.state, searchShow: true});  }
+        if (this.state.searchShow === false)  {  this.setState({ searchShow: true });  }
   }
   back()
   {
-        this.setState({...this.state, searchShow: false, searchText: ""});
+        this.setState({  searchShow: false, searchText: ""});
   }
   onTextChange(text)
   {
-      if (this.state.searchShow === false) { this.setState({...this.state, searchShow: true, searchText: text }); }
-      else { this.setState({...this.state, searchText: text }); }
+      if (this.state.searchShow === false) { this.setState({ searchShow: true, searchText: text }); }
+      else { this.setState({ searchText: text }); }
   }
+
   componentDidMount()
   {
+    // ---- Test the internet ----------------------------------------------------------------------------------------------------------------------------------
     NetInfo.addEventListener("connectionChange", data=>{
           if (data.type === "unknown" || data.type === "none")
           { this.setState({isShowNotification: true}); }
           else { this.setState({isShowNotification: false}); }
     });
+    //---- Message handler display after sign up ----------------------------------------------------------------------------------------------------------------
+   const mess =  ()=>this.setState({ signUpSuccess: true });
+   global.signUp = {
+          set signUp(val) {
+                    this._signUp = val;
+                    mess();
+          },
+          username: undefined,
+          _signUp: false
+    };
   }
 
   render()
   {
-    // ----- Notification about internet connection---------------------------
+    // ----- Notification about internet connection-----------------------------------------------------------------------------------------------------------
     let myNotification = null;
     if (this.state.isShowNotification)
     {
         myNotification = <Message text="Something went wrong with internet connection." />
     }
-    // ---- Test for if user is searching or not
+    if (this.state.signUpSuccess)
+    {
+          myNotification = <Message
+                                      text={ "Welcome " + global.signUp.username }
+                                      round={5}
+                                      backgroundColor="white"
+                                      color="gray"
+                                      textStyle={{ fontSize: 17, lineHeight: 20, fontWeight: "bold"}}
+                                      secondText={
+                                            <Text style={{color: "gray", paddingBottom: 10, paddingLeft: 20}}>You sign up successfully.</Text>
+                                          }
+                                      top="12%"
+                                      icon={{color: "#00BFA5", name: "checkcircle", type: "antdesign", onPress: null}}
+                                />;
+    }
+    // ---- Test for if user is searching or not -------------------------------------------------------------------------------------------------------------
     let body;
     if (this.state.searchShow) {  body = <Search />;  }
     else {   body = (
@@ -90,13 +120,13 @@ class HomeCustomer_Main extends Component
                               containerStyle={{ elevation: 3 }}
                               navigation={this.props.navigation}
                               routename="Detail"
+                              handleOnPress={ ()=>firebase.auth().signOut() }
                       />
                       <GridView
                               title="What today ?"
                               navigation={this.props.navigation}
                               routename="Detail"
                       />
-
                 </ScrollView> );
          }
    // ----- return part -------------------------------------------------------

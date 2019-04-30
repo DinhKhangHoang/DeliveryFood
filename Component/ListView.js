@@ -96,7 +96,7 @@ export default class ListView extends Component
                 <Anchor
                       text={"See more"}
                       wrapperStyle={{width: "30%"}}
-                      handleOnPress={ ()=>{} }
+                      handleOnPress={ this.props.handleOnPress }
                 />
             </View>
             <FlatList

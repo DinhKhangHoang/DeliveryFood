@@ -46,27 +46,27 @@ export default class BookingTable extends Component
         this.orderConfig = this.orderConfig.bind(this);
   }
 //-----increase the number by 1-----------------------------------------------------------------------------------------
-  increase() { this.setState({...this.state, count: this.state.count + 1}); }
+  increase() { this.setState({ count: this.state.count + 1}); }
 //-----decrease the number by 1 if the number is larger than 1----------------------------------------------------------
   decrease()
   {
     if (this.state.count > 1)
     {
-      this.setState({...this.state, count: this.state.count - 1});
+      this.setState({ count: this.state.count - 1});
     }
   }
  //------Test if the number is correct format------------------------------------------------------------------------
   validateNumber()
   {
-          if (isNaN(this.state.numberInput))
+          if (isNaN(this.state.numberInput) | !Number.isInteger(Number(this.state.numberInput)) )
           {
-            this.setState({...this.state, display: "flex"});
+            this.setState({display: "flex"});
           }
           else {
             let count =  Number(this.state.numberInput);
             if (count <= 0) { count = 1; }
 
-           this.setState({...this.state, count: count, isCountDialogShow: false});
+           this.setState({count: count, isCountDialogShow: false});
           }
   }
 //-----------------------------------------------------------------------------------------------------------------------
@@ -76,16 +76,16 @@ validateTime()
   {
     if ( this.state.adjustDate.getHours() < 20 && this.state.adjustDate.getHours() >= 7)
     {
-        this.setState({...this.state, date: this.state.adjustDate, isShow: false});
+        this.setState({ date: this.state.adjustDate, isShow: false});
     }
     else {
 
-       this.setState({...this.state, error1: true, errorMess: "Sorry, we don't work on your picking time."});
+       this.setState({ error1: true, errorMess: "Sorry, we don't work on your picking time."});
     }
   }
   else
   {
-      this.setState( {...this.state, error: true, errorMess: "Please choose the time being at least 30 minutes after now." } );
+      this.setState( { error: true, errorMess: "Please choose the time being at least 30 minutes after now." } );
   }
 }
 // ---- Process booking table ----------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ orderConfig()
                                                         inputStyle={{fontSize: 14, paddingVertical: 0}}
                                                         autoFocus={true}
                                                  />
-                                                 <Text style={{padding: 5, marginLeft: 10, marginBottom: 10, color: "red", display: this.state.display}}>You must enter a number.</Text>
+                                                 <Text style={{padding: 5, marginLeft: 10, marginBottom: 10, color: "red", display: this.state.display}}>You must enter a positive integer number.</Text>
                                                  <RoundButton
                                                         text="Confirm"
                                                         round={0}

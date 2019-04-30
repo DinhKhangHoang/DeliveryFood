@@ -6,6 +6,7 @@ import { Avatar } from "react-native-elements";
 import { accountStyle } from '../Style/style';
 import RoundButton from './roundButton';
 import Login from './login';
+import DetailFood from "./DetailFood";
 import Register from './register';
 import AnchorIcon from './anchorIcon';
 import ChangeInfor from "./changeInformation";
@@ -105,7 +106,7 @@ class HomeLogIn extends Component
           {
             const data = [
                     {key: "Personal Information", handleOnPress: ()=>{ this.props.navigation.navigate("PersonInfor");}, icon: {name: "persona", type: "zocial", color: "#3D4DB8" }},
-                    {key: "Liked Food", handleOnPress: ()=>{ this.props.navigation.navigate("LikedFood"); }, icon: {name: "food", type: "material-community", color: "#89C440" }},
+                    {key: "Favorite food", handleOnPress: ()=>{ this.props.navigation.navigate("LikedFood"); }, icon: {name: "food", type: "material-community", color: "#89C440" }},
                     {key: "Shopping Cart", handleOnPress: ()=>{ this.props.navigation.navigate("CartCustomer"); }, icon: { name: "shopping-cart", type: "feather", color: "#00A7F7" }},
                     {key: 'Log out', handleOnPress: ()=>{ firebase.auth().signOut(); }, icon: {name: "logout", type: "material-community", color: "#FF5606"} },
                 ];
@@ -160,6 +161,7 @@ class AccountLogIn extends Component
             PersonInfor: { screen: ChangeInfor },
             FoodManagement: { screen: FManagement },
             Cart: { screen: Cart },
+            DetailFood: { screen: DetailFood},
             LikedFood: { screen: LikedFood },
             CartCustomer: { screen: CartCustomer },
             ListAccepted: { screen: ListAccepted },

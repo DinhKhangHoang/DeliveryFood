@@ -960,6 +960,27 @@ export const bookingStyle = StyleSheet.create({
     alignItems: "center",
     display: "flex",
     justifyContent: "center"
+  },
+  price:
+  {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#911111",
+    width: "100%",
+    textAlign: "center"
+  },
+  priceWrapper:
+  {
+    ...flexStyle.wrapper,
+    width: "50%",
+    height: "100%"
+  },
+  note:
+  {
+    fontSize: 11,
+    padding: 5,
+    textAlign: 'center',
+    width: "100%"
   }
 });
 
@@ -1419,31 +1440,179 @@ export const messageStyle = StyleSheet.create({
   wrapper:
   {
     width: "90%",
-    backgroundColor: "#3B3B3B",
     marginLeft: "5%",
-    borderRadius: 40,
     display: "flex",
     flexDirection: 'row',
     position: "absolute",
-    top: "90%",
     elevation: 4
   },
   text:
   {
     padding: 10,
     paddingLeft: 20,
-    color: "white",
-    width: "85%"
+    width: "100%"
 
   }
 });
 
 
 export const LikeFoodStyle = StyleSheet.create({
-
+    container:
+    {
+        width: "100%",
+        ...flexStyle.wrapper,
+        paddingVertical: 5,
+        backgroundColor: "white"
+    },
+    wrapperItem:
+    {
+          display: "flex",
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          paddingVertical: 20,
+          paddingLeft: "3%",
+          width: "100%",
+          borderBottomWidth: 1,
+          borderBottomColor: "rgba(0, 0, 0, 0.2)"
+    },
+    image:
+    {
+            width: 60,
+            height: 60,
+            borderRadius: 50
+    },
+    titleItem:
+    {
+          fontSize: 18,
+          fontWeight: "bold",
+          width: "100%"
+    },
+    nameRes:
+    {
+          width: "100%"
+    },
+    wrapTextItem:
+    {
+      display: "flex",
+      width: "70%",
+      justifyContent: "center",
+      paddingLeft: "8%"
+    },
+    titleSection:
+    {
+      width: "100%",
+      padding: 10,
+      paddingLeft: 20,
+      fontSize: 18,
+      fontWeight: "bold",
+      color: "white",
+      backgroundColor: "black",
+      marginTop: -1,
+    },
 });
 
 
 export const CartCustomerStyle = StyleSheet.create({
+        container:
+        {
+              width: "100%",
+              alignItems: "center",
+              justifyContent: 'center',
+        },
+        wrapperItem:
+        {
+                width: "96%",
+                marginLeft: "2%",
+                marginVertical: 10,
+                backgroundColor: "white",
+                shadowOffset: { width: 10, height: 10 },
+                shadowColor: 'black',
+                shadowOpacity: 0.7,
+                elevation: 5,
+        },
+        image:
+        {
+                width: 100,
+                height: 100
+        },
+        headerY:
+        {
+           backgroundColor: "green",
+           display: "flex",
+           flexDirection: "row",
+           padding: 10,
+           justifyContent: 'center',
+           alignItems: 'center'
+        },
+        headerN:
+        {
+              backgroundColor: "#FF6666",
+              display: "flex",
+              flexDirection: "row",
+              padding: 10,
+              justifyContent: 'center',
+              alignItems: 'center'
+        },
+        headerD:
+        {
+              backgroundColor: "#0078D7",
+              display: "flex",
+              flexDirection: "row",
+              padding: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+        },
+        icon:
+        {
+              width: '12%',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: -5
+        },
+        titleHeader:
+        {
+              color: "white",
+              fontWeight: "bold",
+              fontSize: 16,
+              width: "60%",
+              paddingLeft:  "5%",
+        },
+        time:
+        {
+                color: "white",
+                fontSize: 12,
+                width: "28%",
+                textAlign: 'center',
+        },
+        textWrapper:
+        {
+              display: 'flex',
+              justifyContent: "center",
+              width: "65%",
+              paddingLeft: "5%",
+        },
+        info:
+        {
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+          padding: 10
+        },
+        title:
+        {
+                fontSize: 16,
+                fontWeight: "bold",
+        },
+        nameRes:
+        {
+                fontSize: 14
+        },
+        price:
+        {
+            fontWeight: "bold",
+            color: "red",
+            fontSize: 14
+        }
 
 });

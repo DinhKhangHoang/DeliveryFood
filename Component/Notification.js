@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, SafeAreaView, ScrollView, Image, TouchableOpacity, ImageBackground } from "react-native";
+import { Text, View, SafeAreaView, FlatList, Image, TouchableOpacity, ImageBackground, ScrollView } from "react-native";
 import { Header, Icon } from "react-native-elements";
 import Anchor from "./anchor";
 import Login from "./login";
@@ -8,8 +8,6 @@ import firebase from 'react-native-firebase';
 import { notification, flexStyle, loginStyle, CartStyle, accountStyle } from "../Style/style";
 import { createStackNavigator, createAppContainer, createDrawerNavigator, DrawerItems } from "react-navigation";
 import NetInfo from "@react-native-community/netinfo";
-import { SkypeIndicator } from 'react-native-indicators';
-
 // ------------Notification if not login ----------------------------------------------------------------
 class NotLogIn extends Component
 {
@@ -55,10 +53,9 @@ class NotLogInNav extends Component
 //--------------- Item -----------------------------------------------------------------------------------
 export class NotificationItem extends Component
 {
-
-
   render()
   {
+            const {  title, time, content } = this.props;
             return (
               <View style={ notification.itemContainer }>
                   <View style={ notification.titleItemWrapper }>
@@ -70,12 +67,12 @@ export class NotificationItem extends Component
                               style={{width:"20%"}}
                         />
                         <View style={{width: "75%", marginLeft: "5%"}}>
-                                <Text style={ notification.titleText }>Title of notification</Text>
-                                <Text style={ notification.timeText }>12 Apr 2019 16:47</Text>
+                                <Text style={ notification.titleText }>{ title }</Text>
+                                <Text style={ notification.timeText }>{ time }</Text>
                         </View>
                   </View>
                   <View style={ notification.contentItem }>
-                        <Text>[QC] GOI DIEN THOAI GIA RE co ngay 100 phut goi noi mang su dung trong 30 ngay chi voi 29.000d (gia han sau 30 ngay). Dang ky, soan KM29 gui 109. CT ap dung cho TB nhan duoc tin nhan. Chi tiet LH 198 (0d). Tu choi QC, soan TC2 gui 199.</Text>
+                        <Text>{ content }</Text>
                   </View>
               </View>
           );
@@ -98,67 +95,86 @@ class Discount extends Component
       constructor(props)
       {
             super(props);
-            this.state = {
-              user: firebase.auth().currentUser,
-              isConnected: false
-            }
-      }
-      componentDidMount()
-      {
-        NetInfo.addEventListener('connectionChange', (data)=>{
-          if (data.type === "unknown" || data.type === "none")
-                  { this.setState({isConnected: false}); }
-          else { this.setState({isConnected: true}); }
-        });
+            this.state = {data:
+                            [
+                                  {key: "Tile of notification", time: "12 Apr 2019 16:47", content: "[QC] GOI DIEN THOAI GIA RE co ngay 100 phut goi noi mang su dung trong 30 ngay chi voi 29.000d (gia han sau 30 ngay). Dang ky, soan KM29 gui 109. CT ap dung cho TB nhan duoc tin nhan. Chi tiet LH 198 (0d). Tu choi QC, soan TC2 gui 199."},
+                                  {key: "Tile of notification", time: "12 Apr 2019 16:47", content: "[QC] GOI DIEN THOAI GIA RE co ngay 100 phut goi noi mang su dung trong 30 ngay chi voi 29.000d (gia han sau 30 ngay). Dang ky, soan KM29 gui 109. CT ap dung cho TB nhan duoc tin nhan. Chi tiet LH 198 (0d). Tu choi QC, soan TC2 gui 199."},
+                                  {key: "Tile of notification", time: "12 Apr 2019 16:47", content: "[QC] GOI DIEN THOAI GIA RE co ngay 100 phut goi noi mang su dung trong 30 ngay chi voi 29.000d (gia han sau 30 ngay). Dang ky, soan KM29 gui 109. CT ap dung cho TB nhan duoc tin nhan. Chi tiet LH 198 (0d). Tu choi QC, soan TC2 gui 199."},
+                                  {key: "Tile of notification", time: "12 Apr 2019 16:47", content: "[QC] GOI DIEN THOAI GIA RE co ngay 100 phut goi noi mang su dung trong 30 ngay chi voi 29.000d (gia han sau 30 ngay). Dang ky, soan KM29 gui 109. CT ap dung cho TB nhan duoc tin nhan. Chi tiet LH 198 (0d). Tu choi QC, soan TC2 gui 199."},
+                                  {key: "Tile of notification", time: "12 Apr 2019 16:47", content: "[QC] GOI DIEN THOAI GIA RE co ngay 100 phut goi noi mang su dung trong 30 ngay chi voi 29.000d (gia han sau 30 ngay). Dang ky, soan KM29 gui 109. CT ap dung cho TB nhan duoc tin nhan. Chi tiet LH 198 (0d). Tu choi QC, soan TC2 gui 199."},
+                            ],
+                            isEmpty: false
+          };
+          // ---- Fetch data from database ---------------------------------------------------------------------------------
+          // ---- Must check if database is empty or not -------------------------------------------------------------------
       }
       render() {
-        if (this.state.user)
+        if (this.state.isEmpty)
         {
-          if (this.state.isConnected)
               return (
-                <View>
-                      <Header
-                            leftComponent={
-                                  <Icon
-                                        name="menu"
-                                        type="entypo"
-                                        color="white"
-                                        underlayColor="transparent"
-                                        size={34}
-                                        onPress={ ()=> this.props.navigation.toggleDrawer() }
-                                  />
-                            }
-                            centerComponent={{ text: 'DISCOUNT', style: notification.headerTitle }}
-                            backgroundColor="#5B9642"
-                      />
-                      <View style={{ width: "100%", height: "87%"}}>
-                            <ScrollView
-                                  contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
-                                  showsVerticalScrollIndicator={false}>
-                                    <NotificationItem />
-                                    <NotificationItem />
-                                    <NotificationItem />
-                                    <NotificationItem />
-                                    <NotificationItem />
-                                    <NotificationItem />
-                            </ScrollView>
-                    </View>
+                <View style={{flex: 1}}>
+                          <Header
+                                leftComponent={
+                                      <Icon
+                                            name="menu"
+                                            type="entypo"
+                                            color="white"
+                                            underlayColor="transparent"
+                                            size={34}
+                                            onPress={ ()=> this.props.navigation.toggleDrawer() }
+                                      />
+                                }
+                                centerComponent={{ text: 'DISCOUNT', style: notification.headerTitle }}
+                                backgroundColor="#5B9642"
+                          />
+                          <View style={{ width: "100%", height: "87%", backgroundColor: "white"}}>
+                              <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
+                                    <Image
+                                        source={require("../Media/icon/Social_Icon.gif")}
+                                        style={{width: 100, height: 100, marginBottom: "2%"}}
+                                     />
+                                    <Text style={{fontSize: 16, fontWeight: "bold", marginTop: 20}}>You don't have any notification.</Text>
+                              </View>
+                          </View>
                 </View>
-               );
+              );
+        }
         else
         {
-          return (
-          <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-                <View style={{width: "20%", height: "20%"}}>
-                           <SkypeIndicator  />
-                </View>
-                <Text style={{ fontWeight: "bold", fontSize: 18}}>It seems you haven't connected internet</Text>
-          </View>
-         );
-        }
-    }
-    else  { return (<NotLogInNav />); }
-  }
+              return (
+                      <View>
+                            <Header
+                                  leftComponent={
+                                        <Icon
+                                              name="menu"
+                                              type="entypo"
+                                              color="white"
+                                              underlayColor="transparent"
+                                              size={34}
+                                              onPress={ ()=> this.props.navigation.toggleDrawer() }
+                                        />
+                                  }
+                                  centerComponent={{ text: 'DISCOUNT', style: notification.headerTitle }}
+                                  backgroundColor="#5B9642"
+                            />
+                            <View style={{ width: "100%", height: "87%"}}>
+                                  <FlatList
+                                        contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
+                                        showsVerticalScrollIndicator={false}
+                                        data = {this.state.data}
+                                        renderItem={ ({item})=>(
+                                                <NotificationItem
+                                                      title={item.key}
+                                                      time={item.time}
+                                                      content={item.content}
+                                                />
+                                        )}
+                                    />
+                          </View>
+                      </View>
+                  );
+          }
+      } // end render
 }
 
 
@@ -174,27 +190,81 @@ class Activity extends Component
                 />
             ),
   };
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+            data: [],
+            isEmpty: true };
+  }
+
 
   render() {
-      return (
-        <View>
-              <Header
-                    leftComponent={
-                          <Icon
-                                name="menu"
-                                type="entypo"
-                                color="white"
-                                underlayColor="transparent"
-                                size={34}
-                                onPress={ ()=> this.props.navigation.toggleDrawer() }
-                          />
-                    }
-                    centerComponent={{ text: 'ACTIVITY', style: notification.headerTitle }}
-                    backgroundColor="#5B9642"
-              />
-              <Text>222222222222222222</Text>
-        </View>
-       );
+    if (this.state.isEmpty)
+    {
+          return (
+            <View style={{flex: 1}}>
+                      <Header
+                            leftComponent={
+                                  <Icon
+                                        name="menu"
+                                        type="entypo"
+                                        color="white"
+                                        underlayColor="transparent"
+                                        size={34}
+                                        onPress={ ()=> this.props.navigation.toggleDrawer() }
+                                  />
+                            }
+                            centerComponent={{ text: 'ACTIVITY', style: notification.headerTitle }}
+                            backgroundColor="#5B9642"
+                      />
+                      <View style={{ width: "100%", height: "87%", backgroundColor: "white"}}>
+                          <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
+                                <Image
+                                    source={require("../Media/icon/Social_Icon.gif")}
+                                    style={{width: 100, height: 100, marginBottom: "2%"}}
+                                 />
+                                <Text style={{fontSize: 16, fontWeight: "bold", marginTop: 20}}>You don't have any notification.</Text>
+                          </View>
+                      </View>
+            </View>
+          );
+    }
+    else
+    {
+          return (
+                  <View>
+                        <Header
+                              leftComponent={
+                                    <Icon
+                                          name="menu"
+                                          type="entypo"
+                                          color="white"
+                                          underlayColor="transparent"
+                                          size={34}
+                                          onPress={ ()=> this.props.navigation.toggleDrawer() }
+                                    />
+                              }
+                              centerComponent={{ text: 'DISCOUNT', style: notification.headerTitle }}
+                              backgroundColor="#5B9642"
+                        />
+                        <View style={{ width: "100%", height: "87%"}}>
+                              <FlatList
+                                    contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
+                                    showsVerticalScrollIndicator={false}
+                                    data = {this.state.data}
+                                    renderItem={ ({item})=>(
+                                            <NotificationItem
+                                                  title={item.key}
+                                                  time={item.time}
+                                                  content={item.content}
+                                            />
+                                    )}
+                                />
+                      </View>
+                  </View>
+              );
+      }
    }
 }
 
@@ -211,27 +281,80 @@ class ShoppingCart extends Component
                 />
             ),
   };
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+            data: [],
+            isEmpty: true };
+  }
 
   render() {
-      return (
-        <View>
-              <Header
-                    leftComponent={
-                          <Icon
-                                name="menu"
-                                type="entypo"
-                                color="white"
-                                underlayColor="transparent"
-                                size={34}
-                                onPress={ ()=> this.props.navigation.toggleDrawer() }
-                          />
-                    }
-                    centerComponent={{ text: 'CART STATUS', style: notification.headerTitle }}
-                    backgroundColor="#5B9642"
-              />
-              <Text>3</Text>
-        </View>
-       );
+    if (this.state.isEmpty)
+    {
+          return (
+            <View style={{flex: 1}}>
+                      <Header
+                            leftComponent={
+                                  <Icon
+                                        name="menu"
+                                        type="entypo"
+                                        color="white"
+                                        underlayColor="transparent"
+                                        size={34}
+                                        onPress={ ()=> this.props.navigation.toggleDrawer() }
+                                  />
+                            }
+                            centerComponent={{ text: 'CART', style: notification.headerTitle }}
+                            backgroundColor="#5B9642"
+                      />
+                      <View style={{ width: "100%", height: "87%", backgroundColor: "white"}}>
+                          <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
+                                <Image
+                                    source={require("../Media/icon/Social_Icon.gif")}
+                                    style={{width: 100, height: 100, marginBottom: "2%"}}
+                                 />
+                                <Text style={{fontSize: 16, fontWeight: "bold", marginTop: 20}}>You don't have any notification.</Text>
+                          </View>
+                      </View>
+            </View>
+          );
+    }
+    else
+    {
+          return (
+                  <View>
+                        <Header
+                              leftComponent={
+                                    <Icon
+                                          name="menu"
+                                          type="entypo"
+                                          color="white"
+                                          underlayColor="transparent"
+                                          size={34}
+                                          onPress={ ()=> this.props.navigation.toggleDrawer() }
+                                    />
+                              }
+                              centerComponent={{ text: '', style: notification.headerTitle }}
+                              backgroundColor="#5B9642"
+                        />
+                        <View style={{ width: "100%", height: "87%"}}>
+                              <FlatList
+                                    contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
+                                    showsVerticalScrollIndicator={false}
+                                    data = {this.state.data}
+                                    renderItem={ ({item})=>(
+                                            <NotificationItem
+                                                  title={item.key}
+                                                  time={item.time}
+                                                  content={item.content}
+                                            />
+                                    )}
+                                />
+                      </View>
+                  </View>
+              );
+      }
    }
 }
 
@@ -259,24 +382,65 @@ const customDrawer = function(props) {
 
 export default class NotificationPage extends Component
 {
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+          isConnected: false,
+          user: firebase.auth().currentUser
+    };
+  }
+
+  componentDidMount()
+  {
+          NetInfo.addEventListener('connectionChange', (data)=>{
+                if (data.type === "unknown" || data.type === "none")
+                {
+                        this.setState({isConnected: false});
+                }
+                else {
+                        this.setState({isConnected: true});
+                }
+          });
+  }
+
   render()
   {
-    //----------------------------------------------------------------------------------------
-    const MyDrawerNavigator = createAppContainer(createDrawerNavigator(
-        {
-            Discount: { screen: Discount },
-            Activity: { screen: Activity },
-            ShoppingCart: { screen: ShoppingCart }
-        },
-        {
-            initialRouteName: 'Discount',
-            drawerPosition: 'left',
-            contentComponent: customDrawer,
-            contentOptions: {   activeTintColor: 'green'   },
-            order: ["Discount", "Activity", "ShoppingCart"],
-        }));
-    return(
-            <MyDrawerNavigator />
-    );
+    if (this.state.user)
+    {
+          if (this.state.isConnected)
+             {
+                  //----------------------------------------------------------------------------------------
+                  const MyDrawerNavigator = createAppContainer(createDrawerNavigator(
+                      {
+                          Discount: { screen: Discount },
+                          Activity: { screen: Activity },
+                          ShoppingCart: { screen: ShoppingCart }
+                      },
+                      {
+                          initialRouteName: 'Discount',
+                          drawerPosition: 'left',
+                          contentComponent: customDrawer,
+                          contentOptions: {   activeTintColor: 'green'   },
+                          order: ["Discount", "Activity", "ShoppingCart"],
+                      }));
+                  return(
+                          <MyDrawerNavigator />
+                  );
+            }
+          else
+          {
+            return (
+            <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
+                  <Image
+                      source={require("../Media/icon/noWF.png")}
+                      style={{width: 100, height: 100, marginBottom: "2%"}}
+                   />
+                  <Text style={{fontSize: 16, fontWeight: "bold"}}>Please check your internet connection.</Text>
+            </View>
+          );
+       }
+    }
+    else return (<NotLogInNav />);
   }
 }
