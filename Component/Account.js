@@ -18,6 +18,7 @@ import ListDiscarded from "./ListDiscarded.js"
 import ListDeliveried from "./ListDeliveried.js"
 import LikedFood from "./LikeFood.js";
 import CartCustomer from "./CartCustomer.js";
+import Addfood from "./Addfood.js";
 
 // Define a home class for account that haven't logged in yet.
 export class HomeNotLogIn extends Component
@@ -167,7 +168,8 @@ class AccountLogIn extends Component
             ListAccepted: { screen: ListAccepted },
             ListNonChecked: { screen: ListNonChecked },
             ListDiscarded: { screen: ListDiscarded },
-            ListDeliveried: {screen: ListDeliveried}
+            ListDeliveried: {screen: ListDeliveried},
+            Addfood: {screen: Addfood}
           },
           {
             initialRouteName: "Home"
