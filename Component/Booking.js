@@ -5,6 +5,11 @@ import DatePicker from 'react-native-date-picker';
 import Modal from "react-native-modal";
 import RoundButton from "./roundButton";
 import { bookingStyle, flexStyle, accountStyle } from "../Style/style";
+import firebase from 'react-native-firebase';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
+import NetInfo from "@react-native-community/netinfo";
+import Message from "./Message";
+
 
 export default class Booking extends Component
 {
@@ -19,12 +24,27 @@ export default class Booking extends Component
         let date = new Date();
         date.setMinutes(date.getMinutes() + 30);
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        this.state = { count: 1, date: date, isShow: false, adjustDate: date, error: false, isCountDialogShow: false, display: "none", numberInput: "", errorMess: ""};
+        this.state = {
+                count: 1,
+                date: date,
+                isShow: false,
+                adjustDate: date,
+                error: false,
+                isCountDialogShow: false,
+                display: "none",
+                numberInput: "",
+                errorMess: "",
+                user: firebase.auth().currentUser,
+                showMessage: false,
+                message: ""
+            };
         this.increase = this.increase.bind(this);
         this.decrease = this.decrease.bind(this);
         this.validateTime = this.validateTime.bind(this);
         this.validateNumber = this.validateNumber.bind(this);
+        this.orderConfig = this.orderConfig.bind(this);
   }
+
 
   increase() { this.setState({...this.state, count: this.state.count + 1}); }
   decrease()
@@ -67,9 +87,36 @@ export default class Booking extends Component
           }
   }
 
+  orderConfig()
+  {
+        if (this.state.user)
+        {
+           // Test for internet connect
+           NetInfo.getConnectionInfo().then( (data)=>{
+                 if (data.type === "unknown" || data.type === "none")
+                 {
+                        this.setState({showMessage: false})
+                       setTimeout(()=>this.setState( {message: "Please check your internet connecttion.", showMessage: true} ), 20);
+                  }
+                 else {
+                    // Processing the booking cart
+                 }
+           } );
+        }
+        else
+        {
+          this.props.navigation.navigate("LogIn");
+        }
+  }
+
+
   render()
   {
-    const data = this.props.navigation.getParam("data");
+    //-------Message -------------------------------------------------------------------
+    const message = (this.state.showMessage ? <Message text={this.state.message} /> : null);
+    //----------------------------------------------------------------------------------
+    // const data = this.props.navigation.getParam("data");
+    const data = {key: require("../Media/listView/1.jpg"), title: "Title 1: test for long long text", rate: 4.5, price: 12000};
     const price = (this.state.price * this.state.count);
     let interval;
     if ( Platform.OS === 'android' ) {
@@ -84,14 +131,16 @@ export default class Booking extends Component
                       source={ data.key }
                       style={ bookingStyle.image }
                  />
-                 <View style={{display: "flex", justifyContent: "center", alignItems: "center", width: "70%"}}>
+                 <View style={{display: "flex", justifyContent: "center", alignItems: "center", width: "67%", height: "100%"}}>
                         <Text
+                                numberOfLines={2}
                                 style={{
                                           fontSize: 20,
                                           fontWeight: "bold",
                                           textAlign: "left",
                                           color: "#227100",
-                                          width: "80%"
+                                          width: "80%",
+                                          paddingRight: 10
                                      }}>
                                 { data.title }
                         </Text>
@@ -217,23 +266,22 @@ export default class Booking extends Component
                       placeholder="Enter your address here..."
                       inputStyle={{ fontSize: 14, paddingVertical: 0, paddingHorizontal: 10}}
                       inputContainerStyle={{ borderWidth: 1, borderColor: "rgba(0, 0, 0, 0.2)", borderRadius: 5, width: "90%", marginLeft: "5%"}}
-                      multiline
                 />
            </View>
            <View style={ bookingStyle.confirm }>
-                <Text style={{fontSize: 20, fontWeight: "bold", color: "#911111"}}>{   new Intl.NumberFormat('en').format(data.price * this.state.count ) + " đ" }</Text>
+                <Text style={{fontSize: 20, fontWeight: "bold", color: "#911111", width: "50%", textAlign: "center"}}>{   new Intl.NumberFormat('en').format(data.price * this.state.count ) + " đ" }</Text>
                 <RoundButton
                     text="ORDER NOW"
-                    round={10}
+                    round={0}
                     textColor="white"
-                    background="#227100"
-                    boxStyle={{ width: "50%" }}
-                    handleOnPress={ ()=>{} }
+                    background="green"
+                    boxStyle={{ width: "50%", height: "100%", borderWidth: 1, borderColor: "green"}}
+                    handleOnPress={this.orderConfig}
                     underlayColor="#227100"
                 />
            </View>
-
       </View>
+      {message}
   </View>
     );
   }

@@ -3,9 +3,12 @@ package com.deliveryfood;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.henninghall.date_picker.DatePickerPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
+import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
+import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
@@ -28,11 +31,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new NetInfoPackage(),
             new DatePickerPackage(),
             new RNFirebasePackage(),
             new RNFirebaseAuthPackage(),
             new RNGestureHandlerPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new RNFirebaseFirestorePackage(),
+            new RNFirebaseStoragePackage()
       );
     }
 

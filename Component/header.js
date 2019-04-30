@@ -3,7 +3,6 @@ import { Text, View } from "react-native";
 import { SearchBar, Icon } from 'react-native-elements';
 import { headerStyle } from "../Style/style.js";
 
-
 export default class Header extends Component
 {
   constructor(props)
@@ -42,7 +41,7 @@ export default class Header extends Component
                   type="feather"
                   color="white"
                   underlayColor="transparent"
-                  onPress={()=>{ this.props.navigation.push("Cart") }}
+                  onPress={()=>{  this.props.navigation.push("Cart") }}
               />
               { icon }
           </View>

@@ -11,10 +11,15 @@ import AnchorIcon from './anchorIcon';
 import ChangeInfor from "./changeInformation";
 import FManagement from "./FoodManagement";
 import Cart from "./Cart";
+import ListAccepted from "./ListAccepted.js";
+import ListNonChecked from "./ListNonChecked.js";
+import ListDiscarded from "./ListDiscarded.js";
+import ListDeliveried from "./ListDeliveried.js";
+import Addfood from "./Addfood.js";
 
 
 // Define a home class for account that haven't logged in yet.
-class HomeNotLogIn extends Component
+export class HomeNotLogIn extends Component
 {
     static navigationOptions = {
                     header: null
@@ -101,11 +106,12 @@ class HomeLogIn extends Component
               {key: "Shopping Cart", handleOnPress: ()=>{ this.props.navigation.navigate("Cart"); }, icon: { name: "shopping-cart", type: "feather", color: "#00A7F7" }},
               {key: 'Log out', handleOnPress: ()=>firebase.auth().signOut(), icon: {name: "logout", type: "material-community", color: "#FF5606"} },
             ]}
-            renderItem={({item}) => <AnchorIcon
-                                      textStyle={ accountStyle.notLogInText }
-                                      text={ item.key }
-                                      handleOnPress={ item.handleOnPress }
-                                      icon = { item.icon }/>
+            renderItem={   ({item}) => <AnchorIcon
+                                                textStyle={ accountStyle.notLogInText }
+                                                text={ item.key }
+                                                handleOnPress={ item.handleOnPress }
+                                                icon = { item.icon }
+                                        />
                         }
           />
         </View>);
@@ -123,7 +129,12 @@ class AccountLogIn extends Component
             Home: { screen: HomeLogIn },
             PersonInfor: { screen: ChangeInfor },
             FoodManagement: { screen: FManagement },
-            Cart: { screen: Cart }
+            Cart: { screen: Cart },
+            ListAccepted: { screen: ListAccepted },
+            ListNonChecked: { screen: ListNonChecked },
+            ListDiscarded: { screen: ListDiscarded },
+            ListDeliveried: {screen: ListDeliveried},
+            Addfood: {screen: Addfood}
           },
           {
             initialRouteName: "Home"

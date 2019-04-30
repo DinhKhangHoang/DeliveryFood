@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { Component } from "react";
 import { Alert, AppRegistry, Text, View, TextInput, StyleSheet, color, Button } from "react-native";
 import { accountStyle } from "../Style/style";

@@ -4,6 +4,7 @@ import { Icon, Input } from 'react-native-elements';
 import RoundButtonIcon from './roundButtonIcon';
 import { registerStyle, accountStyle } from '../Style/style.js';
 import Anchor from './anchor';
+import Message from "./Message";
 
 export default class Register extends Component
 {
@@ -15,19 +16,30 @@ export default class Register extends Component
   constructor(props)
   {
       super(props);
-      this.state = { password: "", confirmPass: "", isShow: false };
+      this.state = { password: "", confirmPass: "", isShow: false, notification: false, message: 'You have created account successfully' };
+      this.createAccount = this.createAccount.bind(this);
   }
 
 
+  createAccount()
+  {
+    // Doing something
+
+     this.setState({ notification: true});
+  }
+
   render()
   {
+  const message = (this.state.notification ? <Message text={this.state.message} /> : null);
   const { password, confirmPass, isShow } = this.state;
+  const isEqual = (password === confirmPass && password !== "" ? true : false);
   return(
-    <View style={ registerStyle.wrapper } ref = "rootView">
-      <ImageBackground source={ require("../Media/wallpaper/login.png") } style={{width: "100%", height: "100%"}}  imageStyle={{opacity: 0.1 }} >
-           <ScrollView  showsVerticalScrollIndicator={false} contentContainerStyle={{width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}} >
-           <Text style={registerStyle.text}>Registration</Text>
-           <View style={[{width: '80%'}, registerStyle.form]}>
+    <View style={ registerStyle.wrapper } >
+      <ImageBackground source={ require("../Media/wallpaper/login.png") } style={ registerStyle.imageContentStyle }  imageStyle={{opacity: 0.1 }} >
+            <View style={ registerStyle.titleWrapper }>
+                    <Text style={registerStyle.text}>Sign Up</Text>
+            </View>
+           <View style={ registerStyle.form }>
               <Input
                   placeholder="Username"
                   leftIcon={{type: 'font-awesome', name: 'user', color: '#014D40', width: 30}}
@@ -43,7 +55,7 @@ export default class Register extends Component
                   leftIcon={{type: 'font-awesome', name: 'unlock-alt', color:'#014D40', width: 30}}
                   inputStyle={{fontSize: 14, color: '#014D40', paddingLeft: 20}}
                   secureTextEntry={true}
-                  onChangeText={(text) => this.setState({ ...this.state, password: text})}
+                  onChangeText={(text) => this.setState({ password: text })}
                   value={this.state.password}
                />
               <Input
@@ -51,9 +63,9 @@ export default class Register extends Component
                   leftIcon={{type: 'font-awesome', name: 'lock', color:'#014D40', width: 30}}
                   inputStyle={{fontSize: 14, color: '#014D40', paddingLeft: 20}}
                   secureTextEntry={true}
-                  onChangeText={(text) => this.setState({ ...this.state, confirmPass: text, isShow: true})}
+                  onChangeText={(text) => this.setState({confirmPass: text, isShow: true})}
                   value={this.state.confirmPass}
-                  rightIcon={ (isShow ? {type: "font-awesome", name: ( password === confirmPass ? "check-circle" : "exclamation-circle" ), color: ( password === confirmPass ? "#1F9F5F" : "#EA4335" ), width: 30 } : null)}
+                  rightIcon={ (isShow ? {type: "font-awesome", name: (isEqual ? "check-circle" : "exclamation-circle" ), color: ( isEqual ? "#1F9F5F" : "#EA4335" ), width: 30 } : null)}
               />
               <Input
                   placeholder="Email"
@@ -61,29 +73,31 @@ export default class Register extends Component
                   inputStyle={{fontSize: 14, color: '#014D40', paddingLeft: 20}}
               />
               <View style={registerStyle.picker} >
-                <Text style={{color: "#014D40", marginRight: 10}}>Type of account: </Text>
-                <Picker
-                  style={{width:150, height: 50, color: "#014D40", borderWidth: 1, borderColor: "#014D40"}}
-                  selectedValue={(this.state && this.state.type)}
-                  onValueChange={(itemValue) => this.setState({type: itemValue})} >
-                    <Picker.Item label="Customer" value="customer" />
-                    <Picker.Item label="Restaurant" value="restaurant" />
-                </Picker>
+                        <Text style={{color: "#014D40", width: "40%", height: "100%", textAlignVertical: 'center'}}>Type of account: </Text>
+                        <View style={ registerStyle.pickerWrapper }>
+                                <Picker
+                                      style={{width:150, height: 50, color: "#014D40"}}
+                                      selectedValue={(this.state && this.state.type)}
+                                      onValueChange={(itemValue) => this.setState({type: itemValue})} >
+                                        <Picker.Item label="Customer" value="customer" />
+                                        <Picker.Item label="Restaurant" value="restaurant" />
+                                </Picker>
+                        </View>
               </View>
             </View>
-            <View style={{flex: 1, width: "90%"}}>
+            <View style={ registerStyle.buttonWrapper }>
               <RoundButtonIcon
                   textColor="white"
-                  text="SIGN IN"
+                  text="SIGN UP"
                   background="#0A7966"
                   round={5}
-                  handleOnPress= { () => {} }
+                  handleOnPress= { this.createAccount }
                   iconStyle={{name:"chevron-circle-right", type: "font-awesome", color: "white"}}
-                  style={{marginLeft: "10%", marginTop: 20, width: '80%', marginBottom: 30, borderColor: "white", borderWidth: 1}}
+                  style={{ width: '80%', borderColor: "white", borderWidth: 1, height: 55}}
                   underlayColor="#27AB83"
               />
            </View>
-        </ScrollView>
+          { message }
       </ImageBackground>
     </View>
      );

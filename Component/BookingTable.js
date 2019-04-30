@@ -5,11 +5,16 @@ import DatePicker from 'react-native-date-picker';
 import Modal from "react-native-modal";
 import RoundButton from "./roundButton";
 import { bookTableStyle, flexStyle, bookingStyle, accountStyle } from "../Style/style";
+import NetInfo from "@react-native-community/netinfo";
+import Message from "./Message";
+import firebase from 'react-native-firebase';
+
+
 
 export default class BookingTable extends Component
 {
   static navigationOptions = {
-          title: "Booking Food",
+          title: "Booking Table",
           headerTitleStyle:  accountStyle.titleStyle
   };
   constructor(props)
@@ -28,13 +33,17 @@ export default class BookingTable extends Component
                         display: "none",
                         date: date,
                         error: false,
-                        errorMess: ""
+                        errorMess: "",
+                        user: firebase.auth().currentUser,
+                        showMessage: false,
+                        message: ""
                      };
         //------------------------------------------------------------------------------------------------------------------------------------------
         this.increase = this.increase.bind(this);
         this.decrease = this.decrease.bind(this);
         this.validateNumber = this.validateNumber.bind(this);
         this.validateTime = this.validateTime.bind(this);
+        this.orderConfig = this.orderConfig.bind(this);
   }
 //-----increase the number by 1-----------------------------------------------------------------------------------------
   increase() { this.setState({...this.state, count: this.state.count + 1}); }
@@ -79,9 +88,34 @@ validateTime()
       this.setState( {...this.state, error: true, errorMess: "Please choose the time being at least 30 minutes after now." } );
   }
 }
+// ---- Process booking table ----------------------------------------------------------------------------------------------
+orderConfig()
+{
+      if (this.state.user)
+      {
+         // Test for internet connect
+         NetInfo.getConnectionInfo().then( (data)=>{
+               if (data.type === "unknown" || data.type === "none")
+               {
+                      this.setState({showMessage: false})
+                     setTimeout(()=>this.setState( {message: "Please check your internet connecttion.", showMessage: true} ), 20);
+                }
+               else {
+                  // Processing the booking cart
+               }
+         } );
+      }
+      else
+      {
+        this.props.navigation.navigate("LogIn");
+      }
+}
 //-//-----------------------------------------------------------------------------------------------------------------------
   render()
   {
+    //-------Message -------------------------------------------------------------------------------------------------------
+    const message = (this.state.showMessage ? <Message text={this.state.message} /> : null);
+    // -----Number and date format ------------------------------------------------------------------------------------------
     if ( Platform.OS === 'android' ) {
             require('intl');
             require('intl/locale-data/jsonp/en');
@@ -132,6 +166,7 @@ validateTime()
                                                         inputContainerStyle={{borderWidth: 1, borderColor: "rgba(0,0,0,0.2)", borderRadius: 5, marginVertical: 20, width: "40%", marginLeft: "30%"}}
                                                         onChangeText={ (text) => this.setState({...this.state, numberInput: text}) }
                                                         inputStyle={{fontSize: 14, paddingVertical: 0}}
+                                                        autoFocus={true}
                                                  />
                                                  <Text style={{padding: 5, marginLeft: 10, marginBottom: 10, color: "red", display: this.state.display}}>You must enter a number.</Text>
                                                  <RoundButton
@@ -227,13 +262,14 @@ validateTime()
                                     text="Book"
                                     round={0}
                                     boxStyle={{width: "40%", borderWidth: 1, borderColor: "#1F9F5F"}}
-                                    handleOnPress={ ()=>{} }
+                                    handleOnPress={this.orderConfig}
                                     underlayColor="#227100"
                                     textStyle={{color: "white"}}
                             />
 
                     </View>
              </View>
+           {message}
       </View>
     );
   }

@@ -35,7 +35,7 @@ export const MainScreen = createBottomTabNavigator(
       }
     }),
     tabBarOptions: {
-			activeTintColor: "#014D40",
+			activeTintColor: "green",
 			inactiveTintColor: "gray"
 		}
   }

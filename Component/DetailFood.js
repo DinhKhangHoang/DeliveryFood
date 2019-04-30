@@ -1,20 +1,26 @@
 import React, { Component } from "react";
 import { Text, View, Image, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { Rating, Avatar, AirbnbRating, Icon, Input  } from "react-native-elements";
+import firebase from 'react-native-firebase';
 import ComponentWithTitle from "./ComponentWithTitle";
 import RoundButton from "./roundButton";
 import Anchor from "./anchor";
 import ListView from "./ListView";
 import { detailFood, commentStyle, listViewStyle, resInfor, accountStyle } from "../Style/style";
+import NetInfo from "@react-native-community/netinfo";
+import Message from "./Message";
 
 
-
+// ---- THIS IS COMMENT CLASS -----------------------------------------------------------------------------
 class Comment extends Component
 {
   constructor(props)
   {
         super(props);
-        this.state = { liked: false };
+        this.state = {
+          liked: false,
+          user: firebase.auth().currentUser,
+        };
         this.like = this.like.bind(this);
   }
 
@@ -49,20 +55,25 @@ class Comment extends Component
                      </View>
 
                     <View style={ commentStyle.anchorWrapper }>
-                            <Icon
-                                  name="like1"
-                                  type="antdesign"
-                                  color={ (this.state.liked ? "#2089DC" : "gray" )}  /* change color when liked */
-                                  onPress = { this.like }
-                            />
-                            <Icon
-                                  type="entypo"
-                                  name="chat"
-                                  color="gray"
-                                  underlayColor="transparent" //#85776E
+                            {( this.state.user ?
+                                        <Icon
+                                              name="like1"
+                                              type="antdesign"
+                                              color={ (this.state.liked ? "#2089DC" : "gray" )}  /* change color when liked */
+                                              onPress = { this.like }
+                                        /> : null
+                            )}
+                            {( this.state.user ?
+                                      <Icon
+                                            type="entypo"
+                                            name="chat"
+                                            color="gray"
+                                            underlayColor="transparent" //#85776E
 
-                                  onPress={ ()=>{} }
-                            />
+                                            onPress={ ()=>{} }
+                                      />
+                            : null
+                          )}
                     </View>
                 </View>
                 <Text style={ commentStyle.content }>This is the content of comment</Text>
@@ -71,6 +82,9 @@ class Comment extends Component
   }
 }
 
+
+// ---- THIS IS COMMENT INPUT CLASS -----------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 class CommentInput extends Component
 {
   constructor(props)
@@ -105,7 +119,7 @@ class CommentInput extends Component
   }
 }
 
-
+// ------ DETAIL FOOD ---------------------------------------------------------------------------------------------
 export default class DetailFood extends Component
 {
   static navigationOptions = ({ navigation }) => ({
@@ -118,21 +132,59 @@ export default class DetailFood extends Component
   {
     super(props);
     this.state = {
-      like: false   // Lay du lieu tu db
+      like: false,   // Lay du lieu tu db,
+      user: firebase.auth().currentUser,
+      showMessage: false,
+      message: ""
      }
      this.like = this.like.bind(this);
+     this.rating = this.rating.bind(this);
   }
 
-  like() { this.setState({...this.state, like: !this.state.like}); }
+  like() {
+      NetInfo.getConnectionInfo().then( (data)=>{
+          if (data.type === "unknown" || data.type === "none")
+          {
+                this.setState({showMessage: false, like: !this.state.like })
+                setTimeout(()=>this.setState( {message: "We can't save your result because of your internet connection", showMessage: true} ), 20);
+           }
+          else {
+                  this.setState({ like: !this.state.like });
+             // Processing and save to db
+             // ...
+          }
+    } );
+  }
+
+  rating()
+  {
+    NetInfo.getConnectionInfo().then( (data)=>{
+        if (data.type === "unknown" || data.type === "none")
+        {
+              this.setState({showMessage: false})
+              setTimeout(()=>this.setState( {message: "We can't save your result because of your internet connection", showMessage: true} ), 20);
+         }
+        else {
+           // Processing and save to db
+           // ...
+        }
+  } );
+  }
+
   render()
   {
+    //------- Message ----------------------------------------------------------------
+    const message = (this.state.showMessage ? <Message text={this.state.message} /> : null );
+    // ------ Number and date format--------------------------------------------------
     if ( Platform.OS === 'android' ) {
             require('intl');
             require('intl/locale-data/jsonp/en');
     }
 
     const data = this.props.navigation.getParam("data");
+    // const data = {key: require("../Media/listView/1.jpg"), title: "Title 1: test for long long text", rate: 4.5, price: 12000};
     return (
+    <View style={{flex: 1}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ width: "100%", height: "100%" }}>
           <View style={detailFood.foodInfor} >
@@ -173,7 +225,7 @@ export default class DetailFood extends Component
           </View>
 
 
-
+          {(this.state.user ?
           <ComponentWithTitle
                 title="Rating and like"
                 dataStyle={{width: "100%"}}
@@ -181,7 +233,7 @@ export default class DetailFood extends Component
                   <View style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row",  padding: 5}}>
                     <RoundButton
                           text= { (this.state.like ? "Liked" : "Like" ) }  /*   Like or Liked  */
-                          background="transparent"
+                          background={ "transparent" }
                           /*  background-color must depend on whether like or haven't yet  */
                           textColor={ (this.state.like ? "#0078D7" : "gray" ) }
                           round={5}
@@ -195,12 +247,12 @@ export default class DetailFood extends Component
                           count={5}
                           size={20}
                           reviews={["Terrible", "Bad", "Medium", "Good", "Great"]}
-                          onFinishRating={ ()=> {} }
+                          onFinishRating={ this.rating }
                           /* Function handle when rating */
                     />
                  </View>
                 }
-           />
+           /> : null )}
 
 
        <ComponentWithTitle
@@ -279,7 +331,8 @@ export default class DetailFood extends Component
                                     <Comment />
                                     <Comment />
                                     <Comment />
-                                    <CommentInput />
+
+                                    {( this.state.user ? <CommentInput /> : null )}
                               </View>
                          }
          />
@@ -290,9 +343,10 @@ export default class DetailFood extends Component
               navigation = { this.props.navigation }
               routename={ "Detail" }
         />
-
         </View>
       </ScrollView>
+      { message }
+    </View>
     );
   }
 }
