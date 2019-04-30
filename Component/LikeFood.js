@@ -64,7 +64,7 @@ export default class LikedFood extends Component
                 {key: require("../Media/listView/6.jpg"), title: "Title 6", rate: 4.5, price: 6000}
           ]}
       ],
-          isEmpty: true,
+          isEmpty: false,
           isConnected: true
       // Fetch data from database
       //----------------------------

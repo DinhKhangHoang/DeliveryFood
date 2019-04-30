@@ -105,7 +105,7 @@ export default class CartCustomer extends Component
           {key: require("../Media/listView/5.jpg"), title: "Title 5", quantity: 2, price: 17000, status: "delivery"},
           {key: require("../Media/listView/6.jpg"), title: "Title 6", quantity: 1, price: 6000, status: "discarded"}
       ],
-      isEmpty: true,
+      isEmpty: false,
       isConnected: true
       // Fetch data from database
     };
