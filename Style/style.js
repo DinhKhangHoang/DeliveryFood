@@ -1270,10 +1270,10 @@ export const modalEditInfoStyle = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 16,
         width: "20%",
-        height : 50
     },
     inputname:
     {
+        margin : 15,
         width: "80%",
         textAlign: "left",
         fontSize : 16,
@@ -1300,7 +1300,6 @@ export const modalAddFoodStyle = StyleSheet.create({
     },
     image:
     {
-        paddingTop: 50,
         margin: 5,
         height: 300,
         borderWidth: 1,
@@ -1310,24 +1309,27 @@ export const modalAddFoodStyle = StyleSheet.create({
     },
     wrappername:
     {
-        flexDirection:"row",
+        flexDirection:"column",
         paddingVertical: 10,
-        height: 50
+        height: 30
     },
     textname:
     {
         paddingLeft: 20,
         fontWeight: "bold",
         fontSize: 16,
-        width: "20%",
-        height : 50
+        width: "40%",
+        height : 30,
+        paddingTop: 10
     },
     inputname:
     {
-        width: "80%",
-        textAlign: "left",
-        fontSize : 16,
-        height: 40
+      margin: 5,
+      height: 40,
+      borderColor: '#2196F3',
+      borderWidth: 1,
+      fontSize: 16,
+      borderRadius: 5
     },
     apply:
     {

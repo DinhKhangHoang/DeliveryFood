@@ -62,6 +62,7 @@ export default class Addfood extends Component
           State: this.state.statefood,
           rating: 0,
           FoodID: ref.id,
+          numRate: 0,
           ID_RES: firebase.auth().currentUser.uid,
           numRate: 0
         }, {merge: true});
@@ -90,55 +91,57 @@ export default class Addfood extends Component
   render(){
     const {goBack} = this.props.navigation;
     return(
-      <ScrollView>
+      <ScrollView style = {{paddingVertical : 5}}>
             <TouchableOpacity style = {modalAddFoodStyle.image}
                               onPress = {this.picker}>
-              <Image source = {this.state.imageSource} style = {{height: '100%', width: '100%'}}/>
+              <Image source = {this.state.imageSource} style = {{height: '80%', width: '100%'}}/>
+              <Text style = {{fontSize: 30, color: '#2196F3', justifyContent: 'center'}}>Upload Image</Text>
             </TouchableOpacity>
-            <View style = {modalAddFoodStyle.wrappername}>
+
               <Text style={ modalAddFoodStyle.textname }>Name :</Text>
               <TextInput style = {modalAddFoodStyle.inputname}
                           onChangeText = {(text) => {this.setState({inputtitle : text})}}
                           value = {this.state.inputtitle}
-                          underlineColorAndroid = {"light-gray"}
+                          underlineColorAndroid = 'transparent'
+                          autoCapitalize = "none"
               />
-            </View>
-            <View style = {modalAddFoodStyle.wrappername}>
+
               <Text style={ modalAddFoodStyle.textname }>Price :</Text>
               <TextInput style = {modalAddFoodStyle.inputname}
                           onChangeText = {(text) => {this.setState({inputprice : text});}}
                           value = {this.state.inputprice}
-                          underlineColorAndroid = {"light-gray"}
+                          underlineColorAndroid = 'transparent'
+                          autoCapitalize = "none"
               />
-            </View>
-            <View style = {modalAddFoodStyle.wrappername}>
+
               <Text style={ modalAddFoodStyle.textname }>Description :</Text>
               <TextInput style = {modalAddFoodStyle.inputname}
                           onChangeText = {(text) => {this.setState({inputdescription : text})}}
                           value = {this.state.inputdescription}
-                          underlineColorAndroid = {"light-gray"}
+                          underlineColorAndroid = 'transparent'
+                          autoCapitalize = "none"
               />
-            </View>
-            <View style = {modalAddFoodStyle.wrappername}>
-              <Text style={ modalAddFoodStyle.textname }>Type :</Text>
-              <Picker
-                 style = {modalAddFoodStyle.pickerType}
-                 onValueChange = {(type)=>{this.setState({typefood: type});}}
-                 selectedValue = {this.state.typefood}>
-                 <Picker.Item label = "Main course" value = "maincourse"/>
-                 <Picker.Item label = "Dessert" value = "dessert"/>
-               </Picker>
-            </View>
-            <View style = {modalAddFoodStyle.wrappername}>
-              <Text style={ modalAddFoodStyle.textname }>State :</Text>
-              <Picker
-                 style = {modalAddFoodStyle.pickerType}
-                 onValueChange = {(type)=>{this.setState({statefood: type});}}
-                 selectedValue = {this.state.statefood}>
-                 <Picker.Item label = "On stock" value = {true}/>
-                 <Picker.Item label = "Sold out" value = {false}/>
-               </Picker>
-            </View>
+              <View style = {{flexDirection : 'row'}}>
+                <Text style={ modalAddFoodStyle.textname }>Type :</Text>
+                <Picker
+                   style = {modalAddFoodStyle.pickerType}
+                   onValueChange = {(type)=>{this.setState({typefood: type});}}
+                   selectedValue = {this.state.typefood}>
+                   <Picker.Item label = "Main course" value = "maincourse"/>
+                   <Picker.Item label = "Dessert" value = "dessert"/>
+                 </Picker>
+               </View>
+              <View style = {{flexDirection : 'row'}}>
+                <Text style={ modalAddFoodStyle.textname }>State :</Text>
+                <Picker
+                   style = {modalAddFoodStyle.pickerType}
+                   onValueChange = {(type)=>{this.setState({statefood: type});}}
+                   selectedValue = {this.state.statefood}>
+                   <Picker.Item label = "On stock" value = {true}/>
+                   <Picker.Item label = "Sold out" value = {false}/>
+                 </Picker>
+              </View>
+
             <View style = {{justifyContent: 'center', flexDirection: 'row'}}>
               <TouchableHighlight
                 onPress={this._onPressApply}
