@@ -99,7 +99,10 @@ export default class Register extends Component
                                       UID_CUS: res.user.uid,
                                       Address: "",
                                       Birthday: "",
-                                      PhoneNumber: phoneNumber
+                                      PhoneNumber: phoneNumber,
+                                      likedComment: "",
+                                      rating: "",
+                                      likeFood: "",
                                     };
                          }
                         else {
@@ -114,7 +117,10 @@ export default class Register extends Component
                                       Rating: 0,
                                       TimeWork: "",
                                       numberRate: 0,
-                                      bookingTablePrice: 0
+                                      bookingTablePrice: 0,
+                                      likedComment: "",
+                                      rating: "",
+                                      likeFood: "",
                                   };
                         }
                         firebase.firestore().collection(type).doc( res.user.uid ).set( data );

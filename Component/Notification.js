@@ -56,6 +56,7 @@ export class NotificationItem extends Component
   render()
   {
             const {  title, time, content } = this.props;
+                  // --- title = title + nameOfRestaurant -----------------------------------------------
             return (
               <View style={ notification.itemContainer }>
                   <View style={ notification.titleItemWrapper }>

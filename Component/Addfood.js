@@ -63,6 +63,7 @@ export default class Addfood extends Component
           rating: 0,
           FoodID: ref.id,
           ID_RES: firebase.auth().currentUser.uid,
+          numRate: 0
         }, {merge: true});
     UploadImage(this.state.imageSource.uri, ref.id)
     .then(url=>this.setState({imageSource: url}))
