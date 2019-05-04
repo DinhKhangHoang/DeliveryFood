@@ -21,7 +21,7 @@ const UploadImage = (uri,sessionID, mime = 'application/octet-stream')=>{
     const imageRef = firebase.storage().ref('FoodImage').child(sessionID+'.jpg');
     return imageRef.put(uri, {contentType: mime})
     .then(()=>{
-      return imageRef.getDownloadURl();
+      return imageRef.getDownloadURL();
     })
     .then((url)=>{
       resolve(url)

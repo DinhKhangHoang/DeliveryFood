@@ -4,6 +4,7 @@ import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
 import { listViewMenuItemStyle, modalViewInfoStyle, modalEditInfoStyle } from "../Style/style.js";
+import firebase from 'react-native-firebase';
 
 class ListViewMenuItem extends Component
 {
@@ -14,9 +15,34 @@ class ListViewMenuItem extends Component
       //this.renderModalViewinfo = this.renderModalViewInfo.bind(this);
       this.state = {ViewInfovisible : false,
                     EditInfovisible : false,
-                    inputtitle : this.props.title,
-                    inputprice : this.props.price,
+                    inputtitle : '',
+                    inputprice : '',
+                    title: '',
+                    price: 0,
+                    rate: 0,
+                    imgURL :'',
+                    loading: true,
       };
+      this.ref = firebase.firestore().collection('Food');
+      this.unsubscribe = null;
+    }
+    componentDidMount() {
+      this.unsubscribe = this.ref.doc(this.props.foodID).onSnapshot(this.onDocumentUpdate);
+    }
+    componentWillUnmount() {
+      this.unsubscribe();
+    }
+    onDocumentUpdate = (DocumentSnapshot)=>{
+      this.setState({title: DocumentSnapshot.get('Name'),
+                      price: DocumentSnapshot.get('Price'),
+                      rate: DocumentSnapshot.get('rating'),
+                    });
+      let ref = firebase.storage().ref('FoodImage');
+      ref.child(`${this.props.foodID}.jpg`).getDownloadURL()
+      .then((url)=>{
+        //state[loading] = false;
+        this.setState({imgURL: url, loading: false});
+      });
     }
     _onPressProperty(){
       Alert.alert(
@@ -35,25 +61,27 @@ class ListViewMenuItem extends Component
     }
     render()
     {
-      const { imgURL, title = "", rate = 0, price } = this.props;
+      const { foodID } = this.props;
+      if(this.state.loading)
+      return null;
       return (
         <View>
             <View style={ listViewMenuItemStyle.item }>
                   <Image
-                      source={ imgURL }
+                      source={ {uri:this.state.imgURL} }
                       style={ listViewMenuItemStyle.image }
                       resizeMode='cover'
                   />
                   <View style = {{flex:1, flexDirection:"column"}}>
-                    <Text style={ listViewMenuItemStyle.text }>{ title }</Text>
+                    <Text style={ listViewMenuItemStyle.text }>{ this.state.title }</Text>
                     <View style={ listViewMenuItemStyle.wrapperRateAndPrice }>
                         <View style={ listViewMenuItemStyle.rateWrapper }>
                             <Icon name="star" type="antdesign" color="white" size={15} />
-                            <Text style={{color: "white", fontSize: 10, marginLeft: 5}}>{ rate }</Text>
+                            <Text style={{color: "white", fontSize: 10, marginLeft: 5}}>{ this.state.rate }</Text>
                         </View>
                         <View style={ listViewMenuItemStyle.priceWrapper }>
                             <Icon type="font-awesome" name="dollar" color="#227100" size={15} />
-                            <Text style={{fontSize: 15, color: "#227100", marginLeft: 5, fontWeight: "bold"}}>{ price }</Text>
+                            <Text style={{fontSize: 15, color: "#227100", marginLeft: 5, fontWeight: "bold"}}>{ this.state.price }</Text>
                         </View>
                     </View>
                   </View>
@@ -72,19 +100,19 @@ class ListViewMenuItem extends Component
               }}>
               <View style={ modalViewInfoStyle.item }>
                   <Image
-                      source={ imgURL }
+                      source={ {uri: this.state.imgURL} }
                       style={ modalViewInfoStyle.image }
                       resizeMode='cover'
                   />
-                  <Text style={ modalViewInfoStyle.text }>{ title }</Text>
+                  <Text style={ modalViewInfoStyle.text }>{ this.state.title }</Text>
                   <View style={ modalViewInfoStyle.wrapperRateAndPrice }>
                       <View style={ modalViewInfoStyle.rateWrapper }>
                           <Icon name="star" type="antdesign" color="white" size={15} />
-                          <Text style={{color: "white", fontSize: 10, marginLeft: 5}}>{ rate }</Text>
+                          <Text style={{color: "white", fontSize: 10, marginLeft: 5}}>{ this.state.rate }</Text>
                       </View>
                       <View style={ modalViewInfoStyle.priceWrapper }>
                           <Icon type="font-awesome" name="dollar" color="#227100" size={15} />
-                          <Text style={{fontSize: 15, color: "#227100", marginLeft: 5, fontWeight: "bold"}}>{ price }</Text>
+                          <Text style={{fontSize: 15, color: "#227100", marginLeft: 5, fontWeight: "bold"}}>{ this.state.price }</Text>
                       </View>
                   </View>
               </View>
@@ -98,7 +126,7 @@ class ListViewMenuItem extends Component
               }}>
               <View style={ modalEditInfoStyle.item }>
                   <Image
-                      source={ imgURL }
+                      source={ {uri : this.state.imgURL} }
                       style={ modalEditInfoStyle.image }
                       resizeMode='cover'
                   />
@@ -138,7 +166,21 @@ export default class ListViewMenu extends Component
   constructor(props)
   {
     super(props);
+    this.ref = firebase.firestore().collection('Food').where('ID_RES' , '==', firebase.auth().currentUser.uid);
+    this.unsubscribe = null;
     this.state = {
+      loading: true,
+      food :
+        [
+          {title: "Dessert",
+            data :[],
+          },
+          {title: "Main Course",
+            data :[],
+          }
+        ]
+    }
+    /*this.state = {
       sections:
       [
         {title: "Dessert",
@@ -164,24 +206,52 @@ export default class ListViewMenu extends Component
           ]
         }
       ]
+    };*/
+  }
+  componentDidMount() {
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+  }
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+  onCollectionUpdate = (querySnapshot) => {
+    const Dessert = {
+      title: "Dessert",
+        data :[],
+    },
+    MainCourse=
+    {title: "Main Course",
+      data :[],
     };
+    querySnapshot.forEach((doc)=> {
+      if(doc.get('TypeOfFood') == "maincourse"){
+        MainCourse.data.push({key :doc.get('FoodID')});
+      }
+      else if( doc.get('TypeOfFood') == "dessert"){
+        Dessert.data.push({key :doc.get('FoodID')});
+      }
+    });
+    const food = [Dessert, MainCourse];
+    this.setState({
+      food,
+      loading : false,
+    });
   }
   render()
   {
+    if(this.state.loading)
+    return null;
     //const { title } = this.props;
     return (
           <View style={{width: "100%"}}>
             <SectionList
-                sections={ this.state.sections }
+                sections={ this.state.food }
                 showsVerticalScrollIndicator = {false}
                 //keyExtractor={(item) => item.title }
                 renderSectionHeader={({section}) => <Text
                                                         style={listViewMenuItemStyle.text}>{section.title}</Text>}
                 renderItem={( {item} ) => <ListViewMenuItem
-                                                imgURL={item.key}
-                                                title={item.title}
-                                                rate={item.rate}
-                                                price={item.price}
+                                              foodID = {item.key}
                                           />  }
             />
           </View>
