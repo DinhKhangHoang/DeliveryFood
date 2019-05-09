@@ -3,6 +3,7 @@ import { Text, View, Image, FlatList, Modal, TextInput, TouchableHighlight, Aler
 import { Icon } from "react-native-elements";
 import ImagePicker from 'react-native-image-picker';
 import ListViewMenu from "./ListViewMenu";
+import {UploadImage} from "./UploadImage.js"
 import { FoodManagement, accountStyle, modalAddFoodStyle, listViewMenuItemStyle} from "../Style/style";
 import firebase from 'react-native-firebase';
 
@@ -15,22 +16,7 @@ var options = {
   },
 };
 
-const UploadImage = (uri,sessionID, mime = 'application/octet-stream')=>{
-  return new Promise((resolve, reject)=>{
-    const uploadUri = Platform.OS==='ios' ? uri.replace('file://', ''):uri;
-    const imageRef = firebase.storage().ref('FoodImage').child(sessionID+'.jpg');
-    return imageRef.put(uri, {contentType: mime})
-    .then(()=>{
-      return imageRef.getDownloadURL();
-    })
-    .then((url)=>{
-      resolve(url)
-    })
-    .catch((error)=>{
-      reject(error)
-    })
-  })
-}
+
 
 export default class Addfood extends Component
 {
@@ -46,7 +32,8 @@ export default class Addfood extends Component
                  inputdescription: "",
                  typefood: 'maincourse',
                   statefood: true,
-                  imageSource: null
+                  imageSource: null,
+                  
                 };
     this._onPressApply = this._onPressApply.bind(this);
     this.picker = this.picker.bind(this);
