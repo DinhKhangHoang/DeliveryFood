@@ -12,8 +12,8 @@ export default class AnchorIcon extends Component
     return(
       <TouchableHighlight onPress={this.props.handleOnPress} style={[anchorIconStyle.wrapper, wrapperStyle]} underlayColor="rgba(0, 0, 0, 0.2)">
         <View style={{flex: 1,  flexDirection: "row", alignItems: 'center', justifyContent: 'flex-start'}}>
-          <Icon name={icon.name} type={icon.type} color={icon.color} style={anchorIconStyle.icon} />
-          <Text style={ [ textStyle, anchorIconStyle.text] }>{ text }</Text>
+          <Icon name={icon.name} type={icon.type} color={icon.color} style={ anchorIconStyle.icon }/>
+          <Text style={ [ textStyle, anchorIconStyle.text ] }>{ text }</Text>
         </View>
       </TouchableHighlight>
     );

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Text, View } from "react-native";
 import { SearchBar, Icon } from 'react-native-elements';
 import { headerStyle } from "../Style/style.js";
+import firebase from 'react-native-firebase';
+
 
 
 export default class Header extends Component
@@ -11,6 +13,7 @@ export default class Header extends Component
       super(props);
       this.state = { search: "" };
   }
+
 
   render()
   {
@@ -42,7 +45,7 @@ export default class Header extends Component
                   type="feather"
                   color="white"
                   underlayColor="transparent"
-                  onPress={()=>{}}
+                  onPress={ ()=>this.props.navigation.push( (global.UserType == "Restaurant" ? "Cart" : "CartCustomer")) }
               />
               { icon }
           </View>
