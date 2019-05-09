@@ -180,33 +180,6 @@ export default class ListViewMenu extends Component
           }
         ]
     }
-    /*this.state = {
-      sections:
-      [
-        {title: "Dessert",
-          data :
-          [
-            {key: require("../Media/listView/1.jpg"), title: "Title 1", rate: 4.5, price: "12.000"},
-            {key: require("../Media/listView/2.jpg"), title: "Title 2", rate: 5, price: "40.000"},
-            {key: require("../Media/listView/3.jpg"), title: "Title 3", rate: 3, price: "20.000"},
-            {key: require("../Media/listView/4.jpg"), title: "Title 4", rate: 4.5, price: "23.000"},
-            {key: require("../Media/listView/5.jpg"), title: "Title 5", rate: 4.5, price: "17.000"},
-            {key: require("../Media/listView/6.jpg"), title: "Title 6", rate: 4.5, price: "6.000"}
-          ]
-        },
-        {title: "Main Course",
-          data :
-          [
-            {key: require("../Media/listView/1.jpg"), title: "Title 7", rate: 4.5, price: "12.000"},
-            {key: require("../Media/listView/2.jpg"), title: "Title 8", rate: 5, price: "40.000"},
-            {key: require("../Media/listView/3.jpg"), title: "Title 9", rate: 3, price: "20.000"},
-            {key: require("../Media/listView/4.jpg"), title: "Title 10", rate: 4.5, price: "23.000"},
-            {key: require("../Media/listView/5.jpg"), title: "Title 11", rate: 4.5, price: "17.000"},
-            {key: require("../Media/listView/6.jpg"), title: "Title 12", rate: 4.5, price: "6.000"}
-          ]
-        }
-      ]
-    };*/
   }
   componentDidMount() {
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
