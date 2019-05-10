@@ -1,28 +1,40 @@
 import React, { Component } from "react";
-import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput,TouchableOpacity } from "react-native";
+import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput,TouchableOpacity, ScrollView, Picker } from "react-native";
 import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
-import { listViewMenuItemStyle, modalViewInfoStyle, modalEditInfoStyle } from "../Style/style.js";
+import { listViewMenuItemStyle, modalViewInfoStyle, modalEditInfoStyle, modalAddFoodStyle } from "../Style/style.js";
 import firebase from 'react-native-firebase';
 import { NavigationEvents } from 'react-navigation';
+import {UploadImage} from './UploadImage.js';
+import ImagePicker from 'react-native-image-picker';
 
+var options = {
+  title: 'Select Avatar',
+  customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
 class ListViewMenuItem extends Component
 {
     constructor(props)
     {
       super(props);
       this._onPressProperty = this._onPressProperty.bind(this);
-      //this.renderModalViewinfo = this.renderModalViewInfo.bind(this);
+      this._onPressSave = this._onPressSave.bind(this);
       this.state = {ViewInfovisible : false,
                     EditInfovisible : false,
-                    inputtitle : '',
-                    inputprice : '',
                     title: '',
                     price: 0,
                     rate: 0,
                     imgURL :'',
                     loading: true,
+                    information: '',
+                    typeOfFood:'',
+                    State:'',
+
       };
       this.ref = firebase.firestore().collection('Food');
       this.unsubscribe = null;
@@ -37,6 +49,9 @@ class ListViewMenuItem extends Component
       this.setState({title: DocumentSnapshot.get('Name'),
                       price: DocumentSnapshot.get('Price'),
                       rate: DocumentSnapshot.get('rating'),
+                      information: DocumentSnapshot.get('Information'),
+                      typeOfFood: DocumentSnapshot.get('TypeOfFood'),
+                      State: DocumentSnapshot.get('State'),
                     });
       let ref = firebase.storage().ref('FoodImage');
       ref.child(`${this.props.foodID}.jpg`).getDownloadURL()
@@ -59,6 +74,33 @@ class ListViewMenuItem extends Component
         ],
         {cancelable: true},
       );
+    }
+    _onPressSave(){
+      this.ref.doc(this.props.foodID)
+      .update({
+        Name : this.state.title,
+        Price: Number(this.state.price),
+        Information: this.state.information,
+        TypeOfFood: this.state.typeOfFood,
+        State: this.state.State,
+      });
+      Alert.alert("Data saved!");
+    }
+    picker(){
+      ImagePicker.showImagePicker(options, (response) => {
+        if (response.didCancel) {
+
+        } else if (response.error) {
+
+        } else if (response.customButton) {
+
+        } else {
+          let source = { uri: response.uri };
+          this.setState({
+            imgURL: source,
+          });
+        }
+      });
     }
     render()
     {
@@ -125,38 +167,67 @@ class ListViewMenuItem extends Component
               onRequestClose={() => {
                 this.setState({EditInfovisible: false});
               }}>
-              <View style={ modalEditInfoStyle.item }>
-                  <Image
-                      source={ {uri : this.state.imgURL} }
-                      style={ modalEditInfoStyle.image }
-                      resizeMode='cover'
-                  />
-                  <View style = {modalEditInfoStyle.wrappername}>
-                    <Text style={ modalEditInfoStyle.textname }>Name :</Text>
-                    <TextInput style = {modalEditInfoStyle.inputname}
-                                onChangeText = {(text) => {this.setState({inputtitle : text});}}
-                                value = {this.state.inputtitle}
-                                underlineColorAndroid = {"light-gray"}
-                    />
-                  </View>
-                  <View style = {modalEditInfoStyle.wrappername}>
-                    <Text style={ modalEditInfoStyle.textname }>Price :</Text>
-                    <TextInput style = {modalEditInfoStyle.inputname}
-                                onChangeText = {(text) => {this.setState({inputprice : text});}}
-                                value = {this.state.inputprice}
-                                underlineColorAndroid = {"light-gray"}
-                    />
-                  </View>
-              </View>
-              <View style = {{justifyContent: 'center', flexDirection: 'row', flex:1}}>
-                <TouchableHighlight
-                  onPress={() => {
-                    this.setState({EditInfovisible: false});
-                  }}
-                  style = {modalEditInfoStyle.apply}>
-                    <Text style = {{fontSize:24, fontWeight:"bold", color: 'white'}}>Apply</Text>
-                </TouchableHighlight>
-              </View>
+              <ScrollView style = {{paddingVertical : 5}}>
+                    <TouchableOpacity style = {modalAddFoodStyle.image}
+                                      onPress = {this.picker}>
+                      <Image source = {{uri: this.state.imgURL}} style = {{height: '80%', width: '100%'}}/>
+                      <Text style = {{fontSize: 30, color: '#2196F3', justifyContent: 'center'}}>Change Image</Text>
+                    </TouchableOpacity>
+
+                      <Text style={ modalAddFoodStyle.textname }>Name :</Text>
+                      <TextInput style = {modalAddFoodStyle.inputname}
+                                  onChangeText = {(text) => {this.setState({title : text})}}
+                                  value = {this.state.title}
+                                  underlineColorAndroid = 'transparent'
+                                  autoCapitalize = "none"
+                      />
+
+                      <Text style={ modalAddFoodStyle.textname }>Price :</Text>
+                      <TextInput style = {modalAddFoodStyle.inputname}
+                                  onChangeText = {(text) => {this.setState({price : Number(text)});}}
+                                  value = {this.state.price.toString()}
+                                  underlineColorAndroid = 'transparent'
+                                  autoCapitalize = "none"
+                      />
+
+                      <Text style={ modalAddFoodStyle.textname }>Description :</Text>
+                      <TextInput style = {modalAddFoodStyle.inputname}
+                                  onChangeText = {(text) => {this.setState({information : text})}}
+                                  value = {this.state.information}
+                                  underlineColorAndroid = 'transparent'
+                                  autoCapitalize = "none"
+                      />
+                      <View style = {{flexDirection : 'row'}}>
+                        <Text style={ modalAddFoodStyle.textname }>Type :</Text>
+                        <Picker
+                           style = {modalAddFoodStyle.pickerType}
+                           onValueChange = {(type)=>{this.setState({typeOfFood: type});}}
+                           selectedValue = {this.state.typeOfFood}>
+                           <Picker.Item label = "Main course" value = "maincourse"/>
+                           <Picker.Item label = "Dessert" value = "dessert"/>
+                         </Picker>
+                       </View>
+                      <View style = {{flexDirection : 'row'}}>
+                        <Text style={ modalAddFoodStyle.textname }>State :</Text>
+                        <Picker
+                           style = {modalAddFoodStyle.pickerType}
+                           onValueChange = {(type)=>{this.setState({State: type});}}
+                           selectedValue = {this.state.State}>
+                           <Picker.Item label = "On stock" value = {true}/>
+                           <Picker.Item label = "Sold out" value = {false}/>
+                         </Picker>
+                      </View>
+
+                    <View style = {{justifyContent: 'center', flexDirection: 'row'}}>
+                      <TouchableHighlight
+                        onPress={this._onPressSave}
+                        style = {modalAddFoodStyle.apply}
+                        disabled = {!(this.state.title.length && this.state.price.toString().length && this.state.information.length)}
+                       >
+                          <Text style = {{fontSize:24, fontWeight:"bold",color: 'white'}}>Save</Text>
+                      </TouchableHighlight>
+                    </View>
+              </ScrollView>
             </Modal>
         </View>
       );

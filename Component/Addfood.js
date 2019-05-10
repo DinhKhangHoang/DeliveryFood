@@ -33,7 +33,7 @@ export default class Addfood extends Component
                  typefood: 'maincourse',
                   statefood: true,
                   imageSource: null,
-                  
+
                 };
     this._onPressApply = this._onPressApply.bind(this);
     this.picker = this.picker.bind(this);
@@ -51,7 +51,6 @@ export default class Addfood extends Component
           FoodID: ref.id,
           numRate: 0,
           ID_RES: firebase.auth().currentUser.uid,
-          numRate: 0
         }, {merge: true});
     UploadImage(this.state.imageSource.uri, ref.id)
     .then(url=>this.setState({imageSource: url}))
