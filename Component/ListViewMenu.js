@@ -5,6 +5,7 @@ import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
 import { listViewMenuItemStyle, modalViewInfoStyle, modalEditInfoStyle } from "../Style/style.js";
 import firebase from 'react-native-firebase';
+import { NavigationEvents } from 'react-navigation';
 
 class ListViewMenuItem extends Component
 {
@@ -217,6 +218,7 @@ export default class ListViewMenu extends Component
     //const { title } = this.props;
     return (
           <View style={{width: "100%"}}>
+            <NavigationEvents onDidFocus={this.ref.onSnapshot(this.onCollectionUpdate)} />
             <SectionList
                 sections={ this.state.food }
                 showsVerticalScrollIndicator = {false}

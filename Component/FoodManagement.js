@@ -8,15 +8,8 @@ export default class FManagement extends Component
 {
     constructor(){
       super();
-      //this.state = {AddFoodvisible: false,
-      //              inputtitle: "",
-    //                inputprice: "",
-    //                inputdescription: "",
-      //              typefood: 'maincourse',
-      //              statefood: true,};
       this._onPressAdd = this._onPressAdd.bind(this);
-    //  this._onPressApply = this._onPressApply.bind(this);
-      //this.ref = firebase.firestore().collection('Food');
+
     }
     static navigationOptions = ({navigation})=>{
       return{
@@ -42,26 +35,9 @@ export default class FManagement extends Component
                       )
             };
     };
-    //componentWillMount() {
-    //  this.props.navigation.setParams({ _onPressAdd: this._onPressAdd });
-    //}
     _onPressAdd(){
-    //  this.setState({AddFoodvisible: true});
-      //Alert.alert("Hello");
       this.props.navigation.navigate("Addfood");
     }
-  //  _onPressApply(){
-      //doc = this.ref.add({
-        //    Name : this.state.inputtitle,
-        //    Price: this.state.inputprice,
-        //    Information: this.state.inputdescription,
-        //    TypeOfFood: this.state.typefood,
-        //    State: this.state.statefood,
-        //    rating: 0,
-        //  });
-    //  Alert.alert("Data saved!");
-    //  this.setState({AddFoodvisible: false,});
-  //  }
     render()
     {
       return (
