@@ -24,10 +24,11 @@ class ListViewMenuItem extends Component
       super(props);
       this._onPressProperty = this._onPressProperty.bind(this);
       this._onPressSave = this._onPressSave.bind(this);
+      this._onPressDelete = this._onPressDelete.bind(this);
       this.state = {ViewInfovisible : false,
                     EditInfovisible : false,
                     title: '',
-                    price: 0,
+                    price: '',
                     rate: 0,
                     imgURL :'',
                     loading: true,
@@ -47,7 +48,7 @@ class ListViewMenuItem extends Component
     }
     onDocumentUpdate = (DocumentSnapshot)=>{
       this.setState({title: DocumentSnapshot.get('Name'),
-                      price: DocumentSnapshot.get('Price'),
+                      price: String(DocumentSnapshot.get('Price')),
                       rate: DocumentSnapshot.get('rating'),
                       information: DocumentSnapshot.get('Information'),
                       typeOfFood: DocumentSnapshot.get('TypeOfFood'),
@@ -62,10 +63,17 @@ class ListViewMenuItem extends Component
     }
     _onPressProperty(){
       Alert.alert(
-        this.props.title,
+        this.state.title,
         'Select one',
         [
-          {text: 'Delete', onPress: () => {}},
+          {text: 'Delete', onPress: ()=>{
+            Alert.alert("Delete data?","Select one",
+            [
+              {text: 'Delete', onPress: this._onPressDelete},
+              {text: 'Cancel', onPress:()=>{}},
+            ],
+              {cancelable: true},
+            )}},
           {
             text: 'View Information',
             onPress: ()=>{this.setState({ViewInfovisible : true})} ,
@@ -74,6 +82,11 @@ class ListViewMenuItem extends Component
         ],
         {cancelable: true},
       );
+    }
+    _onPressDelete(){
+      this.ref.doc(this.props.foodID).delete();
+      firebase.storage().ref('FoodImage').child(`${this.props.foodID}.jpg`).delete();
+      Alert.alert("Data deleted!");
     }
     _onPressSave(){
       this.ref.doc(this.props.foodID)
@@ -84,7 +97,18 @@ class ListViewMenuItem extends Component
         TypeOfFood: this.state.typeOfFood,
         State: this.state.State,
       });
-      Alert.alert("Data saved!");
+      firebase.storage().ref('FoodImage').child(`${this.props.foodID}.jpg`)
+      .delete()
+      .then(()=>{
+        UploadImage(this.state.imgURL.uri, this.props.foodID)
+        .then(url=>this.setState({imgURL: url}))
+        .then(()=>{
+          Alert.alert("Data saved!");
+          this.setState({EditInfovisible: false});
+        })
+      })
+
+
     }
     picker(){
       ImagePicker.showImagePicker(options, (response) => {
@@ -184,8 +208,8 @@ class ListViewMenuItem extends Component
 
                       <Text style={ modalAddFoodStyle.textname }>Price :</Text>
                       <TextInput style = {modalAddFoodStyle.inputname}
-                                  onChangeText = {(text) => {this.setState({price : Number(text)});}}
-                                  value = {this.state.price.toString()}
+                                  onChangeText = {(text) => {this.setState({price : text});}}
+                                  value = {this.state.price}
                                   underlineColorAndroid = 'transparent'
                                   autoCapitalize = "none"
                       />
@@ -222,7 +246,7 @@ class ListViewMenuItem extends Component
                       <TouchableHighlight
                         onPress={this._onPressSave}
                         style = {modalAddFoodStyle.apply}
-                        disabled = {!(this.state.title.length && this.state.price.toString().length && this.state.information.length)}
+                        disabled = {!(this.state.title.length != 0 && this.state.price.length != 0 && this.state.information.length != 0)}
                        >
                           <Text style = {{fontSize:24, fontWeight:"bold",color: 'white'}}>Save</Text>
                       </TouchableHighlight>
@@ -257,7 +281,7 @@ export default class ListViewMenu extends Component
     this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
   }
   componentWillUnmount() {
-    this.unsubscribe();
+    this.unsubscribe = null;
   }
   onCollectionUpdate = (querySnapshot) => {
     const Dessert = {
@@ -289,7 +313,8 @@ export default class ListViewMenu extends Component
     //const { title } = this.props;
     return (
           <View style={{width: "100%"}}>
-            <NavigationEvents onDidFocus={this.ref.onSnapshot(this.onCollectionUpdate)} />
+            <NavigationEvents onDidFocus={()=>this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate)} />
+            <NavigationEvents onWillBlur={()=>this.unsubscribe = null} />
             <SectionList
                 sections={ this.state.food }
                 showsVerticalScrollIndicator = {false}

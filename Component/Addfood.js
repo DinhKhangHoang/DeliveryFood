@@ -54,9 +54,12 @@ export default class Addfood extends Component
         }, {merge: true});
     UploadImage(this.state.imageSource.uri, ref.id)
     .then(url=>this.setState({imageSource: url}))
+    .then(()=>{
+      Alert.alert("Data saved!");
+      this.props.navigation.goBack();
+    })
     .catch(error=>console.log(error));
-    Alert.alert("Data saved!");
-    this.props.navigation.goBack();
+
   }
   picker(){
     ImagePicker.showImagePicker(options, (response) => {
