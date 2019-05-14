@@ -1,29 +1,23 @@
 import React, { Component } from "react";
-import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput,TouchableOpacity, ScrollView, Picker } from "react-native";
+import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput,TouchableOpacity, ScrollView, Picker, ActivityIndicator } from "react-native";
 import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
 import { listViewMenuItemStyle, modalViewInfoStyle, modalEditInfoStyle, modalAddFoodStyle } from "../Style/style.js";
 import firebase from 'react-native-firebase';
-import { NavigationEvents } from 'react-navigation';
+import { NavigationEvents, NavigationActions } from 'react-navigation';
 import {UploadImage} from './UploadImage.js';
 import ImagePicker from 'react-native-image-picker';
+import EditFood from './EditFood.js';
+import NavigationService from './NavigationService.js';
 
-var options = {
-  title: 'Select Avatar',
-  customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
-};
+
 class ListViewMenuItem extends Component
 {
     constructor(props)
     {
       super(props);
       this._onPressProperty = this._onPressProperty.bind(this);
-      this._onPressSave = this._onPressSave.bind(this);
       this._onPressDelete = this._onPressDelete.bind(this);
       this.state = {ViewInfovisible : false,
                     EditInfovisible : false,
@@ -31,6 +25,7 @@ class ListViewMenuItem extends Component
                     price: '',
                     rate: 0,
                     imgURL :'',
+                    imagesoure: '',
                     loading: true,
                     information: '',
                     typeOfFood:'',
@@ -44,8 +39,9 @@ class ListViewMenuItem extends Component
       this.unsubscribe = this.ref.doc(this.props.foodID).onSnapshot(this.onDocumentUpdate);
     }
     componentWillUnmount() {
-      this.unsubscribe();
+      this.unsubscribe = null;
     }
+
     onDocumentUpdate = (DocumentSnapshot)=>{
       this.setState({title: DocumentSnapshot.get('Name'),
                       price: String(DocumentSnapshot.get('Price')),
@@ -78,7 +74,7 @@ class ListViewMenuItem extends Component
             text: 'View Information',
             onPress: ()=>{this.setState({ViewInfovisible : true})} ,
           },
-          {text: 'Edit', onPress: () => {this.setState({EditInfovisible: true})}},
+          {text: 'Edit', onPress: () => {NavigationService.navigate('EditFood',{foodID: this.props.foodID})}},
         ],
         {cancelable: true},
       );
@@ -86,53 +82,23 @@ class ListViewMenuItem extends Component
     _onPressDelete(){
       this.ref.doc(this.props.foodID).delete();
       firebase.storage().ref('FoodImage').child(`${this.props.foodID}.jpg`).delete();
+      //await this.props.onDeleteFood();
       Alert.alert("Data deleted!");
     }
-    _onPressSave(){
-      this.ref.doc(this.props.foodID)
-      .update({
-        Name : this.state.title,
-        Price: Number(this.state.price),
-        Information: this.state.information,
-        TypeOfFood: this.state.typeOfFood,
-        State: this.state.State,
-      });
-      firebase.storage().ref('FoodImage').child(`${this.props.foodID}.jpg`)
-      .delete()
-      .then(()=>{
-        UploadImage(this.state.imgURL.uri, this.props.foodID)
-        .then(url=>this.setState({imgURL: url}))
-        .then(()=>{
-          Alert.alert("Data saved!");
-          this.setState({EditInfovisible: false});
-        })
-      })
 
-
-    }
-    picker(){
-      ImagePicker.showImagePicker(options, (response) => {
-        if (response.didCancel) {
-
-        } else if (response.error) {
-
-        } else if (response.customButton) {
-
-        } else {
-          let source = { uri: response.uri };
-          this.setState({
-            imgURL: source,
-          });
-        }
-      });
-    }
     render()
     {
       const { foodID } = this.props;
       if(this.state.loading)
-      return null;
+      return (
+        <View style = {listViewMenuItemStyle.loader}>
+          <ActivityIndicator size = 'small' color = 'gray'/>
+        </View>
+      );
       return (
         <View>
+        <NavigationEvents onDidFocus={()=>this.unsubscribe = this.ref.doc(this.props.foodID).onSnapshot(this.onDocumentUpdate)}
+                          onWillBlur={()=>this.unsubscribe = null} />
             <View style={ listViewMenuItemStyle.item }>
                   <Image
                       source={ {uri:this.state.imgURL} }
@@ -184,75 +150,7 @@ class ListViewMenuItem extends Component
                   </View>
               </View>
             </Modal>
-            <Modal
-              animationType="slide"
-              transparent={false}
-              visible={this.state.EditInfovisible}
-              onRequestClose={() => {
-                this.setState({EditInfovisible: false});
-              }}>
-              <ScrollView style = {{paddingVertical : 5}}>
-                    <TouchableOpacity style = {modalAddFoodStyle.image}
-                                      onPress = {this.picker}>
-                      <Image source = {{uri: this.state.imgURL}} style = {{height: '80%', width: '100%'}}/>
-                      <Text style = {{fontSize: 30, color: '#2196F3', justifyContent: 'center'}}>Change Image</Text>
-                    </TouchableOpacity>
 
-                      <Text style={ modalAddFoodStyle.textname }>Name :</Text>
-                      <TextInput style = {modalAddFoodStyle.inputname}
-                                  onChangeText = {(text) => {this.setState({title : text})}}
-                                  value = {this.state.title}
-                                  underlineColorAndroid = 'transparent'
-                                  autoCapitalize = "none"
-                      />
-
-                      <Text style={ modalAddFoodStyle.textname }>Price :</Text>
-                      <TextInput style = {modalAddFoodStyle.inputname}
-                                  onChangeText = {(text) => {this.setState({price : text});}}
-                                  value = {this.state.price}
-                                  underlineColorAndroid = 'transparent'
-                                  autoCapitalize = "none"
-                      />
-
-                      <Text style={ modalAddFoodStyle.textname }>Description :</Text>
-                      <TextInput style = {modalAddFoodStyle.inputname}
-                                  onChangeText = {(text) => {this.setState({information : text})}}
-                                  value = {this.state.information}
-                                  underlineColorAndroid = 'transparent'
-                                  autoCapitalize = "none"
-                      />
-                      <View style = {{flexDirection : 'row'}}>
-                        <Text style={ modalAddFoodStyle.textname }>Type :</Text>
-                        <Picker
-                           style = {modalAddFoodStyle.pickerType}
-                           onValueChange = {(type)=>{this.setState({typeOfFood: type});}}
-                           selectedValue = {this.state.typeOfFood}>
-                           <Picker.Item label = "Main course" value = "maincourse"/>
-                           <Picker.Item label = "Dessert" value = "dessert"/>
-                         </Picker>
-                       </View>
-                      <View style = {{flexDirection : 'row'}}>
-                        <Text style={ modalAddFoodStyle.textname }>State :</Text>
-                        <Picker
-                           style = {modalAddFoodStyle.pickerType}
-                           onValueChange = {(type)=>{this.setState({State: type});}}
-                           selectedValue = {this.state.State}>
-                           <Picker.Item label = "On stock" value = {true}/>
-                           <Picker.Item label = "Sold out" value = {false}/>
-                         </Picker>
-                      </View>
-
-                    <View style = {{justifyContent: 'center', flexDirection: 'row'}}>
-                      <TouchableHighlight
-                        onPress={this._onPressSave}
-                        style = {modalAddFoodStyle.apply}
-                        disabled = {!(this.state.title.length != 0 && this.state.price.length != 0 && this.state.information.length != 0)}
-                       >
-                          <Text style = {{fontSize:24, fontWeight:"bold",color: 'white'}}>Save</Text>
-                      </TouchableHighlight>
-                    </View>
-              </ScrollView>
-            </Modal>
         </View>
       );
     }
@@ -262,7 +160,7 @@ export default class ListViewMenu extends Component
   constructor(props)
   {
     super(props);
-    this.ref = firebase.firestore().collection('Food').where('ID_RES' , '==', firebase.auth().currentUser.uid);
+    this.ref = firebase.firestore().collection('Food');
     this.unsubscribe = null;
     this.state = {
       loading: true,
@@ -278,9 +176,12 @@ export default class ListViewMenu extends Component
     }
   }
   componentDidMount() {
-    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-  }
+    /*this.focusListner = NavigationActions.addListener("didFocus",
+      this.ref.where('ID_RES' , '==', firebase.auth().currentUser.uid).onSnapshot(this.onCollectionUpdate));*/
+    this.unsubscribe = this.ref.where('ID_RES' , '==', firebase.auth().currentUser.uid).onSnapshot(this.onCollectionUpdate);
+}
   componentWillUnmount() {
+    //this.focusListner.remove();
     this.unsubscribe = null;
   }
   onCollectionUpdate = (querySnapshot) => {
@@ -313,8 +214,7 @@ export default class ListViewMenu extends Component
     //const { title } = this.props;
     return (
           <View style={{width: "100%"}}>
-            <NavigationEvents onDidFocus={()=>this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate)} />
-            <NavigationEvents onWillBlur={()=>this.unsubscribe = null} />
+
             <SectionList
                 sections={ this.state.food }
                 showsVerticalScrollIndicator = {false}
@@ -323,6 +223,7 @@ export default class ListViewMenu extends Component
                                                         style={listViewMenuItemStyle.text}>{section.title}</Text>}
                 renderItem={( {item} ) => <ListViewMenuItem
                                               foodID = {item.key}
+
                                           />  }
             />
           </View>

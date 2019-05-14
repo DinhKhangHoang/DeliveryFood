@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { Text, View, Image, FlatList, Modal, TextInput, TouchableHighlight, Alert, TouchableOpacity, Picker, ScrollView, Platform } from "react-native";
 import { Icon } from "react-native-elements";
 import ImagePicker from 'react-native-image-picker';
-import ListViewMenu from "./ListViewMenu";
 import {UploadImage} from "./UploadImage.js"
 import { FoodManagement, accountStyle, modalAddFoodStyle, listViewMenuItemStyle} from "../Style/style";
 import firebase from 'react-native-firebase';
+import { StackActions, NavigationActions } from 'react-navigation';
+import Loader from './loader.js'
 
 var options = {
   title: 'Select Avatar',
@@ -16,7 +17,13 @@ var options = {
   },
 };
 
-
+const resetAction = StackActions.reset({
+  index: 1,
+  actions: [
+    NavigationActions.navigate({ routeName: 'Home' }),
+    NavigationActions.navigate({ routeName: 'FoodManagement' }),
+  ],
+});
 
 export default class Addfood extends Component
 {
@@ -33,15 +40,16 @@ export default class Addfood extends Component
                  typefood: 'maincourse',
                   statefood: true,
                   imageSource: null,
-
+                  loading : false,
                 };
     this._onPressApply = this._onPressApply.bind(this);
     this.picker = this.picker.bind(this);
     this.ref = firebase.firestore().collection('Food');
   }
-  _onPressApply(){
+  async _onPressApply(){
+    this.setState({loading: true});
     const ref = this.ref.doc();
-    ref.set({
+     await ref.set({
           Name : this.state.inputtitle,
           Price: Number(this.state.inputprice),
           Information: this.state.inputdescription,
@@ -52,13 +60,15 @@ export default class Addfood extends Component
           numRate: 0,
           ID_RES: firebase.auth().currentUser.uid,
         }, {merge: true});
-    UploadImage(this.state.imageSource.uri, ref.id)
-    .then(url=>this.setState({imageSource: url}))
-    .then(()=>{
-      Alert.alert("Data saved!");
-      this.props.navigation.goBack();
-    })
-    .catch(error=>console.log(error));
+
+          await UploadImage(this.state.imageSource.uri, ref.id)
+          .then(()=>{
+            this.props.navigation.dispatch(resetAction);
+            Alert.alert('Data saved!');
+          })
+          .catch(error=>console.log(error));
+
+
 
   }
   picker(){
@@ -79,12 +89,15 @@ export default class Addfood extends Component
   }
   render(){
     const {goBack} = this.props.navigation;
+    if(this.state.loading)
+    return(<Loader/>);
+    else
     return(
       <ScrollView style = {{paddingVertical : 5}}>
             <TouchableOpacity style = {modalAddFoodStyle.image}
                               onPress = {this.picker}>
               <Image source = {this.state.imageSource} style = {{height: '80%', width: '100%'}}/>
-              <Text style = {{fontSize: 30, color: '#2196F3', justifyContent: 'center'}}>Upload Image</Text>
+              <Text style = {{fontSize: 30, color: '#2196F3', justifyContent: 'center', textAlign: 'center'}}>Upload Image</Text>
             </TouchableOpacity>
 
               <Text style={ modalAddFoodStyle.textname }>Name :</Text>
@@ -135,7 +148,7 @@ export default class Addfood extends Component
               <TouchableHighlight
                 onPress={this._onPressApply}
                 style = {modalAddFoodStyle.apply}
-                disabled = {!(this.state.inputtitle.length && this.state.inputprice.length && this.state.inputdescription.length)}
+                disabled = {!(this.state.inputtitle.length != 0 && this.state.inputprice.length != 0 && this.state.inputdescription.length != 0 && this.state.imageSource.length != 0)}
                >
                   <Text style = {{fontSize:24, fontWeight:"bold",color: 'white'}}>Add</Text>
               </TouchableHighlight>

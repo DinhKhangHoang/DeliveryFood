@@ -1121,6 +1121,15 @@ export const listViewMenuItemStyle = StyleSheet.create({
       borderColor: "rgba(0, 0, 0, 0.2)",
       borderRadius: 4
   },
+  loader:
+  {
+    height: 100,
+    width: "100%",
+    backgroundColor: '#FFFFFF',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
   image:
   {
       width: 100,
