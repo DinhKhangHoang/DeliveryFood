@@ -25,6 +25,7 @@ import Message from "./Message";
 import LikedFood from "./LikeFood.js";
 import CartCustomer from "./CartCustomer.js";
 import firebase from "react-native-firebase";
+import EditFood from "./EditFood.js";
 
 
 
@@ -203,7 +204,8 @@ export default class HomeCustomer extends Component
       SignUp: { screen: Register },
       LikedFood: { screen: LikedFood },
       CartCustomer: { screen: CartCustomer },
-      Addfood: {screen: Addfood}
+      Addfood: {screen: Addfood},
+      EditFood: {screen: EditFood}
     },
     {
       initialRouteName: "Home",

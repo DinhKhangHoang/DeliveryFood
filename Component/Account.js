@@ -22,6 +22,9 @@ import Addfood from "./Addfood.js";
 import Booking from "./Booking.js";
 import BookingTable from "./BookingTable.js";
 import RestaurantInfor from "./restaurantInfor.js";
+import EditFood from "./EditFood.js";
+import NavigationService from "./NavigationService.js";
+
 // Define a home class for account that haven't logged in yet.
 export class HomeNotLogIn extends Component
 {
@@ -175,12 +178,15 @@ class AccountLogIn extends Component
             Order: { screen: Booking },
             Infor: { screen: RestaurantInfor },
             bookTable: { screen: BookingTable },
+            EditFood: {screen: EditFood}
           },
           {
             initialRouteName: "Home"
           }
         ));
-        return (<Nav />);
+        return (<Nav ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}/>);
       }
 }
 

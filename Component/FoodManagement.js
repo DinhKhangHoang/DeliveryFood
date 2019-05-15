@@ -1,22 +1,30 @@
 import React, { Component } from "react";
-import {View, TouchableOpacity} from "react-native";
+import {View, TouchableOpacity, SectionList, Text} from "react-native";
 import { Icon } from "react-native-elements";
 import ListViewMenu from "./ListViewMenu";
+import {NavigationEvents} from "react-navigation";
 import { FoodManagement, accountStyle, listViewMenuItemStyle} from "../Style/style";
+import firebase from "react-native-firebase";
 
 export default class FManagement extends Component
 {
     constructor(){
       super();
-      //this.state = {AddFoodvisible: false,
-      //              inputtitle: "",
-    //                inputprice: "",
-    //                inputdescription: "",
-      //              typefood: 'maincourse',
-      //              statefood: true,};
       this._onPressAdd = this._onPressAdd.bind(this);
-    //  this._onPressApply = this._onPressApply.bind(this);
-      //this.ref = firebase.firestore().collection('Food');
+      /*this.unsubscribe = null;
+      this.state = {
+        loading: true,
+        food :
+          [
+            {title: "Dessert",
+              data :[],
+            },
+            {title: "Main Course",
+              data :[],
+            }
+          ]
+      }
+      this.ref = firebase.firestore().collection('Food');*/
     }
     static navigationOptions = ({navigation})=>{
       return{
@@ -27,7 +35,7 @@ export default class FManagement extends Component
                       },
                       headerRight: (
                         <TouchableOpacity style = {listViewMenuItemStyle.button}
-                                          onPress = {()=>{navigation.navigate("Addfood")}}
+                                          onPress = {navigation.getParam('_onPressAdd')}
                                           activeOpacity ={0.7}>
                           <View style = {{flexDirection: "column", flex: 1, justifyContent: 'center'} }>
                             <Icon
@@ -42,32 +50,73 @@ export default class FManagement extends Component
                       )
             };
     };
-    //componentWillMount() {
-    //  this.props.navigation.setParams({ _onPressAdd: this._onPressAdd });
-    //}
-    _onPressAdd(){
-    //  this.setState({AddFoodvisible: true});
-      //Alert.alert("Hello");
-      this.props.navigation.navigate("Addfood");
+    componentWillMount(){
+      this.props.navigation.setParams({_onPressAdd: this._onPressAdd});
+      //this.unsubscribe = firebase.firestore().collection('Food').where('ID_RES' , '==', firebase.auth().currentUser.uid).onSnapshot(this.onCollectionUpdate);
     }
-  //  _onPressApply(){
-      //doc = this.ref.add({
-        //    Name : this.state.inputtitle,
-        //    Price: this.state.inputprice,
-        //    Information: this.state.inputdescription,
-        //    TypeOfFood: this.state.typefood,
-        //    State: this.state.statefood,
-        //    rating: 0,
-        //  });
-    //  Alert.alert("Data saved!");
-    //  this.setState({AddFoodvisible: false,});
-  //  }
+    _onPressAdd(){
+      this.props.navigation.navigate('Addfood');
+
+    }
+    render(){
+      return(
+        <View>
+          <ListViewMenu/>
+        </View>
+      );
+    }
+    /*componentDidMount() {
+      this.focusListner = this.props.navigation.addListener("didFocus",
+        this.ref.where('ID_RES' , '==', firebase.auth().currentUser.uid).onSnapshot(this.onCollectionUpdate));
+      this.unsubscribe = this.ref.where('ID_RES' , '==', firebase.auth().currentUser.uid).onSnapshot(this.onCollectionUpdate);
+    }
+    componentWillUnmount() {
+      this.unsubscribe = null;
+      this.focusListner.remove();
+    }
+    onCollectionUpdate = (querySnapshot) => {
+      const Dessert = {
+        title: "Dessert",
+          data :[],
+      },
+      MainCourse=
+      {title: "Main Course",
+        data :[],
+      };
+      querySnapshot.forEach((doc)=> {
+        if(doc.get('TypeOfFood') == "maincourse"){
+          MainCourse.data.push({key :doc.get('FoodID')});
+        }
+        else if( doc.get('TypeOfFood') == "dessert"){
+          Dessert.data.push({key :doc.get('FoodID')});
+        }
+      });
+      const food = [Dessert, MainCourse];
+      this.setState({
+        food,
+        loading : false,
+      });
+    }
     render()
     {
+      if(this.state.loading)
+      return null;
+      //const { title } = this.props;
       return (
-          <View>
-           <ListViewMenu/>
-          </View>
-       );
-   }
+            <View style={{width: "100%"}}>
+
+              <SectionList
+                  sections={ this.state.food }
+                  showsVerticalScrollIndicator = {false}
+                  //keyExtractor={(item) => item.title }
+                  renderSectionHeader={({section}) => <Text
+                                                          style={listViewMenuItemStyle.text}>{section.title}</Text>}
+                  renderItem={( {item} ) => <ListViewMenuItem
+                                                foodID = {item.key}
+
+                                            />  }
+              />
+            </View>
+      );
+   }*/
 }
