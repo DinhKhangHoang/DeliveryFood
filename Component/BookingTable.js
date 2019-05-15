@@ -8,7 +8,7 @@ import { bookTableStyle, flexStyle, bookingStyle, accountStyle } from "../Style/
 import NetInfo from "@react-native-community/netinfo";
 import Message from "./Message";
 import firebase from 'react-native-firebase';
-
+import { SkypeIndicator } from 'react-native-indicators';
 
 
 export default class BookingTable extends Component
@@ -20,23 +20,22 @@ export default class BookingTable extends Component
   constructor(props)
   {
         super(props);
-        //------------------------------------------------------------------------------------------------------------------------------------------
-        let date = new Date();
-        date.setMinutes(date.getMinutes() + 30);
         ////------------------------------------------------------------------------------------------------------------------------------------------
         this.state = {
                         numberInput:'',
-                        price: 10000,
+                        price: 0,
                         type: "normal",
                         count: 1,
                         isCountDialogShow: false,
                         display: "none",
-                        date: date,
+                        date: null,
+                        adjustDate: null,
                         error: false,
                         errorMess: "",
                         user: firebase.auth().currentUser,
                         showMessage: false,
-                        message: ""
+                        message: "",
+                        isProcessing: false
                      };
         //------------------------------------------------------------------------------------------------------------------------------------------
         this.increase = this.increase.bind(this);
@@ -44,7 +43,13 @@ export default class BookingTable extends Component
         this.validateNumber = this.validateNumber.bind(this);
         this.validateTime = this.validateTime.bind(this);
         this.orderConfig = this.orderConfig.bind(this);
+        this.formatTime = this.formatTime.bind(this);
   }
+// ---------------------------------------------------------------------------------------------------------------------
+componentDidMount()
+{
+    this.setState({ price:  this.props.navigation.getParam("data").price });
+}
 //-----increase the number by 1-----------------------------------------------------------------------------------------
   increase() { this.setState({ count: this.state.count + 1}); }
 //-----decrease the number by 1 if the number is larger than 1----------------------------------------------------------
@@ -63,10 +68,10 @@ export default class BookingTable extends Component
             this.setState({display: "flex"});
           }
           else {
-            let count =  Number(this.state.numberInput);
-            if (count <= 0) { count = 1; }
+                let count =  Number(this.state.numberInput);
+                if (count <= 0) { count = 1; }
 
-           this.setState({count: count, isCountDialogShow: false});
+               this.setState({count: count, isCountDialogShow: false});
           }
   }
 //-----------------------------------------------------------------------------------------------------------------------
@@ -80,7 +85,7 @@ validateTime()
     }
     else {
 
-       this.setState({ error1: true, errorMess: "Sorry, we don't work on your picking time."});
+       this.setState({ error: true, errorMess: "Sorry, we don't work on your picking time."});
     }
   }
   else
@@ -88,13 +93,20 @@ validateTime()
       this.setState( { error: true, errorMess: "Please choose the time being at least 30 minutes after now." } );
   }
 }
+// ---- Format time --------------------------------------------------------------------------------------------------------
+formatTime(time, s = false)
+{
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const timeString = (time.getHours() >= 10 ? time.getHours() : "0" + time.getHours()) + ":" + (time.getMinutes() >= 10 ? time.getMinutes() : "0" + time.getMinutes()) + (s ? "   " : " ") + (time.getDate() < 10 ? "0" + time.getDate() : time.getDate()) + "-" + monthNames[time.getMonth()] + "-" + time.getFullYear();
+      return timeString;
+}
 // ---- Process booking table ----------------------------------------------------------------------------------------------
 orderConfig()
 {
       if (this.state.user)
       {
          // Test for internet connect
-         NetInfo.getConnectionInfo().then( (data)=>{
+         NetInfo.getConnectionInfo().then( async (data)=>{
                if (data.type === "unknown" || data.type === "none")
                {
                       this.setState({showMessage: false})
@@ -102,8 +114,55 @@ orderConfig()
                 }
                else {
                   // Processing the booking cart
-               }
-         } );
+                  if (this.state.date == null)
+                  {
+                        this.setState({showMessage: false})
+                        setTimeout(()=>this.setState( {message: "Please choose the time.", showMessage: true} ), 20);
+                  }
+                  else
+                  {
+                          this.setState({isProcessing: true });
+                          const user = await firebase.firestore().collection( global.UserType + "s" ).doc( firebase.auth().currentUser.uid).get();
+                          if (( global.UserType == "Customer" && user.data().Address == "" ) || ( global.UserType == "Restaurant" && user.data().bookingTablePrice == 0 ))
+                          {
+                                  this.setState({showMessage: false, isProcessing: false})
+                                  setTimeout(()=>this.setState( {message: "Please update and complete your personal information.", showMessage: true} ), 20);
+                          }
+                          else
+                          {
+                                  firebase.firestore().collection("ListOrders").add({}).then(
+                                  async (ref)=>{
+                                        const item = {
+                                              CUS_ID: user.id,
+                                              ChargeTotal: (this.state.type == "normal" ? this.state.price * this.state.count : this.state.price * this.state.count * 1.2)  * 0.2,
+                                              OrderID: ref.id,
+                                              PhoneNumber: user.data().PhoneNumber,
+                                              Quantity: this.state.count,
+                                              RES_ID: this.props.navigation.getParam("data").resID,
+                                              Status: "nonchecked",
+                                              TimeOrder: this.formatTime(new Date()),
+                                              TimeReceive: this.formatTime( this.state.date ),
+                                              Type: "Table"
+                                        };
+                                         firebase.firestore().collection("ListOrders").doc(ref.id).update(item);
+                                         firebase.firestore().collection("Restaurants").doc(this.props.navigation.getParam("data").resID).update({ Ordercount: this.props.navigation.getParam("data").ordercount + 1});
+                                         this.props.navigation.getParam("data").message();
+                                         this.props.navigation.navigate("Detail");
+                                   });
+                                   firebase.firestore().collection("Notification").add({}).then( (ref)=>{
+                                         const item = {
+                                               Content: "Đơn hàng đặt bàn của bạn tại '" + this.props.navigation.getParam("data").name +  "' đã được gửi thành công. Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi, chúc bạn ngon miệng.",
+                                               ID: ref.id,
+                                               RES_ID: this.props.navigation.getParam("data").resID,
+                                               Time: this.formatTime(new Date()),
+                                               Title: this.props.navigation.getParam("data").name + "- Table order sent successfully",
+                                               UID: user.id
+                                         };
+                                         firebase.firestore().collection("Notification").doc(ref.id).update(item);
+                                   });
+                         }
+                   }
+         }});
       }
       else
       {
@@ -143,7 +202,7 @@ orderConfig()
                                   </TouchableOpacity>
                                   <TouchableOpacity
                                       style={{width: "40%"}}
-                                      onLongPress={ ()=> this.setState({...this.state, isCountDialogShow: true, display: "none"}) }
+                                      onLongPress={ ()=> this.setState({ isCountDialogShow: true, display: "none"}) }
                                       activeOpacity={0.5}>
                                               <Text style={ bookingStyle.counting }>{this.state.count}</Text>
                                   </TouchableOpacity>
@@ -164,7 +223,7 @@ orderConfig()
                                                 <Input
                                                         placeholder="Enter here..."
                                                         inputContainerStyle={{borderWidth: 1, borderColor: "rgba(0,0,0,0.2)", borderRadius: 5, marginVertical: 20, width: "40%", marginLeft: "30%"}}
-                                                        onChangeText={ (text) => this.setState({...this.state, numberInput: text}) }
+                                                        onChangeText={ (text) => this.setState({ numberInput: text}) }
                                                         inputStyle={{fontSize: 14, paddingVertical: 0}}
                                                         autoFocus={true}
                                                  />
@@ -198,16 +257,14 @@ orderConfig()
                           <TouchableOpacity
                                 style={{borderWidth: 1, borderColor: "rgba(0, 0, 0, 0.2)", borderRadius: 5, width: "60%", marginLeft: "20%"}}
                                 activeOpacity={0.5}
-                                onPress={ () => this.setState({...this.state, isShow: true, error: false, error1: false})}
+                                onPress={ () => this.setState({ isShow: true, error: false })}
                           >
                               <Text
                                     style={{ fontSize: 14,
                                              paddingVertical: 10,
                                              paddingHorizontal: 10,
                                              textAlign: "center"}}>
-                                                    { new Intl.DateTimeFormat('en-US').format(this.state.date)
-                                                    + "    " + this.state.date.getHours() + ':' +
-                                                    (this.state.date.getMinutes().toString().length === 2 ? this.state.date.getMinutes() : "0" + this.state.date.getMinutes()) }
+                                                      {(  this.state.date === null ? "" : this.formatTime(this.state.date, true)) }
                               </Text>
 
                           </TouchableOpacity>
@@ -218,8 +275,8 @@ orderConfig()
                                       </View>
 
                                       <DatePicker
-                                              onDateChange={ date => this.setState({ ...this.state, adjustDate: date }) }
-                                              date={this.state.adjustDate}
+                                              onDateChange={ date => this.setState({ adjustDate: date }) }
+                                              date={(this.state.adjustDate !== null ? this.state.adjustDate : new Date() )}
                                               minuteInterval={10}
                                               style={{width: "90%"}}
 
@@ -241,7 +298,7 @@ orderConfig()
                                           <RoundButton
                                                 text="Cancel"
                                                 textStyle={{color: "gray"}}
-                                                handleOnPress={ ()=> this.setState({...this.state, isShow: false}) }
+                                                handleOnPress={ ()=> this.setState({ isShow: false}) }
                                                 round={0}
                                                 boxStyle={{width: "50%", height: 60, borderWidth: 1, borderColor: "rgba(0, 0, 0, 0.2)"}}
                                                 background="white"
@@ -256,8 +313,9 @@ orderConfig()
                     </View>
                     <View style={[ flexStyle.wrapper, {flexDirection: "row", marginTop: 20,   borderTopWidth: 1, borderColor: "rgba(0, 0, 0, 0.2)"} ]}>
                             <View style={{width: "60%"}}>
-                                  <Text style={bookTableStyle.price}>{ new Intl.NumberFormat('en').format(this.state.price * this.state.count * 0.2)  + " đ"}</Text>
+                                  <Text style={bookTableStyle.price}>{ new Intl.NumberFormat('en').format(( this.state.type == "normal" ? this.state.price * this.state.count : this.state.price * this.state.count * 1.2)  * 0.2)  + " đ"}</Text>
                             </View>
+                      {( this.state.isProcessing ? <SkypeIndicator  color="#114B5F" /> :
                             <RoundButton
                                     text="Book"
                                     round={0}
@@ -265,8 +323,7 @@ orderConfig()
                                     handleOnPress={this.orderConfig}
                                     underlayColor="#227100"
                                     textStyle={{color: "white"}}
-                            />
-
+                            /> )}
                     </View>
              </View>
            {message}

@@ -111,7 +111,7 @@ export default class Register extends Component
                                       Email: email,
                                       UID_RES: res.user.uid,
                                       Address: "",
-                                      Feedback: 0,
+                                      FeedBack: 0,
                                       Ordercount: 0,
                                       PhoneNumber: phoneNumber,
                                       Rating: 0,
@@ -203,6 +203,7 @@ export default class Register extends Component
               />
               <Input
                   placeholder="Phone number"
+                  textContentType="telephoneNumber"
                   keyboardType='numeric'
                   leftIcon={{type: "font-awesome", name: "phone", color:"#014D40", width: 30}}
                   inputStyle={{fontSize: 14, color: '#014D40', paddingLeft: 20}}

@@ -19,6 +19,9 @@ import ListDeliveried from "./ListDeliveried.js"
 import LikedFood from "./LikeFood.js";
 import CartCustomer from "./CartCustomer.js";
 import Addfood from "./Addfood.js";
+import Booking from "./Booking.js";
+import BookingTable from "./BookingTable.js";
+import RestaurantInfor from "./restaurantInfor.js";
 import EditFood from "./EditFood.js";
 import NavigationService from "./NavigationService.js";
 
@@ -133,7 +136,7 @@ class HomeLogIn extends Component
                       />
               </View>
               <View style={{}}>
-                    <Text style={accountStyle.username} >{ (global.UserType == "Restaurant" ? global.info.data.NameRES : global.info.data.NameCUS ) }</Text>
+                    <Text style={accountStyle.username} >{  global.info.data.name }</Text>
                     <Text style={ accountStyle.type }>{ global.UserType }</Text>
               </View>
           </View>
@@ -164,7 +167,7 @@ class AccountLogIn extends Component
             PersonInfor: { screen: ChangeInfor },
             FoodManagement: { screen: FManagement },
             Cart: { screen: Cart },
-            DetailFood: { screen: DetailFood},
+            Detail: { screen: DetailFood},
             LikedFood: { screen: LikedFood },
             CartCustomer: { screen: CartCustomer },
             ListAccepted: { screen: ListAccepted },
@@ -172,6 +175,9 @@ class AccountLogIn extends Component
             ListDiscarded: { screen: ListDiscarded },
             ListDeliveried: {screen: ListDeliveried},
             Addfood: {screen: Addfood},
+            Order: { screen: Booking },
+            Infor: { screen: RestaurantInfor },
+            bookTable: { screen: BookingTable },
             EditFood: {screen: EditFood}
           },
           {
@@ -195,15 +201,17 @@ export default class AccountPage extends Component
   }
 
 
-  componentDidMount()
+  componentWillMount()
   {
     firebase.auth().onAuthStateChanged( (currentUser)=>this.setState({ user: currentUser }));
     const { currentUser } = firebase.auth();
+    if (currentUser && !global.info)
+            global.getUser();
     this.setState({user: currentUser});
   }
   render()
   {
-    if (this.state.user) { return ( <AccountLogIn /> ); }
-    else { return ( < AccountNotLogIn />); }
+    if (this.state.user) return ( <AccountLogIn /> );
+    else  return ( < AccountNotLogIn />);
   }
 }
