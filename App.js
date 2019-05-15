@@ -4,6 +4,7 @@ import { createAppContainer } from 'react-navigation';
 import firebase from 'react-native-firebase';
 import SplashScreen from './Component/splashScreen';
 import { MainScreen } from "./Component/mainScreen";
+import NetInfo from "@react-native-community/netinfo";
 //--------------------------------------------------------------------
 /*
 import Login from './Component/login';
@@ -20,9 +21,8 @@ import GridView from "./Component/GridView";
 import { NotificationItem } from "./Component/Notification";
 import Message from "./Component/Message";
 import LikedFood from "./Component/LikeFood";
-*/
-
 import CartCustomer from "./Component/CartCustomer";
+*/
 //---------------------------------------------------------------------
 
 export default class App extends Component {
@@ -36,6 +36,9 @@ constructor(props)
   };
   this.ref = firebase.firestore();
   this.getInfoUser = this.getInfoUser.bind(this);
+  this.getFoodData = this.getFoodData.bind(this);
+  // ==================================================================
+
 }
 
 
@@ -53,26 +56,22 @@ getInfoUser()
                if (info.exists)
                {
                     global.info = { key: info.id, data: info.data() };
-                    docCus.onSnapshot( docSnapshot=>global.info = { key: docSnapshot.id, data: docSnapshot.data() });
+                    docCus.onSnapshot( docSnapshot => global.info = { key: docSnapshot.id, data: { name: docSnapshot.data().NameCUS }});
                     global.UserType = "Customer";
                 }
-             }
-         );
+        });
+
         setTimeout(()=>{
-          if (!global.info)
-          {
-                  docRes.get().then(
-                      (info)=>{
-                        if (info.exists)
-                        {
-                             global.info = { key: info.id, data: info.data() };
-                             docRes.onSnapshot( docSnapshot=>global.info = { key: docSnapshot.id, data: docSnapshot.data() });
-                             global.UserType = "Restaurant";
-                         }
-                      }
-                  );
-          }
-        }, 50);
+                    docRes.get().then(
+                        (info)=>{
+                             if (info.exists)
+                             {
+                               global.info = { key: info.id, data: info.data() };
+                               docRes.onSnapshot( docSnapshot => global.info = { key: docSnapshot.id, data: { name: docSnapshot.data().NameRES }});
+                               global.UserType = "Restaurant";
+                             }
+                        });
+                }, 50);
    }
    // ----- User is not logged in ----------------------------------------------------------------------------------------------
   else
@@ -81,34 +80,88 @@ getInfoUser()
           global.info = null;
     }
 // --------------------------------------------------------------------------------------------------------------------------------
+}  // -- end getInfoUser -------
+
+
+ async getFoodData()
+ {
+       global.foodData = {
+              swiper: [],
+              dessert: [],
+              main: [],
+              grid: [],
+              isFetchedData: false
+       };
+       // ===================================================================
+      const isConnected = await NetInfo.isConnected.fetch();
+      if (isConnected)
+      {
+                  const storageRef = firebase.storage().ref();
+                  const firestore = firebase.firestore().collection("Food");
+                  // =================================================================================================
+                  firestore.where("rating", ">=", 0).orderBy("rating", "desc").limit(30).get().then(data => {
+                          data.forEach(
+                                function (i)
+                                {
+                                      const item = {
+                                                        key: '',
+                                                        id: i.id,
+                                                        title: i.data().Name,
+                                                        resID: i.data().ID_RES,
+                                                        type: i.data().TypeOfFood,
+                                                        rate: i.data().rating,
+                                                        price: i.data().Price
+                                                   };
+                                     if (global.foodData.swiper.length < 6 && global.foodData.swiper.findIndex(obj => obj.id == item.id) == -1)
+                                            global.foodData.swiper.push( item )
+                                     else
+                                     {
+                                             if (item.type === "maincourse" && global.foodData.main.length < 6 && global.foodData.main.findIndex(obj => obj.id == item.id) == -1)
+                                                    global.foodData.main.push( item );
+                                            else if (item.type === "dessert" && global.foodData.dessert.length < 6 && global.foodData.dessert.findIndex(obj => obj.id == item.id) == -1)
+                                                    global.foodData.dessert.push( item );
+                                            else if ( global.foodData.grid.length < 10 && global.foodData.grid.findIndex(obj => obj.id == item.id) == -1) { global.foodData.grid.push( item ); }
+                                    }
+                           });
+                  });
+
+                  const sleep = (milliseconds) => { return new Promise(resolve => setTimeout(resolve, milliseconds)) }
+
+                  while (true) {
+                        await sleep(100);
+                        if ( global.foodData.grid.length >= 5)
+                        {
+                              global.foodData.isFetchedData = true;
+                              break;
+                        }
+
+                }
+      }
+ }
+
+
+async componentDidMount()
+{
+      this.getInfoUser();
+      this.unsubscriber = firebase.auth().onAuthStateChanged((puser) => {
+              this.setState({ user: puser });
+              this.getInfoUser();
+        });
+      global.foodLoading = this.getFoodData;
+      global.getUser = this.getInfoUser();
+      await this.getFoodData();
+      this.setState({ isLoaded: true });
 }
-
- componentDidMount() {
- // --- Add listener to user changing ----------------------------------------------------------------------------------------------
-    this.unsubscriber = firebase.auth().onAuthStateChanged((puser) => {
-            this.setState({ user: puser });
-            this.getInfoUser();
-      });
-  }
-
 
   render() {
     // -------- Loading and splashscreen -------------------------------------
     if (this.state.isLoaded === false)
-    {
       // Load data from database...
-
-
-      // Pseudo time-consuming function
-      //this.setState({...this.state, isLoaded: true});
-      setTimeout( ()=>this.setState({...this.state, isLoaded: true}), 1000);
       return (<SplashScreen />);
-    }
     else
     {
       const Main = createAppContainer(MainScreen);
-      return (
-            <Main />
-    )};
+      return ( <Main /> );
+    };
   }
 }

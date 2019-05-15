@@ -16,6 +16,7 @@ export default class Anchor extends Component
   }
 }
 
+
 Anchor.propTypes = {
   text: PropTypes.string.isRequired,
   textStyle: PropTypes.object,

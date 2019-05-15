@@ -19,7 +19,7 @@ export const splashStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginTop: 20
+    paddingTop: 20
   },
   icon: {
       width: 75,
@@ -168,7 +168,6 @@ export const loginStyle = StyleSheet.create({
       display: "flex",
       justifyContent: "flex-start",
       alignItems: "center",
-      marginTop: "5%"
   }
 });
 
@@ -354,6 +353,18 @@ export const swiperStyle = StyleSheet.create({
     {
           width:  width,
           height: height * 0.4,
+    },
+    loading:
+    {
+      height: height,
+      width: width
+    },
+    cantLoading:
+    {
+      backgroundColor: "rgba(0, 0, 0, 0.2)",
+      width:  "100%",
+      height: height * 0.4,
+      display: "flex",
     }
 });
 
@@ -553,6 +564,7 @@ export const detailFood = StyleSheet.create({
     image:
     {
           width: "100%",
+          height: 300
     },
     title:
     {
@@ -624,6 +636,11 @@ export const detailFood = StyleSheet.create({
       width: 50,
       height: 50,
       borderRadius: 40
+    },
+    cantLoading:
+    {
+      height: height * 0.6,
+      width: width
     }
 });
 
@@ -702,7 +719,8 @@ export const commentStyle = StyleSheet.create({
           justifyContent: "center",
           alignItems: "center",
           borderBottomWidth: 1,
-          borderBottomColor: "rgba(0, 0, 0, 0.2)"
+          borderBottomColor: "rgba(0, 0, 0, 0.2)",
+          paddingVertical: 3
     },
     avatarAndName:
     {
@@ -710,11 +728,12 @@ export const commentStyle = StyleSheet.create({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          flexDirection: 'row'
+          flexDirection: 'row',
+          paddingTop: 5
     },
     nameAndTime:
     {
-          width: "70%",
+          width: "60%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -723,14 +742,12 @@ export const commentStyle = StyleSheet.create({
     {
           width: "80%",
           fontSize: 14,
-          padding: 5,
-          marginVertical: 10
+          padding: 3,
 
     },
     nameText:
     {
         fontSize: 14,
-        padding: 5,
         paddingLeft: 20,
         fontWeight: "bold",
         textAlign: "left",
@@ -749,7 +766,7 @@ export const commentStyle = StyleSheet.create({
       justifyContent: "space-between",
       alignItems: "center",
       flexDirection: "row",
-      width: "20%"
+      width: "30%",
     },
     time:
     {
@@ -769,7 +786,14 @@ export const commentStyle = StyleSheet.create({
         alignItems: "center",
         flexDirection: "row",
         marginVertical: 10,
-        marginLeft: "5%"
+    },
+    input:
+    {
+      width: "85%",
+      ...flexStyle.wrapper,
+      flexDirection: "row",
+      borderRadius: 20,
+      borderWidth: 1
     }
 });
 
@@ -1388,7 +1412,7 @@ export const gridStyle = StyleSheet.create({
       wrapperItem:
       {
         width: "48%",
-        height: 230,
+        height: 200,
         borderColor: "rgba(0, 0, 0, 0.2)",
         borderWidth: 1,
         borderRadius: 8,
@@ -1423,6 +1447,11 @@ export const gridStyle = StyleSheet.create({
           borderColor: "black",
           borderWidth: 1
 */
+    },
+      cantLoading:
+      {
+        height: 230,
+        width: width * 0.48
       }
 });
 
@@ -1528,8 +1557,8 @@ export const CartCustomerStyle = StyleSheet.create({
         },
         wrapperItem:
         {
-                width: "96%",
-                marginLeft: "2%",
+                width: "94%",
+                marginLeft: "3%",
                 marginVertical: 10,
                 backgroundColor: "white",
                 shadowOffset: { width: 10, height: 10 },
@@ -1620,6 +1649,14 @@ export const CartCustomerStyle = StyleSheet.create({
             fontWeight: "bold",
             color: "red",
             fontSize: 14
+        },
+        titleCart:
+        {
+           textAlign: "center",
+           padding: 20,
+           fontWeight: "bold",
+           fontSize: 25,
+           backgroundColor: "white",
+           color: "black"
         }
-
 });
