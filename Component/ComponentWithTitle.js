@@ -10,12 +10,13 @@ export default class ComponentWithTitle extends Component
 {
   render()
   {
-    const { data, title, sndText = null, handleOnPressSndText = ()=>{} , containerStyle, dataStyle } = this.props;
+    const { data, title = "This is no title", sndText = null, handleOnPressSndText = ()=>{} , containerStyle, dataStyle } = this.props;
     return (
       <View style={[componentWithTitle.wrapper, containerStyle]}>
           <View style={componentWithTitle.header}>
               <Text style={ [componentWithTitle.title, {width: (sndText === null ? "100%" : "70%")}] }>{ title }</Text>
               { sndText === null ? null : <Anchor
+                  title=""
                   text={sndText}
                   textStyle={ componentWithTitle.text }
                   handleOnPress={handleOnPressSndText}

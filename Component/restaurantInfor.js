@@ -4,6 +4,7 @@ import { Icon } from "react-native-elements";
 //import MapView from 'react-native-maps';
 import { resInforStyle, accountStyle } from "../Style/style";
 import RoundButton from "./roundButton";
+import firebase from 'react-native-firebase';
 
 class TextWithIcon extends Component
 {
@@ -30,6 +31,38 @@ export default class RestaurantInfor extends Component
           title: "Restaurant Information",
           headerTitleStyle:  accountStyle.titleStyle
   };
+  constructor(props)
+  {
+    super(props);
+    this.state = { data: [] };
+    this.getResData = this.getResData.bind(this);
+  }
+
+
+  async getResData()
+  {
+        const dataNav = this.props.navigation.getParam("data");
+        const infoRes = await firebase.firestore().collection("Restaurants").doc( dataNav.resID ).get();
+        await this.setState({
+              data: {
+                   name: infoRes.data().NameRES,
+                   address: infoRes.data().Address,
+                   phone: infoRes.data().PhoneNumber,
+                   timeWork: infoRes.data().TimeWork,
+                   resID: dataNav.resID,
+                   price: infoRes.data().bookingTablePrice,
+                   ordercount: infoRes.data().Ordercount
+              }
+        });
+  }
+
+
+  componentDidMount()
+  {
+       this.getResData();
+  }
+
+
   render()
   {
     return (
@@ -49,19 +82,19 @@ export default class RestaurantInfor extends Component
         <View style={ resInforStyle.infor }>
             <TextWithIcon
                   icon={{type: "material-community", name: "home-circle", color:"#0B69A3"}}
-                  text="Name of restaurant"
+                  text={ this.state.data.name }
             />
             <TextWithIcon
                   icon={{type: "font-awesome", name: "address-book", color:"#CF1124", size: 30}}
-                  text="102/3E Võ Dõng 1, Gia Kiệm, Thống Nhất, Đồng Nai"
+                  text={ this.state.data.address }
             />
             <TextWithIcon
                   icon={{type: "font-awesome", name: "phone", color:"#1F9F5F", size: 30}}
-                  text="033 823 4362"
+                  text={ this.state.data.phone }
             />
             <TextWithIcon
                   icon={{type: "material", name: "access-time", color:"#6733BA", size: 30}}
-                  text="7h00 - 22h00"
+                  text={ this.state.data.timeWork }
             />
             <View style={ resInforStyle.buttonWrapper }>
                       <RoundButton
@@ -69,7 +102,7 @@ export default class RestaurantInfor extends Component
                             round={0}
                             boxStyle={ resInforStyle.button }
                             textColor="white"
-                            handleOnPress={ ()=> { this.props.navigation.push("bookTable")} }
+                            handleOnPress={ ()=> { this.props.navigation.push("bookTable", { data: { ...this.state.data, message: this.props.navigation.getParam("data").message} })} }
                             underlayColor="#227100"
                       />
                       <RoundButton

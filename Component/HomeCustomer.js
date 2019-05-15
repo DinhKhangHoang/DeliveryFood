@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, ScrollView } from "react-native";
+import { Text, View, FlatList } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { homeStyle } from "../Style/style.js";
 import Header from "./header";
@@ -19,10 +19,10 @@ import Register from './register';
 import Message from "./Message";
 import LikedFood from "./LikeFood.js";
 import CartCustomer from "./CartCustomer.js";
-
-
-
 import firebase from "react-native-firebase";
+import EditFood from "./EditFood.js";
+
+
 
 // Define Home class
 class HomeCustomer_Main extends Component
@@ -35,7 +35,8 @@ class HomeCustomer_Main extends Component
                       searchShow: false,
                       searchText: "",
                       isShowNotification: false,
-                      signUpSuccess: false
+                      signUpSuccess: false,
+                      loading: true,
                  };
 
     this.isSearch = this.isSearch.bind(this);
@@ -43,39 +44,51 @@ class HomeCustomer_Main extends Component
     this.onTextChange = this.onTextChange.bind(this);
   }
 
-  isSearch()
-  {
-        if (this.state.searchShow === false)  {  this.setState({ searchShow: true });  }
-  }
-  back()
-  {
-        this.setState({  searchShow: false, searchText: ""});
-  }
+
+  isSearch()   {   if (this.state.searchShow === false)  {  this.setState({ searchShow: true });  } }
+  back()       {   this.setState({  searchShow: false, searchText: ""});  }
   onTextChange(text)
   {
       if (this.state.searchShow === false) { this.setState({ searchShow: true, searchText: text }); }
       else { this.setState({ searchText: text }); }
   }
 
+
+
   componentDidMount()
   {
-    // ---- Test the internet ----------------------------------------------------------------------------------------------------------------------------------
-    NetInfo.addEventListener("connectionChange", data=>{
-          if (data.type === "unknown" || data.type === "none")
-          { this.setState({isShowNotification: true}); }
-          else { this.setState({isShowNotification: false}); }
-    });
     //---- Message handler display after sign up ----------------------------------------------------------------------------------------------------------------
-   const mess =  ()=>this.setState({ signUpSuccess: true });
-   global.signUp = {
-          set signUp(val) {
-                    this._signUp = val;
-                    mess();
-          },
-          username: undefined,
-          _signUp: false
-    };
+         const mess =  () => this.setState({ signUpSuccess: true });
+         global.signUp = {
+                set signUp(val) {
+                          this._signUp = val;
+                          mess();
+                },
+                username: undefined,
+                _signUp: false
+          };
+    //============================================================================================================================================================
+           if (global.foodData.isFetchedData)
+                    this.setState({ loading: false});
+    // ---- Test the internet ----------------------------------------------------------------------------------------------------------------------------------
+            this.ref = NetInfo.addEventListener("connectionChange", async data => {
+                  if (data.type === "unknown" || data.type === "none") { this.setState({isShowNotification: true}); }
+                  else
+                  {
+                        this.setState({ isShowNotification: false });
+                        if (!global.foodData.isFetchedData)
+                        {
+                            await global.foodLoading();
+                            this.setState({ loading: false });
+                        }
+                  }
+            });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
   }
+
+  // -----------------------------------------------------------------------------------------------------------------------------------------------------------
+  componentWillUnmount() { NetInfo.removeEventListener('connectionChange', this.ref); }
+
 
   render()
   {
@@ -103,34 +116,57 @@ class HomeCustomer_Main extends Component
     // ---- Test for if user is searching or not -------------------------------------------------------------------------------------------------------------
     let body;
     if (this.state.searchShow) {  body = <Search />;  }
-    else {   body = (
-                <ScrollView
+    else {
+      const dataList = [ {key: "swiper"}, {key: "dessert"}, {key: "main"}, {key: "grid"}]
+      const _renderItem =( {item} )=>{
+            if (item.key == "swiper")
+                  return   (<MySwiper
+                                 navigation={this.props.navigation}
+                                 routename="Detail"
+                                 loading={ this.state.loading }
+                                 data={ global.foodData.swiper } /> );
+            else if (item.key == "dessert")
+                return (  <ListView
+                                title="Dessert"
+                                containerStyle={{ elevation: 3 }}
+                                navigation={this.props.navigation}
+                                routename="Detail"
+                                handleOnPress={ ()=>{} }
+                                loading = { this.state.loading }
+                                data = {global.foodData.dessert } />);
+            else if (item.key == "main")
+                return (  <ListView
+                                title="Main Meal"
+                                containerStyle={{ elevation: 3 }}
+                                navigation={this.props.navigation}
+                                routename="Detail"
+                                handleOnPress={ ()=>{} }
+                                loading = { this.state.loading }
+                                data = { global.foodData.main } />);
+            else return (    <GridView
+                                    title="What today ?"
+                                    navigation={this.props.navigation}
+                                    routename="Detail"
+                                    loading = { this.state.loading }
+                                    data = { global.foodData.grid } />);
+      };
+      body = (
+                <FlatList
+                      removeClippedSubviews={true}
                       showsVerticalScrollIndicator={false}
-                >
-                      <MySwiper
-                            navigation={this.props.navigation}
-                            routename="Detail"
-                      />
-                      <ListView
-                              title="Dessert"
-                              containerStyle={{ elevation: 3 }}
-                              navigation={this.props.navigation}
-                              routename="Detail"
-                              handleOnPress={ ()=>firebase.auth().signOut() }
-                      />
-                      <GridView
-                              title="What today ?"
-                              navigation={this.props.navigation}
-                              routename="Detail"
-                      />
-                </ScrollView> );
+                      data={dataList}
+                      keyExtractor={ (item, id) => item.key+id }
+                      renderItem={_renderItem}
+                  />
+              )
          }
    // ----- return part -------------------------------------------------------
     return(
       <View style={{flex: 1}} >
           <Header
                   show={this.state.searchShow}
-                  onFocus={this.isSearch} back={this.back}
+                  onFocus={this.isSearch}
+                  back={this.back}
                   onTextChange={this.onTextChange}
                   searchText={this.state.searchText}
                   navigation={ this.props.navigation }
