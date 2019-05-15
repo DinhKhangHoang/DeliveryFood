@@ -9,7 +9,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import Loader from './loader.js'
 
 var options = {
-  title: 'Select Avatar',
+  title: 'Select photo',
   customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
   storageOptions: {
     skipBackup: true,
@@ -41,6 +41,7 @@ export default class Addfood extends Component
                   statefood: true,
                   imageSource: null,
                   loading : false,
+                  correctNumber: true,
                 };
     this._onPressApply = this._onPressApply.bind(this);
     this.picker = this.picker.bind(this);
@@ -89,6 +90,15 @@ export default class Addfood extends Component
   }
   render(){
     const {goBack} = this.props.navigation;
+    let body, correct;
+    if(this.state.correctNumber)
+      correct = null;
+    else
+      correct = <Text style = {{fontSize: 10, color: 'red', marginLeft: 5}}>Please input a number...</Text>;
+    if(this.state.imageSource == null)
+      body = <Icon type = 'font-awesone' name = 'file-upload' color = 'gray' size = {100} />;
+    else
+      body = <Image source = {this.state.imageSource} style = {{height: '80%', width: '100%'}}/>
     if(this.state.loading)
     return(<Loader/>);
     else
@@ -96,32 +106,48 @@ export default class Addfood extends Component
       <ScrollView style = {{paddingVertical : 5}}>
             <TouchableOpacity style = {modalAddFoodStyle.image}
                               onPress = {this.picker}>
-              <Image source = {this.state.imageSource} style = {{height: '80%', width: '100%'}}/>
+              {body}
               <Text style = {{fontSize: 30, color: '#2196F3', justifyContent: 'center', textAlign: 'center'}}>Upload Image</Text>
             </TouchableOpacity>
 
               <Text style={ modalAddFoodStyle.textname }>Name :</Text>
-              <TextInput style = {modalAddFoodStyle.inputname}
+              <TextInput style = {{...modalAddFoodStyle.inputname, height: 40}}
                           onChangeText = {(text) => {this.setState({inputtitle : text})}}
                           value = {this.state.inputtitle}
                           underlineColorAndroid = 'transparent'
                           autoCapitalize = "none"
+
+
               />
 
               <Text style={ modalAddFoodStyle.textname }>Price :</Text>
-              <TextInput style = {modalAddFoodStyle.inputname}
-                          onChangeText = {(text) => {this.setState({inputprice : text});}}
+              <TextInput style = {{...modalAddFoodStyle.inputname, height: 40}}
+                          onChangeText = {(text) => {
+                            this.setState({inputprice : text});
+                            if(/^\d+$/.test(text))
+                              this.setState({correctNumber: true});
+                            else {
+                              this.setState({correctNumber: false});
+                            }
+                          }}
                           value = {this.state.inputprice}
                           underlineColorAndroid = 'transparent'
                           autoCapitalize = "none"
+
+
               />
+              {correct}
 
               <Text style={ modalAddFoodStyle.textname }>Description :</Text>
-              <TextInput style = {modalAddFoodStyle.inputname}
+              <TextInput style = {{...modalAddFoodStyle.inputname, textAlignVertical: "top", height: 100}}
                           onChangeText = {(text) => {this.setState({inputdescription : text})}}
                           value = {this.state.inputdescription}
                           underlineColorAndroid = 'transparent'
                           autoCapitalize = "none"
+                          multiline = {true}
+                          editable = {true}
+                          numberOfLines = {5}
+
               />
               <View style = {{flexDirection : 'row'}}>
                 <Text style={ modalAddFoodStyle.textname }>Type :</Text>
@@ -144,11 +170,11 @@ export default class Addfood extends Component
                  </Picker>
               </View>
 
-            <View style = {{justifyContent: 'center', flexDirection: 'row'}}>
+            <View style = {{justifyContent: 'center', flexDirection: 'row', paddingTop: 30}}>
               <TouchableHighlight
                 onPress={this._onPressApply}
                 style = {modalAddFoodStyle.apply}
-                disabled = {!(this.state.inputtitle.length != 0 && this.state.inputprice.length != 0 && this.state.inputdescription.length != 0 && this.state.imageSource.length != 0)}
+                disabled = {!(this.state.inputtitle.length != 0 && this.state.inputprice.length != 0 && this.state.inputdescription.length != 0 && this.state.imageSource.length != 0 && this.state.correctNumber)}
                >
                   <Text style = {{fontSize:24, fontWeight:"bold",color: 'white'}}>Add</Text>
               </TouchableHighlight>
