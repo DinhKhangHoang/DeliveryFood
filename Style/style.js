@@ -1358,7 +1358,7 @@ export const modalAddFoodStyle = StyleSheet.create({
     inputname:
     {
       margin: 5,
-      height: 40,
+
       borderColor: '#2196F3',
       borderWidth: 1,
       fontSize: 16,
@@ -1375,12 +1375,252 @@ export const modalAddFoodStyle = StyleSheet.create({
     },
     pickerType:
     {
-        width:"40%",
+        width:"50%",
         height: 40,
         color: "gray"
     }
 });
+export const orderStyle = StyleSheet.create({
+  container:
+  {
+      width,
+      height,
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+  },
+  wrapper:
+  {
+        width: "85%",
+        height: "75%",
 
+        shadowOffset: { width: 10, height: 10 },
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        elevation: 3,
+        backgroundColor: "white",
+
+
+  },
+  image:
+  {
+          width: 80,
+          height: 80,
+          borderRadius: 50,
+          top: 5,
+          left: 5
+  },
+  name:
+  {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "90%",
+          height: 100,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          marginTop: "7%",
+          //backgroundColor: "#F2FDE0",
+          borderRadius: 50,
+  },
+  count:
+  {
+        marginHorizontal: 20,
+        width: "90%",
+
+        flexDirection: 'row',
+        paddingTop: 20,
+  },
+  address:
+  {
+      marginHorizontal: 20,
+      width: "90%",
+      height: "20%",
+      flexDirection: 'row',
+  },
+  confirm:
+  {
+        borderTopWidth: 1,
+        borderTopColor: "rgba(0, 0, 0, 0.2)",
+        width: "100%",
+        height: "15%",
+        marginTop: "5%",
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: "center",
+        flexDirection: "row",
+  },
+  adjustCount:
+  {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          width: "60%",
+          borderColor: "rgba(0, 0, 0, 0.2)",
+          borderWidth: 1,
+          borderRadius: 5,
+          marginLeft: "20%",
+  },
+  text:
+  {
+    fontSize: 16,
+    fontWeight: "bold",
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    textAlign: 'left',
+  },
+  time:
+  {
+      marginHorizontal: 20,
+      width: "90%",
+      height: "20%",
+      flexDirection:'row',
+  },
+  TouchableOpacity:
+  {
+    width: "30%",
+    display: "flex",
+    justifyContent: "center"
+  },
+
+  counting:
+  {
+     fontSize: 15,
+     fontWeight: "bold",
+     paddingVertical: 8,
+     paddingHorizontal: 15,
+     borderLeftWidth: 1,
+     borderRightWidth: 1,
+     borderColor: "rgba(0, 0, 0, 0.2)",
+     textAlign: "center"
+  },
+  modal:
+  {
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center"
+  },
+  modalCounting:
+  {
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center"
+  },
+  price:
+  {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#911111",
+    width: "100%",
+    textAlign: "center"
+  },
+  priceWrapper:
+  {
+    ...flexStyle.wrapper,
+    width: "50%",
+    height: "100%"
+  },
+  note:
+  {
+    fontSize: 11,
+    padding: 5,
+    textAlign: 'center',
+    width: "100%"
+  }
+});
+export const orderItem = StyleSheet.create({
+    headerTitle:
+    {
+          color: "white",
+          fontSize: 20,
+          fontWeight: "bold"
+    },
+    backWrapper:
+    {
+
+    },
+    back:
+    {
+
+    },
+    drawerTitle:
+    {
+          width: 100,
+          height: 100,
+          fontSize: 80,
+          position: 'absolute',
+          left: "29%",
+          top: 50,
+          zIndex: 9,
+          fontWeight: "bold",
+          color: "white",
+          borderWidth: 4,
+          borderColor: "white",
+          borderRadius: 60,
+          paddingLeft: 20,
+          paddingBottom: 22
+    },
+    itemContainer:
+    {
+      width: "85%",
+      //borderWidth: 1,
+      //borderColor: "rgba(0, 0, 0, 0.2)",
+      backgroundColor: "white",
+      borderRadius: 10,
+      padding: 15,
+      marginBottom: 20,
+      shadowOffset: { width: 10, height: 10 },
+      shadowColor: 'black',
+      shadowOpacity: 0.3,
+      elevation: 3,
+    },
+    titleItemWrapper:
+    {
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          borderBottomWidth: 1,
+          borderBottomColor: "rgba(0, 0, 0, 0.2)",
+          paddingBottom: 10
+    },
+    titleText:
+    {
+      fontSize: 13,
+      fontWeight: "bold",
+      color: "black"
+    },
+    timeText:
+    {
+      fontSize: 11
+    },
+    contentItem:
+    {
+      paddingTop: 10,
+    },
+    closeButton:
+    {
+      position: "absolute",
+      zIndex: 10,
+      elevation: 5,
+      top: "2%",
+      left: "85%"
+    },
+    noLoginText:
+    {
+      fontSize: 20,
+      fontWeight: "bold",
+      padding: 10
+    }
+});
 
 export const gridStyle = StyleSheet.create({
       container:

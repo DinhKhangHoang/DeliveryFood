@@ -23,6 +23,7 @@ import Booking from "./Booking.js";
 import BookingTable from "./BookingTable.js";
 import RestaurantInfor from "./restaurantInfor.js";
 import EditFood from "./EditFood.js";
+import OrderInfo from './OrderInfo.js';
 import NavigationService from "./NavigationService.js";
 
 // Define a home class for account that haven't logged in yet.
@@ -175,6 +176,7 @@ class AccountLogIn extends Component
             ListDiscarded: { screen: ListDiscarded },
             ListDeliveried: {screen: ListDeliveried},
             Addfood: {screen: Addfood},
+            OrderInfo: {screen: OrderInfo},
             Order: { screen: Booking },
             Infor: { screen: RestaurantInfor },
             bookTable: { screen: BookingTable },
