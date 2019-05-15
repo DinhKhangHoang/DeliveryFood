@@ -19,6 +19,8 @@ import ListDeliveried from "./ListDeliveried.js"
 import LikedFood from "./LikeFood.js";
 import CartCustomer from "./CartCustomer.js";
 import Addfood from "./Addfood.js";
+import EditFood from "./EditFood.js";
+import NavigationService from "./NavigationService.js";
 
 // Define a home class for account that haven't logged in yet.
 export class HomeNotLogIn extends Component
@@ -169,13 +171,16 @@ class AccountLogIn extends Component
             ListNonChecked: { screen: ListNonChecked },
             ListDiscarded: { screen: ListDiscarded },
             ListDeliveried: {screen: ListDeliveried},
-            Addfood: {screen: Addfood}
+            Addfood: {screen: Addfood},
+            EditFood: {screen: EditFood}
           },
           {
             initialRouteName: "Home"
           }
         ));
-        return (<Nav />);
+        return (<Nav ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}/>);
       }
 }
 

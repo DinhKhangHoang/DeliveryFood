@@ -1,10 +1,16 @@
 import React, { Component } from "react";
-import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput,TouchableOpacity } from "react-native";
+import { Text, View, Image, SectionList,Button,Alert,TouchableHighlight, Modal, TextInput,TouchableOpacity, ScrollView, Picker, ActivityIndicator } from "react-native";
 import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
 import PropTypes from 'prop-types';
-import { listViewMenuItemStyle, modalViewInfoStyle, modalEditInfoStyle } from "../Style/style.js";
+import { listViewMenuItemStyle, modalViewInfoStyle, modalEditInfoStyle, modalAddFoodStyle } from "../Style/style.js";
 import firebase from 'react-native-firebase';
+import { NavigationEvents, NavigationActions } from 'react-navigation';
+import {UploadImage} from './UploadImage.js';
+import ImagePicker from 'react-native-image-picker';
+import EditFood from './EditFood.js';
+import NavigationService from './NavigationService.js';
+
 
 class ListViewMenuItem extends Component
 {
@@ -12,16 +18,19 @@ class ListViewMenuItem extends Component
     {
       super(props);
       this._onPressProperty = this._onPressProperty.bind(this);
-      //this.renderModalViewinfo = this.renderModalViewInfo.bind(this);
+      this._onPressDelete = this._onPressDelete.bind(this);
       this.state = {ViewInfovisible : false,
                     EditInfovisible : false,
-                    inputtitle : '',
-                    inputprice : '',
                     title: '',
-                    price: 0,
+                    price: '',
                     rate: 0,
                     imgURL :'',
+                    imagesoure: '',
                     loading: true,
+                    information: '',
+                    typeOfFood:'',
+                    State:'',
+
       };
       this.ref = firebase.firestore().collection('Food');
       this.unsubscribe = null;
@@ -30,12 +39,16 @@ class ListViewMenuItem extends Component
       this.unsubscribe = this.ref.doc(this.props.foodID).onSnapshot(this.onDocumentUpdate);
     }
     componentWillUnmount() {
-      this.unsubscribe();
+      this.unsubscribe = null;
     }
+
     onDocumentUpdate = (DocumentSnapshot)=>{
       this.setState({title: DocumentSnapshot.get('Name'),
-                      price: DocumentSnapshot.get('Price'),
+                      price: String(DocumentSnapshot.get('Price')),
                       rate: DocumentSnapshot.get('rating'),
+                      information: DocumentSnapshot.get('Information'),
+                      typeOfFood: DocumentSnapshot.get('TypeOfFood'),
+                      State: DocumentSnapshot.get('State'),
                     });
       let ref = firebase.storage().ref('FoodImage');
       ref.child(`${this.props.foodID}.jpg`).getDownloadURL()
@@ -46,26 +59,46 @@ class ListViewMenuItem extends Component
     }
     _onPressProperty(){
       Alert.alert(
-        this.props.title,
+        this.state.title,
         'Select one',
         [
-          {text: 'Delete', onPress: () => {}},
+          {text: 'Delete', onPress: ()=>{
+            Alert.alert("Delete data?","Select one",
+            [
+              {text: 'Delete', onPress: this._onPressDelete},
+              {text: 'Cancel', onPress:()=>{}},
+            ],
+              {cancelable: true},
+            )}},
           {
             text: 'View Information',
             onPress: ()=>{this.setState({ViewInfovisible : true})} ,
           },
-          {text: 'Edit', onPress: () => {this.setState({EditInfovisible: true})}},
+          {text: 'Edit', onPress: () => {NavigationService.navigate('EditFood',{foodID: this.props.foodID})}},
         ],
         {cancelable: true},
       );
     }
+    _onPressDelete(){
+      this.ref.doc(this.props.foodID).delete();
+      firebase.storage().ref('FoodImage').child(`${this.props.foodID}.jpg`).delete();
+      //await this.props.onDeleteFood();
+      Alert.alert("Data deleted!");
+    }
+
     render()
     {
       const { foodID } = this.props;
       if(this.state.loading)
-      return null;
+      return (
+        <View style = {listViewMenuItemStyle.loader}>
+          <ActivityIndicator size = 'small' color = 'gray'/>
+        </View>
+      );
       return (
         <View>
+        <NavigationEvents onDidFocus={()=>this.unsubscribe = this.ref.doc(this.props.foodID).onSnapshot(this.onDocumentUpdate)}
+                          onWillBlur={()=>this.unsubscribe = null} />
             <View style={ listViewMenuItemStyle.item }>
                   <Image
                       source={ {uri:this.state.imgURL} }
@@ -117,46 +150,7 @@ class ListViewMenuItem extends Component
                   </View>
               </View>
             </Modal>
-            <Modal
-              animationType="slide"
-              transparent={false}
-              visible={this.state.EditInfovisible}
-              onRequestClose={() => {
-                this.setState({EditInfovisible: false});
-              }}>
-              <View style={ modalEditInfoStyle.item }>
-                  <Image
-                      source={ {uri : this.state.imgURL} }
-                      style={ modalEditInfoStyle.image }
-                      resizeMode='cover'
-                  />
-                  <View style = {modalEditInfoStyle.wrappername}>
-                    <Text style={ modalEditInfoStyle.textname }>Name :</Text>
-                    <TextInput style = {modalEditInfoStyle.inputname}
-                                onChangeText = {(text) => {this.setState({inputtitle : text});}}
-                                value = {this.state.inputtitle}
-                                underlineColorAndroid = {"light-gray"}
-                    />
-                  </View>
-                  <View style = {modalEditInfoStyle.wrappername}>
-                    <Text style={ modalEditInfoStyle.textname }>Price :</Text>
-                    <TextInput style = {modalEditInfoStyle.inputname}
-                                onChangeText = {(text) => {this.setState({inputprice : text});}}
-                                value = {this.state.inputprice}
-                                underlineColorAndroid = {"light-gray"}
-                    />
-                  </View>
-              </View>
-              <View style = {{justifyContent: 'center', flexDirection: 'row', flex:1}}>
-                <TouchableHighlight
-                  onPress={() => {
-                    this.setState({EditInfovisible: false});
-                  }}
-                  style = {modalEditInfoStyle.apply}>
-                    <Text style = {{fontSize:24, fontWeight:"bold", color: 'white'}}>Apply</Text>
-                </TouchableHighlight>
-              </View>
-            </Modal>
+
         </View>
       );
     }
@@ -166,7 +160,7 @@ export default class ListViewMenu extends Component
   constructor(props)
   {
     super(props);
-    this.ref = firebase.firestore().collection('Food').where('ID_RES' , '==', firebase.auth().currentUser.uid);
+    this.ref = firebase.firestore().collection('Food');
     this.unsubscribe = null;
     this.state = {
       loading: true,
@@ -182,10 +176,13 @@ export default class ListViewMenu extends Component
     }
   }
   componentDidMount() {
-    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-  }
+    /*this.focusListner = NavigationActions.addListener("didFocus",
+      this.ref.where('ID_RES' , '==', firebase.auth().currentUser.uid).onSnapshot(this.onCollectionUpdate));*/
+    this.unsubscribe = this.ref.where('ID_RES' , '==', firebase.auth().currentUser.uid).onSnapshot(this.onCollectionUpdate);
+}
   componentWillUnmount() {
-    this.unsubscribe();
+    //this.focusListner.remove();
+    this.unsubscribe = null;
   }
   onCollectionUpdate = (querySnapshot) => {
     const Dessert = {
@@ -217,6 +214,7 @@ export default class ListViewMenu extends Component
     //const { title } = this.props;
     return (
           <View style={{width: "100%"}}>
+
             <SectionList
                 sections={ this.state.food }
                 showsVerticalScrollIndicator = {false}
@@ -225,6 +223,7 @@ export default class ListViewMenu extends Component
                                                         style={listViewMenuItemStyle.text}>{section.title}</Text>}
                 renderItem={( {item} ) => <ListViewMenuItem
                                               foodID = {item.key}
+
                                           />  }
             />
           </View>
