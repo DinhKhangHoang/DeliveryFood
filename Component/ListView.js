@@ -15,12 +15,12 @@ class ListViewItem extends Component
   constructor(props)
   {
         super(props);
-        this.state = { disabled: false, imgURL: '' };
+        this.state = { disabled: false, imgURL: ' ' };
         this.handleOnPress = this.handleOnPress.bind(this);
   }
   componentDidMount()
   {
-      if (this.props.imgURL == '')
+      if (this.props.imgURL == ' ')
       {
           firebase.storage().ref().child("/FoodImage/" + this.props.id + ".jpg").getDownloadURL().then(url=>{
                 this.setState({ imgURL: url });

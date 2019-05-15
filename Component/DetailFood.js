@@ -612,7 +612,7 @@ async loadingSimilarFood(infoFood, storageRef, dataNav)
           similar.forEach(
             (i)=>{
                   const item = {
-                                    key: '',
+                                    key: ' ',
                                     id: i.id,
                                     title: i.data().Name,
                                     resID: i.data().ID_RES,
@@ -634,7 +634,7 @@ async componentDidMount()
          this.setState({data:
              {
                   foodID: dataNav.id,
-                  image: "",
+                  image: " ",
                   name: infoFood.data().Name,
                   price: infoFood.data().Price,
                   state: infoFood.data().State,
@@ -672,7 +672,6 @@ async componentDidMount()
               // ===== Load comment about food ============================================================================================================================
           }
           this.loadComment(storageRef, dataNav, infoAccount);
-         // ==== Set state =============================================================================================
   }
 
   updateNewComment(item)

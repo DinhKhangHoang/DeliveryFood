@@ -14,14 +14,14 @@ class ShoppingCartItem extends Component
   constructor(props)
   {
         super(props);
-        this.state = { imageURL: '', status: 'received', title: '', nameRES: '',  address: '' };
+        this.state = { imageURL: ' ', status: 'received', title: '', nameRES: '',  address: '' };
   }
    componentDidMount()
    {
         if (this.props.id)
         {
                 // -------------------- Set image URL --------------------------------------------------------------------------
-                if (this.props.imageURL == '')
+                if (this.props.imageURL == ' ')
                         firebase.storage().ref().child("/FoodImage/" + this.props.id + ".jpg").getDownloadURL().then(url=>{
                               this.setState({ imageURL: url });
                         });
@@ -175,7 +175,7 @@ export default class CartCustomer extends Component
             firebase.firestore().collection("ListOrders").where("CUS_ID", "==",  firebase.auth().currentUser.uid).get().then(data=>{
                     data.forEach(doc => {
                             const item = {
-                                    key: '',
+                                    key: ' ',
                                     foodID: doc.data().FoodID,
                                     resID: doc.data().RES_ID,
                                     quantity: doc.data().Quantity,
