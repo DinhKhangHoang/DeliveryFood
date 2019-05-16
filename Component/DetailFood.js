@@ -612,7 +612,7 @@ async loadingSimilarFood(infoFood, storageRef, dataNav)
           similar.forEach(
             (i)=>{
                   const item = {
-                                    key: '',
+                                    key: ' ',
                                     id: i.id,
                                     title: i.data().Name,
                                     resID: i.data().ID_RES,
@@ -634,7 +634,7 @@ async componentDidMount()
          this.setState({data:
              {
                   foodID: dataNav.id,
-                  image: "",
+                  image: " ",
                   name: infoFood.data().Name,
                   price: infoFood.data().Price,
                   state: infoFood.data().State,
@@ -672,7 +672,6 @@ async componentDidMount()
               // ===== Load comment about food ============================================================================================================================
           }
           this.loadComment(storageRef, dataNav, infoAccount);
-         // ==== Set state =============================================================================================
   }
 
   updateNewComment(item)
@@ -707,6 +706,7 @@ async componentDidMount()
             require('intl');
             require('intl/locale-data/jsonp/en');
     }
+    const isSameRes = firebase.auth().currentUser && firebase.auth().currentUser.uid == this.state.data.resID;
     const info = (<View style={detailFood.foodInfor} >
              <Image
                  source={{uri: this.state.data.image }}   /*  This must be data from main-screen */
@@ -721,6 +721,7 @@ async componentDidMount()
                                    <Icon name="star" type="antdesign" color="white" size={15} />
                                    <Text style={{color: "white", fontSize: 14, marginLeft: 10}}>{ this.state.data.rating }</Text>
                            </View>
+                           { ( isSameRes ? null :
                            <RoundButton
                                  text="ORDER"
                                  textColor="white"
@@ -737,6 +738,7 @@ async componentDidMount()
                                                                                                    message: this.OrderSuccess,
                                                                                                    ordercount: this.state.data.orderCount}} ); } }
                            />
+                         )}
                      </View>
              </View>
              <View style={ detailFood.statusFood }>
@@ -763,13 +765,14 @@ async componentDidMount()
                               <Rect x="45%" y="93%" rx="10" ry="10" width="50%" height="5%" />
                           </ContentLoader>
                   </View>);
+
     return (
     <View style={{flex: 1}}>
       {myNotification}
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ width: "100%", height: "100%" }}>
               { (this.state.loading ? load : info) }
-          {(this.state.user ?
+          {( this.state.user ?
           <ComponentWithTitle
                 title="Rating and like"
                 dataStyle={{width: "100%"}}
@@ -806,14 +809,14 @@ async componentDidMount()
             data={
                <View style={ resInfor.wrapper }>
                   <View style={ resInfor.banner }>
-                        <View style={ resInfor.name }>
+                        <View style={ [resInfor.name, {width: (isSameRes ? "100%" : "65%") }] }>
                               <Avatar
                                   size="small"
                                   rounded
                                   icon={{type: "evilicon", name: "user", color: "white"}}
                                   containerStyle={{}}
                               />
-                              <View >
+                              <View style={{width: "80%"}}>
                                     <Text style={{ fontWeight: "bold", fontSize: 14, width: "100%", padding: 5, marginLeft: 14}}>{ this.state.data.resName }</Text>
                                     <View style={ resInfor.locate } >
                                         <Icon
@@ -823,10 +826,11 @@ async componentDidMount()
                                               size={15}
                                         />
 
-                                        <Text style={{ fontSize: 12, paddingLeft: 5}}>{ this.state.data.resAddress }</Text>
+                                        <Text style={{ fontSize: 12, paddingLeft: 5, width: "90%"}}>{ this.state.data.resAddress }</Text>
                                     </View>
                               </View>
                         </View>
+                         { ( isSameRes ? null :
                         <RoundButton
                               text="Visit"
                               textColor="#227100"
@@ -838,7 +842,7 @@ async componentDidMount()
                                                                                                 message: this.OrderSuccess,
                                                                                                 }} ); } }
                               underlayColor="#F2FDE0"
-                        />
+                        /> )}
                   </View>
                   <View style={ resInfor.statistics }>
                       <View style={ resInfor.statisticsWrapper }>

@@ -655,7 +655,6 @@ export const resInfor = StyleSheet.create({
   },
   name:
   {
-      width: "65%",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -663,7 +662,7 @@ export const resInfor = StyleSheet.create({
   },
   locate:
   {
-      width: "95%",
+      width: "100%",
       marginLeft: 5,
       display: "flex",
       justifyContent: "center",

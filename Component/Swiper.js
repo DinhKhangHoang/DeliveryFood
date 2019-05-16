@@ -15,7 +15,7 @@ class SwiperItem extends Component
   constructor(props)
   {
         super(props);
-        this.state = { disabled: false, autoplay: true, imageURL: ''  };
+        this.state = { disabled: false, autoplay: true, imageURL: ' '  };
         this.handleOnPress = this.handleOnPress.bind(this);
   }
 
@@ -31,7 +31,7 @@ class SwiperItem extends Component
 
       componentDidMount()
       {
-          if (this.props.imageURL == '')
+          if (this.props.imageURL == ' ')
           {
               firebase.storage().ref().child("/FoodImage/" + this.props.id + ".jpg").getDownloadURL().then(url=>{
                     this.setState({ imageURL: url });

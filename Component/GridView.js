@@ -10,7 +10,7 @@ class GridItem extends Component
   constructor(props)
   {
         super(props);
-        this.state = { disabled: false, imgURL: ''  };
+        this.state = { disabled: false, imgURL:  ' '  };
         this.handleOnPress = this.handleOnPress.bind(this);
   }
   // ================================================================================
@@ -26,7 +26,7 @@ class GridItem extends Component
  // ==================================================================================
    componentDidMount()
    {
-           if (!this.props.loading && this.props.imgURL == '' &&  this.props.id)
+           if (!this.props.loading && this.props.imgURL == ' ' &&  this.props.id)
            {
                  firebase.storage().ref().child("/FoodImage/" + this.props.id + ".jpg").getDownloadURL().then(url=>{
                         this.setState({ imgURL: url });

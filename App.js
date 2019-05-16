@@ -104,7 +104,7 @@ getInfoUser()
                                 function (i)
                                 {
                                       const item = {
-                                                        key: '',
+                                                        key: ' ',
                                                         id: i.id,
                                                         title: i.data().Name,
                                                         resID: i.data().ID_RES,

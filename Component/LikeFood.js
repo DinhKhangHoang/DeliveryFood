@@ -11,12 +11,12 @@ class LikedFoodItem extends Component
   constructor(props)
   {
        super(props);
-       this.state = { imageURL: '', title: '', nameRes: '' };
+       this.state = { imageURL: ' ', title: '', nameRes: '' };
   }
 
   componentDidMount()
   {
-          if (this.props.imageURL == '')
+          if (this.props.imageURL == ' ')
                 firebase.storage().ref().child("/FoodImage/" + this.props.id + ".jpg").getDownloadURL().then(url=>{
                       this.setState({ imageURL: url });
                 });
@@ -87,7 +87,7 @@ async getData()
                                      // --- Make new item --------------------------------------------------------------
                                      const newItem = {
                                                id: item["id"],
-                                               key: '',
+                                               key: ' ',
                                                time: item["time"]
                                         };
                                      //----------------------------------------------------------------------
