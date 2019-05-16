@@ -38,9 +38,9 @@ class ListViewMenuItem extends Component
     componentDidMount() {
       this.unsubscribe = this.ref.doc(this.props.foodID).onSnapshot(this.onDocumentUpdate);
     }
-    componentWillUnmount() {
-      this.unsubscribe = null;
-    }
+    /*componentWillUnmount() {
+      this.unsubscribe();
+    }*/
 
     onDocumentUpdate = (DocumentSnapshot)=>{
       this.setState({title: DocumentSnapshot.get('Name'),
@@ -72,7 +72,7 @@ class ListViewMenuItem extends Component
             )}},
           {
             text: 'View Information',
-            onPress: ()=>{this.setState({ViewInfovisible : true})} ,
+            onPress: ()=>{NavigationService.navigate('Detail',{data: {id: this.props.foodID, title: this.state.title }})} ,
           },
           {text: 'Edit', onPress: () => {NavigationService.navigate('EditFood',{foodID: this.props.foodID})}},
         ],
@@ -80,15 +80,23 @@ class ListViewMenuItem extends Component
       );
     }
     _onPressDelete(){
-      this.ref.doc(this.props.foodID).delete();
-      firebase.storage().ref('FoodImage').child(`${this.props.foodID}.jpg`).delete();
+      //this.ref.doc(this.props.foodID).delete();
+      //firebase.storage().ref('FoodImage').child(`${this.props.foodID}.jpg`).delete();
       //await this.props.onDeleteFood();
+      this.ref.doc(this.props.foodID)
+      .update({
+        isDeleted: true,
+      })
       Alert.alert("Data deleted!");
     }
 
     render()
     {
       const { foodID } = this.props;
+      let body = null;
+      if(this.state.State == false){
+        body = <Text style={{fontSize: 15, color: "red", marginLeft: 5, fontWeight: "bold"}}>Sold out</Text>;
+      }
       if(this.state.loading)
       return (
         <View style = {listViewMenuItemStyle.loader}>
@@ -117,6 +125,7 @@ class ListViewMenuItem extends Component
                             <Text style={{fontSize: 15, color: "#227100", marginLeft: 5, fontWeight: "bold"}}>{ this.state.price }</Text>
                         </View>
                     </View>
+                    {body}
                   </View>
                   <TouchableOpacity style = {listViewMenuItemStyle.button} onPress = {this._onPressProperty} activeOpacity ={0.7}>
                     <View style = {{flexDirection: "column", flex: 1, justifyContent: 'center'}}>
@@ -178,12 +187,12 @@ export default class ListViewMenu extends Component
   componentDidMount() {
     /*this.focusListner = NavigationActions.addListener("didFocus",
       this.ref.where('ID_RES' , '==', firebase.auth().currentUser.uid).onSnapshot(this.onCollectionUpdate));*/
-    this.unsubscribe = this.ref.where('ID_RES' , '==', firebase.auth().currentUser.uid).onSnapshot(this.onCollectionUpdate);
+    this.unsubscribe = this.ref.where('ID_RES' , '==', firebase.auth().currentUser.uid).where('isDeleted','==',false).onSnapshot(this.onCollectionUpdate);
 }
-  componentWillUnmount() {
+  /*componentWillUnmount() {
     //this.focusListner.remove();
     this.unsubscribe = null;
-  }
+  }*/
   onCollectionUpdate = (querySnapshot) => {
     const Dessert = {
       title: "Dessert",

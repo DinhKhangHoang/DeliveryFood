@@ -184,14 +184,13 @@ export default class EditFood extends Component
                  </Picker>
               </View>
 
-            <View style = {{justifyContent: 'center', flexDirection: 'row'}}>
-              <TouchableHighlight
+            <View style = {{paddingTop: 20,marginHorizontal: 70, paddingBottom: 30}}>
+              <Button
                 onPress={this._onPressSave}
-                style = {modalAddFoodStyle.apply}
-                disabled = {!(this.state.title.length != 0 && this.state.price.length != 0 && this.state.information.length != 0 && this.state.correct)}
-               >
-                  <Text style = {{fontSize:24, fontWeight:"bold",color: 'white'}}>Save</Text>
-              </TouchableHighlight>
+                title = 'SAVE'
+                disabled = {!(this.state.title.length != 0 && this.state.price.length != 0 && this.state.information.length != 0 && this.state.correctNumber)}
+               />
+
             </View>
       </ScrollView>
     );

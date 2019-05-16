@@ -1435,7 +1435,6 @@ export const orderStyle = StyleSheet.create({
   {
         marginHorizontal: 20,
         width: "90%",
-
         flexDirection: 'row',
         paddingTop: 20,
   },
