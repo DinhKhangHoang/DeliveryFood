@@ -14,11 +14,6 @@ import Booking from "./Booking.js";
 import BookingTable from "./BookingTable";
 import Cart from "./Cart";
 import GridView from "./GridView";
-import ListAccepted from "./ListAccepted.js";
-import ListNonChecked from "./ListNonChecked.js";
-import ListDiscarded from "./ListDiscarded.js";
-import ListDeliveried from "./ListDeliveried.js";
-import Addfood from "./Addfood.js";
 import Login from './login';
 import Register from './register';
 import Message from "./Message";
@@ -196,16 +191,10 @@ export default class HomeCustomer extends Component
       Infor: { screen: RestaurantInfor },
       bookTable: { screen: BookingTable },
       Cart: { screen: Cart },
-      ListAccepted: { screen: ListAccepted },
-      ListNonChecked: { screen: ListNonChecked },
-      ListDiscarded: { screen: ListDiscarded },
-      ListDeliveried: {screen: ListDeliveried},
       LogIn: { screen: Login },
       SignUp: { screen: Register },
       LikedFood: { screen: LikedFood },
       CartCustomer: { screen: CartCustomer },
-      Addfood: {screen: Addfood},
-      EditFood: {screen: EditFood}
     },
     {
       initialRouteName: "Home",
