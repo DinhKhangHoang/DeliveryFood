@@ -1,10 +1,5 @@
 export default data = [
-    {
-        id: '1JKd7NLolRMZE8EmVVMr',
-        Name: 'Gà cay nướng phô mai',
-        Price: 'Price: 100000đ',
-        avatar: 'https://firebasestorage.googleapis.com/v0/b/myfoody-1acad.appspot.com/o/FoodImage%2F1JKd7NLolRMZE8EmVVMr.jpg?alt=media&token=ef4ce120-2dd9-4358-87c1-60b3707a0ad6',
-    },
+    
     {
         id: '5izEmKgXO73k8UGCKqOi',
         Name: 'Gà không lối thoát',
