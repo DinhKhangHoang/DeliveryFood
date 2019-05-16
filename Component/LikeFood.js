@@ -1,30 +1,29 @@
 import React, { Component } from "react";
-import { Text, View, Image, TouchableOpacity, SectionList } from "react-native";
+import { Text, View, Image, TouchableOpacity, SectionList, ActivityIndicator } from "react-native";
 import { LikeFoodStyle, accountStyle } from "../Style/style";
 import Message from "./Message";
 import NetInfo from "@react-native-community/netinfo";
 import firebase from 'react-native-firebase';
-import { SkypeIndicator } from 'react-native-indicators';
 
 class LikedFoodItem extends Component
 {
   constructor(props)
   {
        super(props);
-       this.state = { imageURL: ' ', title: '', nameRes: '' };
+       this.state = { imageURL: ' ', title: '', nameRes: '', isLoading: true };
   }
 
   componentDidMount()
   {
           if (this.props.imageURL == ' ')
                 firebase.storage().ref().child("/FoodImage/" + this.props.id + ".jpg").getDownloadURL().then(url=>{
-                      this.setState({ imageURL: url });
+                      this.setState({ imageURL: url, isLoading: false });
                 });
           else  this.setState({ imageURL: this.props.imageURL });
 
           firebase.firestore().collection("Food").doc( this.props.id ).get().then(async (food)=>{
                 const res = await firebase.firestore().collection("Restaurants").doc(food.data().ID_RES).get();
-                this.setState({ title: food.data().Name, nameRes: res.data().NameRES });
+                this.setState({ title: food.data().Name, nameRes: res.data().NameRES, isLoading: false });
           });
 
   }
@@ -32,23 +31,29 @@ class LikedFoodItem extends Component
   render()
   {
         const { handleOnPress } = this.props;
-        return(
-                    <TouchableOpacity
-                            activeOpacity={0.7}
-                            onPress={ handleOnPress }
-                            style={ LikeFoodStyle.wrapperItem }
-                    >
-                            <Image
-                                  source={{uri: this.state.imageURL }}
-                                  style={ LikeFoodStyle.image }
-                                  resizeMode="cover"
-                              />
-                        <View style={LikeFoodStyle.wrapTextItem}>
-                              <Text numberOfLines={1} style={ LikeFoodStyle.titleItem }>{ this.state.title }</Text>
-                              <Text style={ LikeFoodStyle.nameRes}>{ this.state.nameRes }</Text>
-                        </View>
-                    </TouchableOpacity>
-              );
+        if (this.state.isLoading)
+            return (
+              <View style={ [LikeFoodStyle.wrapperItem, {width: "90%", display: "flex", alignItems: "center", justifyContent: 'center'} ] }>
+                    <View style={{width: "80%"}}>
+                          <ActivityIndicator size="small" color="black" />
+                    </View>
+              </View> );
+        else
+            return(
+                        <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={ handleOnPress }
+                                style={ LikeFoodStyle.wrapperItem } >
+                                <Image
+                                      source={{uri: this.state.imageURL }}
+                                      style={ LikeFoodStyle.image }
+                                      resizeMode="cover" />
+                            <View style={LikeFoodStyle.wrapTextItem}>
+                                  <Text numberOfLines={1} style={ LikeFoodStyle.titleItem }>{ this.state.title }</Text>
+                                  <Text style={ LikeFoodStyle.nameRes}>{ this.state.nameRes }</Text>
+                            </View>
+                        </TouchableOpacity>
+                  );
     }
 }
 
@@ -154,8 +159,8 @@ async componentWillMount()
        return (
             <View style={{ display: "flex",justifyContent: 'center', alignItems: 'center', flex: 1}}>
                   <View style={{ height: "20%", backgroundColor: "white"}}>
-                          <SkypeIndicator />
-                          <Text style={{ width: "100%", fontWeight: "bold", fontSize: 18, textAlign: "center"}}>LOADING...</Text>
+                          <ActivityIndicator size="large" color='black' />
+                          <Text style={{ width: "100%", fontWeight: "bold", fontSize: 18, textAlign: "center", color: "black", marginTop: 20}}>LOADING</Text>
                           { message }
                   </View>
              </View>

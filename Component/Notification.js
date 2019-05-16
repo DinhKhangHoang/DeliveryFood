@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, SafeAreaView, FlatList, Image, TouchableOpacity, ImageBackground, ScrollView } from "react-native";
+import { Text, View, SafeAreaView, FlatList, Image, TouchableOpacity, ImageBackground, ScrollView, ActivityIndicator } from "react-native";
 import { Header, Icon } from "react-native-elements";
 import Anchor from "./anchor";
 import Login from "./login";
@@ -8,7 +8,6 @@ import firebase from 'react-native-firebase';
 import { notification, flexStyle, loginStyle, CartStyle, accountStyle } from "../Style/style";
 import { createStackNavigator, createAppContainer,  } from "react-navigation";
 import NetInfo from "@react-native-community/netinfo";
-import { SkypeIndicator } from 'react-native-indicators';
 
 // ------------Notification if not login ----------------------------------------------------------------
 class NotLogIn extends Component
@@ -57,7 +56,7 @@ export class NotificationItem extends Component
       constructor(props)
       {
             super(props);
-            this.state = { title: '', time: '', content: '' };
+            this.state = { title: '', time: '', content: '', isLoading: true };
       }
 
       componentDidMount()
@@ -67,13 +66,23 @@ export class NotificationItem extends Component
                   this.setState({
                         title: data.data().Title,
                         time: data.data().Time,
-                        content: data.data().Content
+                        content: data.data().Content,
+                        isLoading: false
                   });
             });
       }
 
       render()
       {
+        if (this.state.isLoading)
+              return (
+                <View style={ [notification.itemContainer, {display: "flex", justifyContent: "center", alignItems: 'center'}] }>
+                      <View style={{ width: "90%" }}>
+                              <ActivityIndicator size="small" color="black" />
+                      </View>
+                </View>
+              );
+        else
             return (
               <View style={ notification.itemContainer }>
                   <View style={ notification.titleItemWrapper }>
@@ -112,11 +121,11 @@ export default class NotificationPage extends Component
           };
   }
 
-getData()
+async getData()
   {
       if (this.state.user)
       {
-          firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).get().then(doc=>{
+          await firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).get().then(doc=>{
                   doc.forEach(item=>{
                         let temp = this.state.data;
                         temp.push({key: item.id, time: item.data().Time});
@@ -124,6 +133,8 @@ getData()
                   });
           });
       }
+      this.setState({ isLoading: false });
+
   }
 
   async componentDidMount()
@@ -146,7 +157,8 @@ getData()
           const isConnected = await NetInfo.isConnected.fetch();
           if (isConnected) this.setState({ isConnected: true });
           else this.setState({isEmpty: true});
-          setTimeout(()=>this.setState({ isLoading: false }), 500);
+
+          if (!this.state.user) this.setState({ isLoading: false });
   }
 
   render()
@@ -156,8 +168,8 @@ getData()
       return (
         <View style={{ display: "flex",justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: "white"}}>
               <View style={{ height: "20%", backgroundColor: "white"}}>
-                      <SkypeIndicator />
-                      <Text style={{ width: "100%", fontWeight: "bold", fontSize: 18, textAlign: "center"}}>LOADING...</Text>
+                      <ActivityIndicator size="large" color='black' />
+                      <Text style={{ width: "100%", fontWeight: "bold", fontSize: 18, textAlign: "center", color: "black", marginTop: 20}}>LOADING</Text>
               </View>
          </View>
       );
@@ -177,7 +189,7 @@ getData()
               else
                     return (
                             <View>
-                                  <Header centerComponent={{ text: 'NOTIFICATIONS', style: notification.headerTitle }}  backgroundColor="#5B9642" />
+                                  <Header centerComponent={{ text: 'NOTIFICATIONS', style: notification.headerTitle }}  backgroundColor="#006727" />
                                   <View style={{ width: "100%", height: "87%"}}>
                                         <FlatList
                                               contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }

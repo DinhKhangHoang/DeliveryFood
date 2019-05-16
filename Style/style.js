@@ -372,13 +372,20 @@ export const swiperStyle = StyleSheet.create({
 export const headerStyle = StyleSheet.create({
       wrapper:
       {
-        backgroundColor: "#5B9642",
+        backgroundColor: "#248823",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
         height: 60,
         flexDirection: "row"
+      },
+      iconWrapper:
+      {
+        width: "50%",
+        ...flexStyle.wrapper,
+        paddingVertical: 10,
+        borderRadius: 60,
       }
 });
 

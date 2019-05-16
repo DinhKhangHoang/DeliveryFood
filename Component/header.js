@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
-import { SearchBar, Icon } from 'react-native-elements';
+import { Text, View, Image } from "react-native";
+import { Icon } from 'react-native-elements';
 import { headerStyle } from "../Style/style.js";
 import firebase from 'react-native-firebase';
 
@@ -18,36 +18,32 @@ export default class Header extends Component
   render()
   {
     const { search } = this.state;
-    const icon = (this.props.show ? (
-       <Icon
-          name="arrow-left-circle"
-          type="feather"
-          color="white"
-          underlayColor="transparent"
-          onPress={this.props.back}
-      />
-      )  :  (null));
     return (
       <View style={headerStyle.wrapper} >
-          <SearchBar
-              placeholder = "Search here..."
-              onChangeText = { this.props.onTextChange }
-              value = { this.props.searchText }
-              inputContainerStyle={{backgroundColor: "#E5E4EA"}}
-              inputStyle={{fontSize: 14, padding: 0}}
-              round
-              containerStyle={{ marginLeft: "2%", width: "65%", backgroundColor: "transparent", position: "relative", borderBottomColor: "transparent", borderTopColor: "transparent"}}
-              onFocus={this.props.onFocus}
-          />
-          <View style={{width: "25%", justifyContent: "space-around", alignItems: "center", display: "flex", flexDirection: "row", marginRight: "5%"}}>
-              <Icon
-                  name="shopping-cart"
-                  type="feather"
-                  color="white"
-                  underlayColor="transparent"
-                  onPress={ ()=>this.props.navigation.push( (global.UserType == "Restaurant" ? "Cart" : "CartCustomer")) }
-              />
-              { icon }
+          <Image
+                source={ require("../Media/icon/logo.png") }
+                style={{ width: "60%"}}
+                resizeMode="cover"
+            />
+          <View style={{paddingLeft: "3%", width: "30%", justifyContent: "space-around", alignItems: "center", display: "flex", flexDirection: "row", marginRight: "5%"}}>
+              <View style={ headerStyle.iconWrapper}>
+                  <Icon
+                         name="search"
+                         type="evilicons"
+                         color="white"
+                         underlayColor="transparent"
+                         onPress={()=>{this.props.navigation.push("Search")}}
+                 />
+             </View>
+             <View style={ headerStyle.iconWrapper }>
+                    <Icon
+                        name="shopping-cart"
+                        type="feather"
+                        color="white"
+                        underlayColor="transparent"
+                        onPress={ ()=>this.props.navigation.push( (global.UserType == "Restaurant" ? "Cart" : "CartCustomer")) }
+                    />
+            </View>
           </View>
       </View>
     );

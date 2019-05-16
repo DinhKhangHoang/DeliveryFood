@@ -118,7 +118,7 @@ export default class Login extends Component
                               activeOpacity={ 0.5 }
                               disabled={this.state.disabled}
                         />
-                        <SkypeIndicator  color="#114B5F" style={{ display: (this.state.disabled ? "flex" : "none") }} />
+                        <SkypeIndicator  color="#114B5F" style={{ display: (this.state.disabled ? "flex" : "none"), paddingTop: "12%"}} />
                 </View>
           </View>
           <View  style={{width: "100%", height: "20%", display: "flex", justifyContent: 'center'}}>

@@ -6,7 +6,7 @@ import { headerStyle } from "../Style/style.js";
 import { StackNavigator } from 'react-navigation';
 import data from './datasearch'
 import DetailFood from './DetailFood';
-
+import Anchor from "./anchor";
 
 const {width, height} = Dimensions.get('window')
 
@@ -94,13 +94,20 @@ const {width, height} = Dimensions.get('window')
                         ]
                     }]}
                 >
-                <TextInput
-                    style={styles.textInput}
-                    placeholder = "Search here..."
-                    onChangeText={(text) => this.filterSearch(text)}
-                    value={this.state.text}
-                />
-
+                <View style={{display: "flex", flexDirection: "row" }}>
+                      <TextInput
+                          style={styles.textInput}
+                          placeholder = "Search here..."
+                          onChangeText={(text) => this.filterSearch(text)}
+                          value={this.state.text}
+                      />
+                      <Anchor
+                            text="BACK"
+                            textStyle={{fontWeight: "bold", width: "100%", textAlign: "center"}}
+                            wrapperStyle={{width: "20%",  height: 50}}
+                            handleOnPress={()=>this.props.navigation.goBack()}
+                      />
+                </View>
                     <ListView
                         enableEmptySections={true}
                         style={styles.listContainer}
@@ -124,7 +131,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#cecece',
         marginBottom: 10,
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        width: "70%"
     },
     content: {
         zIndex: 1

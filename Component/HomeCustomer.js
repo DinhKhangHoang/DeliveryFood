@@ -32,25 +32,10 @@ class HomeCustomer_Main extends Component
   {
     super(props);
     this.state = {
-                      searchShow: false,
-                      searchText: "",
                       isShowNotification: false,
                       signUpSuccess: false,
                       loading: true,
                  };
-
-    this.isSearch = this.isSearch.bind(this);
-    this.back = this.back.bind(this);
-    this.onTextChange = this.onTextChange.bind(this);
-  }
-
-
-  isSearch()   {   if (this.state.searchShow === false)  {  this.setState({ searchShow: true });  } }
-  back()       {   this.setState({  searchShow: false, searchText: ""});  }
-  onTextChange(text)
-  {
-      if (this.state.searchShow === false) { this.setState({ searchShow: true, searchText: text }); }
-      else { this.setState({ searchText: text }); }
   }
 
 
@@ -95,9 +80,7 @@ class HomeCustomer_Main extends Component
     // ----- Notification about internet connection-----------------------------------------------------------------------------------------------------------
     let myNotification = null;
     if (this.state.isShowNotification)
-    {
         myNotification = <Message text="Something went wrong with internet connection." />
-    }
     if (this.state.signUpSuccess)
     {
           myNotification = <Message
@@ -114,9 +97,6 @@ class HomeCustomer_Main extends Component
                                 />;
     }
     // ---- Test for if user is searching or not -------------------------------------------------------------------------------------------------------------
-    let body;
-    if (this.state.searchShow) {  body = <Search />;  }
-    else {
       const dataList = [ {key: "swiper"}, {key: "dessert"}, {key: "main"}, {key: "grid"}]
       const _renderItem =( {item} )=>{
             if (item.key == "swiper")
@@ -150,16 +130,6 @@ class HomeCustomer_Main extends Component
                                     loading = { this.state.loading }
                                     data = { global.foodData.grid } />);
       };
-      body = (
-                <FlatList
-                      removeClippedSubviews={true}
-                      showsVerticalScrollIndicator={false}
-                      data={dataList}
-                      keyExtractor={ (item, id) => item.key+id }
-                      renderItem={_renderItem}
-                  />
-              )
-         }
    // ----- return part -------------------------------------------------------
     return(
       <View style={{flex: 1}} >
@@ -171,7 +141,13 @@ class HomeCustomer_Main extends Component
                   searchText={this.state.searchText}
                   navigation={ this.props.navigation }
            />
-          { body }
+           <FlatList
+                 removeClippedSubviews={true}
+                 showsVerticalScrollIndicator={false}
+                 data={dataList}
+                 keyExtractor={ (item, id) => item.key+id }
+                 renderItem={_renderItem}
+             />
           { myNotification }
       </View>
     );
@@ -195,6 +171,7 @@ export default class HomeCustomer extends Component
       SignUp: { screen: Register },
       LikedFood: { screen: LikedFood },
       CartCustomer: { screen: CartCustomer },
+      Search: { screen: Search}
     },
     {
       initialRouteName: "Home",
