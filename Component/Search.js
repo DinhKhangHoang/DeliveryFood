@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import { Text,StyleSheet,View,ListView,TouchableHighlight,Dimensions,Image,Animated,TextInput, Alert } from 'react-native';
+import { SearchBar, Icon } from 'react-native-elements';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { headerStyle } from "../Style/style.js";
 import { StackNavigator } from 'react-navigation';
-import data from '../data'
-import RestaurantInfor from './restaurantInfor'
+import data from './datasearch'
+import DetailFood from './DetailFood';
+
 
 const {width, height} = Dimensions.get('window')
 
- class Searchpage extends Component {
+ export default class Search extends Component{
    	static navigationOptions = {	header: null	};
     constructor(props){
         super(props)
@@ -21,9 +24,19 @@ const {width, height} = Dimensions.get('window')
             text: ''
         }
     }
+    // componentDidMount() { this.setState({ text: this.props.searchText }); }
+    // componentDidUpdate(props)
+    // {
+    //       if (props.searchText != this.props.searchText)
+    //       {
+    //             this.setState({ text: this.props.searchText });
+    //             this.filterSearch(this.state.text);
+    //       }
+    // }
+
     renderRow(rowData){
         return (
-            <TouchableHighlight onPress={() => this.props.navigation.navigate('RestaurantInfor')}>
+            <TouchableHighlight onPress={() =>  {this.props.navigation.push('Detail', { data: {id: rowData.id, title:rowData.Name}} )}}>
             <View style={styles.containerCell}>
                     <View style={styles.footerContainer}>
                         <View
@@ -35,8 +48,8 @@ const {width, height} = Dimensions.get('window')
                             />
                         </View>
                         <View style={styles.footerTextContainer}>
-                            <Text style={styles.text}>{rowData.Restaurant}</Text>
-                            <Text style={[styles.text, styles.textTitle]}>{rowData.Address}</Text>
+                            <Text style={styles.text}>{rowData.Name}</Text>
+                            <Text style={[styles.text, styles.textTitle]}>{rowData.Price}</Text>
                         </View>
                     </View>
                 </View>
@@ -45,7 +58,7 @@ const {width, height} = Dimensions.get('window')
     }
     filterSearch(text){
         const newData = data.filter(function(item){
-            const itemData = item.Restaurant.toUpperCase()
+            const itemData = item.Name.toUpperCase()
             const textData = text.toUpperCase()
             return itemData.indexOf(textData) > -1
         })
@@ -81,12 +94,13 @@ const {width, height} = Dimensions.get('window')
                         ]
                     }]}
                 >
+                <TextInput
+                    style={styles.textInput}
+                    placeholder = "Search here..."
+                    onChangeText={(text) => this.filterSearch(text)}
+                    value={this.state.text}
+                />
 
-                    <TextInput
-                        style={styles.textInput}
-                        onChangeText={(text) => this.filterSearch(text)}
-                        value={this.state.text}
-                    />
                     <ListView
                         enableEmptySections={true}
                         style={styles.listContainer}
@@ -97,26 +111,6 @@ const {width, height} = Dimensions.get('window')
             </View>
         )
     }
-}
-export default class Search extends Component
-{
-  constructor(props)
-  {
-    super(props);
-    this.state = {};
-  }
-  render()
-  {
-	  const Nav = createAppContainer(createStackNavigator({
-		  Search: { screen: Searchpage },
-		  RestaurantInfor: { screen: RestaurantInfor },
-	  },
-		  {
-			  initialRouteName: "Search"
-		  }
-	  ));
-	  return (<Nav />);
-  }
 }
 
 
@@ -139,7 +133,7 @@ const styles = StyleSheet.create({
        flexDirection: 'row',
        paddingHorizontal: 10,
        paddingVertical: 10,
-       backgroundColor: 'green'
+       backgroundColor: 'white'
     },
     imageAvatar: {
         width: 50,
@@ -149,7 +143,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize:20,
-        color: '#fff'
+        color: 'black'
     },
     containerCell: {
         marginBottom: 10
