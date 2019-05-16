@@ -19,7 +19,7 @@ export const splashStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    marginTop: 20
+    paddingTop: 20
   },
   icon: {
       width: 75,
@@ -168,7 +168,6 @@ export const loginStyle = StyleSheet.create({
       display: "flex",
       justifyContent: "flex-start",
       alignItems: "center",
-      marginTop: "5%"
   }
 });
 
@@ -354,6 +353,18 @@ export const swiperStyle = StyleSheet.create({
     {
           width:  width,
           height: height * 0.4,
+    },
+    loading:
+    {
+      height: height,
+      width: width
+    },
+    cantLoading:
+    {
+      backgroundColor: "rgba(0, 0, 0, 0.2)",
+      width:  "100%",
+      height: height * 0.4,
+      display: "flex",
     }
 });
 
@@ -553,6 +564,7 @@ export const detailFood = StyleSheet.create({
     image:
     {
           width: "100%",
+          height: 300
     },
     title:
     {
@@ -624,6 +636,11 @@ export const detailFood = StyleSheet.create({
       width: 50,
       height: 50,
       borderRadius: 40
+    },
+    cantLoading:
+    {
+      height: height * 0.6,
+      width: width
     }
 });
 
@@ -638,7 +655,6 @@ export const resInfor = StyleSheet.create({
   },
   name:
   {
-      width: "65%",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -646,7 +662,7 @@ export const resInfor = StyleSheet.create({
   },
   locate:
   {
-      width: "95%",
+      width: "100%",
       marginLeft: 5,
       display: "flex",
       justifyContent: "center",
@@ -702,7 +718,8 @@ export const commentStyle = StyleSheet.create({
           justifyContent: "center",
           alignItems: "center",
           borderBottomWidth: 1,
-          borderBottomColor: "rgba(0, 0, 0, 0.2)"
+          borderBottomColor: "rgba(0, 0, 0, 0.2)",
+          paddingVertical: 3
     },
     avatarAndName:
     {
@@ -710,11 +727,12 @@ export const commentStyle = StyleSheet.create({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          flexDirection: 'row'
+          flexDirection: 'row',
+          paddingTop: 5
     },
     nameAndTime:
     {
-          width: "70%",
+          width: "60%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -723,14 +741,12 @@ export const commentStyle = StyleSheet.create({
     {
           width: "80%",
           fontSize: 14,
-          padding: 5,
-          marginVertical: 10
+          padding: 3,
 
     },
     nameText:
     {
         fontSize: 14,
-        padding: 5,
         paddingLeft: 20,
         fontWeight: "bold",
         textAlign: "left",
@@ -749,7 +765,7 @@ export const commentStyle = StyleSheet.create({
       justifyContent: "space-between",
       alignItems: "center",
       flexDirection: "row",
-      width: "20%"
+      width: "30%",
     },
     time:
     {
@@ -769,7 +785,14 @@ export const commentStyle = StyleSheet.create({
         alignItems: "center",
         flexDirection: "row",
         marginVertical: 10,
-        marginLeft: "5%"
+    },
+    input:
+    {
+      width: "85%",
+      ...flexStyle.wrapper,
+      flexDirection: "row",
+      borderRadius: 20,
+      borderWidth: 1
     }
 });
 
@@ -1121,6 +1144,15 @@ export const listViewMenuItemStyle = StyleSheet.create({
       borderColor: "rgba(0, 0, 0, 0.2)",
       borderRadius: 4
   },
+  loader:
+  {
+    height: 100,
+    width: "100%",
+    backgroundColor: '#FFFFFF',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
   image:
   {
       width: 100,
@@ -1325,7 +1357,7 @@ export const modalAddFoodStyle = StyleSheet.create({
     inputname:
     {
       margin: 5,
-      height: 40,
+
       borderColor: '#2196F3',
       borderWidth: 1,
       fontSize: 16,
@@ -1342,12 +1374,252 @@ export const modalAddFoodStyle = StyleSheet.create({
     },
     pickerType:
     {
-        width:"40%",
+        width:"50%",
         height: 40,
         color: "gray"
     }
 });
+export const orderStyle = StyleSheet.create({
+  container:
+  {
+      width,
+      height,
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+  },
+  wrapper:
+  {
+        width: "85%",
+        height: "75%",
 
+        shadowOffset: { width: 10, height: 10 },
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        elevation: 3,
+        backgroundColor: "white",
+
+
+  },
+  image:
+  {
+          width: 80,
+          height: 80,
+          borderRadius: 50,
+          top: 5,
+          left: 5
+  },
+  name:
+  {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "90%",
+          height: 100,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          marginTop: "7%",
+          //backgroundColor: "#F2FDE0",
+          borderRadius: 50,
+  },
+  count:
+  {
+        marginHorizontal: 20,
+        width: "90%",
+
+        flexDirection: 'row',
+        paddingTop: 20,
+  },
+  address:
+  {
+      marginHorizontal: 20,
+      width: "90%",
+      height: "20%",
+      flexDirection: 'row',
+  },
+  confirm:
+  {
+        borderTopWidth: 1,
+        borderTopColor: "rgba(0, 0, 0, 0.2)",
+        width: "100%",
+        height: "15%",
+        marginTop: "5%",
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: "center",
+        flexDirection: "row",
+  },
+  adjustCount:
+  {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          width: "60%",
+          borderColor: "rgba(0, 0, 0, 0.2)",
+          borderWidth: 1,
+          borderRadius: 5,
+          marginLeft: "20%",
+  },
+  text:
+  {
+    fontSize: 16,
+    fontWeight: "bold",
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    textAlign: 'left',
+  },
+  time:
+  {
+      marginHorizontal: 20,
+      width: "90%",
+      height: "20%",
+      flexDirection:'row',
+  },
+  TouchableOpacity:
+  {
+    width: "30%",
+    display: "flex",
+    justifyContent: "center"
+  },
+
+  counting:
+  {
+     fontSize: 15,
+     fontWeight: "bold",
+     paddingVertical: 8,
+     paddingHorizontal: 15,
+     borderLeftWidth: 1,
+     borderRightWidth: 1,
+     borderColor: "rgba(0, 0, 0, 0.2)",
+     textAlign: "center"
+  },
+  modal:
+  {
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center"
+  },
+  modalCounting:
+  {
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center"
+  },
+  price:
+  {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#911111",
+    width: "100%",
+    textAlign: "center"
+  },
+  priceWrapper:
+  {
+    ...flexStyle.wrapper,
+    width: "50%",
+    height: "100%"
+  },
+  note:
+  {
+    fontSize: 11,
+    padding: 5,
+    textAlign: 'center',
+    width: "100%"
+  }
+});
+export const orderItem = StyleSheet.create({
+    headerTitle:
+    {
+          color: "white",
+          fontSize: 20,
+          fontWeight: "bold"
+    },
+    backWrapper:
+    {
+
+    },
+    back:
+    {
+
+    },
+    drawerTitle:
+    {
+          width: 100,
+          height: 100,
+          fontSize: 80,
+          position: 'absolute',
+          left: "29%",
+          top: 50,
+          zIndex: 9,
+          fontWeight: "bold",
+          color: "white",
+          borderWidth: 4,
+          borderColor: "white",
+          borderRadius: 60,
+          paddingLeft: 20,
+          paddingBottom: 22
+    },
+    itemContainer:
+    {
+      width: "85%",
+      //borderWidth: 1,
+      //borderColor: "rgba(0, 0, 0, 0.2)",
+      backgroundColor: "white",
+      borderRadius: 10,
+      padding: 15,
+      marginBottom: 20,
+      shadowOffset: { width: 10, height: 10 },
+      shadowColor: 'black',
+      shadowOpacity: 0.3,
+      elevation: 3,
+    },
+    titleItemWrapper:
+    {
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          borderBottomWidth: 1,
+          borderBottomColor: "rgba(0, 0, 0, 0.2)",
+          paddingBottom: 10
+    },
+    titleText:
+    {
+      fontSize: 13,
+      fontWeight: "bold",
+      color: "black"
+    },
+    timeText:
+    {
+      fontSize: 11
+    },
+    contentItem:
+    {
+      paddingTop: 10,
+    },
+    closeButton:
+    {
+      position: "absolute",
+      zIndex: 10,
+      elevation: 5,
+      top: "2%",
+      left: "85%"
+    },
+    noLoginText:
+    {
+      fontSize: 20,
+      fontWeight: "bold",
+      padding: 10
+    }
+});
 
 export const gridStyle = StyleSheet.create({
       container:
@@ -1390,7 +1662,7 @@ export const gridStyle = StyleSheet.create({
       wrapperItem:
       {
         width: "48%",
-        height: 230,
+        height: 200,
         borderColor: "rgba(0, 0, 0, 0.2)",
         borderWidth: 1,
         borderRadius: 8,
@@ -1425,6 +1697,11 @@ export const gridStyle = StyleSheet.create({
           borderColor: "black",
           borderWidth: 1
 */
+    },
+      cantLoading:
+      {
+        height: 230,
+        width: width * 0.48
       }
 });
 
@@ -1530,8 +1807,8 @@ export const CartCustomerStyle = StyleSheet.create({
         },
         wrapperItem:
         {
-                width: "96%",
-                marginLeft: "2%",
+                width: "94%",
+                marginLeft: "3%",
                 marginVertical: 10,
                 backgroundColor: "white",
                 shadowOffset: { width: 10, height: 10 },
@@ -1622,6 +1899,14 @@ export const CartCustomerStyle = StyleSheet.create({
             fontWeight: "bold",
             color: "red",
             fontSize: 14
+        },
+        titleCart:
+        {
+           textAlign: "center",
+           padding: 20,
+           fontWeight: "bold",
+           fontSize: 25,
+           backgroundColor: "white",
+           color: "black"
         }
-
 });

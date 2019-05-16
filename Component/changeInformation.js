@@ -73,6 +73,7 @@ componentDidMount()
 													Object.keys(changeValue).map((name, index)=>{
 														return (
 																		<MyText
+																						key={index}
 																						containerStyle={ styles.textMessage }
 																						title={ name }
 																						value={ this.state.data[changeValue[name]] }
@@ -85,7 +86,7 @@ componentDidMount()
 						<View style={{ width: "90%", marginTop: "13%" }}>
 										<Button
 											title="Change Information"
-											onPress={() => this.props.navigation.navigate('ChangeInformation_1')}
+											onPress={() => this.props.navigation.navigate('ChangeInformation_1', { data: global.info.data })}
 											color="blue"
 										/>
 						</View>
@@ -98,7 +99,7 @@ componentDidMount()
 export default class ChangeInfor extends Component
 {
   static navigationOptions = {
-                    title: ( global.UserType == "Restaurant" ? "Restaurant Information" : 'Personal Information'),
+                    title: "Detail Information",
                     headerTitleStyle:  { ...accountStyle.titleStyle, color: "white" },
                     headerStyle:{
                           backgroundColor: "#0078D7",

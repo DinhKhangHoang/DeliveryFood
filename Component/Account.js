@@ -19,6 +19,12 @@ import ListDeliveried from "./ListDeliveried.js"
 import LikedFood from "./LikeFood.js";
 import CartCustomer from "./CartCustomer.js";
 import Addfood from "./Addfood.js";
+import Booking from "./Booking.js";
+import BookingTable from "./BookingTable.js";
+import RestaurantInfor from "./restaurantInfor.js";
+import EditFood from "./EditFood.js";
+import OrderInfo from './OrderInfo.js';
+import NavigationService from "./NavigationService.js";
 
 // Define a home class for account that haven't logged in yet.
 export class HomeNotLogIn extends Component
@@ -131,7 +137,7 @@ class HomeLogIn extends Component
                       />
               </View>
               <View style={{}}>
-                    <Text style={accountStyle.username} >{ (global.UserType == "Restaurant" ? global.info.data.NameRES : global.info.data.NameCUS ) }</Text>
+                    <Text style={accountStyle.username} >{  global.info.data.name }</Text>
                     <Text style={ accountStyle.type }>{ global.UserType }</Text>
               </View>
           </View>
@@ -162,20 +168,27 @@ class AccountLogIn extends Component
             PersonInfor: { screen: ChangeInfor },
             FoodManagement: { screen: FManagement },
             Cart: { screen: Cart },
-            DetailFood: { screen: DetailFood},
+            Detail: { screen: DetailFood},
             LikedFood: { screen: LikedFood },
             CartCustomer: { screen: CartCustomer },
             ListAccepted: { screen: ListAccepted },
             ListNonChecked: { screen: ListNonChecked },
             ListDiscarded: { screen: ListDiscarded },
             ListDeliveried: {screen: ListDeliveried},
-            Addfood: {screen: Addfood}
+            Addfood: {screen: Addfood},
+            OrderInfo: {screen: OrderInfo},
+            Order: { screen: Booking },
+            Infor: { screen: RestaurantInfor },
+            bookTable: { screen: BookingTable },
+            EditFood: {screen: EditFood}
           },
           {
             initialRouteName: "Home"
           }
         ));
-        return (<Nav />);
+        return (<Nav ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}/>);
       }
 }
 
@@ -190,15 +203,17 @@ export default class AccountPage extends Component
   }
 
 
-  componentDidMount()
+  componentWillMount()
   {
     firebase.auth().onAuthStateChanged( (currentUser)=>this.setState({ user: currentUser }));
     const { currentUser } = firebase.auth();
+    if (currentUser && !global.info)
+            global.getUser();
     this.setState({user: currentUser});
   }
   render()
   {
-    if (this.state.user) { return ( <AccountLogIn /> ); }
-    else { return ( < AccountNotLogIn />); }
+    if (this.state.user) return ( <AccountLogIn /> );
+    else  return ( < AccountNotLogIn />);
   }
 }

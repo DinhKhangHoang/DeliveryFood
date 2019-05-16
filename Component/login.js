@@ -97,8 +97,6 @@ export default class Login extends Component
                           leftIcon={{ type: 'font-awesome', name: 'lock', color:'#014D40', width: 30 }}
                           inputStyle={{ fontSize: 14, color: '#014D40', paddingLeft: 20 }}
                           secureTextEntry={!this.state.isShow}
-                          /* errorMessage={ this.state.error ? this.state.errorMessage : ""}
-                          errorStyle={{color: "white", fontSize: 15, borderRadius: 10, backgroundColor: "#F93D5C", padding: 8}} */
                           onChangeText={ (pass) => this.setState({  password: pass}) }
                           value={this.state.password}
                         />
@@ -123,34 +121,15 @@ export default class Login extends Component
                         <SkypeIndicator  color="#114B5F" style={{ display: (this.state.disabled ? "flex" : "none") }} />
                 </View>
           </View>
-          <View  style={{width: "100%", height: "30%"}}>
-                    <Text style={{fontSize: 16, color: "#014D40", width: "100%", textAlign: "center"}}>
-                            Or connect with
-                    </Text>
-                    <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: "center"}}>
-                          <SocialIcon
-                                type='facebook'
-                                onPress={ ()=>{}}
-                                underlayColor='#003E6B'
-                          />
-                          <SocialIcon
-                                type='google'
-                                onPress={()=>{}}
-                                style={{backgroundColor: '#EA4335', marginLeft: 15}}
-                                underlayColor='#D64545'
-                          />
-                    </View>
-                    <Anchor
-                          text="Forgot password?"
-                          textStyle={{color: "#014D40", fontSize: 14}}
-                          handleOnPress={()=>{}}
-                    />
+          <View  style={{width: "100%", height: "20%", display: "flex", justifyContent: 'center'}}>
+
                     {
                       showRes ?
                     <Anchor
                           text="Don't have an acount?"
                           textStyle={{color: "#014D40", fontSize: 14}}
                           handleOnPress={()=>{ this.props.navigation.navigate("SignUp"); }}
+                          title=''
                     /> : null
                   }
           </View>

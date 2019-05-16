@@ -3,31 +3,53 @@ import { Text, View, Image, TouchableOpacity, SectionList } from "react-native";
 import { LikeFoodStyle, accountStyle } from "../Style/style";
 import Message from "./Message";
 import NetInfo from "@react-native-community/netinfo";
+import firebase from 'react-native-firebase';
+import { SkypeIndicator } from 'react-native-indicators';
 
 class LikedFoodItem extends Component
 {
+  constructor(props)
+  {
+       super(props);
+       this.state = { imageURL: ' ', title: '', nameRes: '' };
+  }
+
+  componentDidMount()
+  {
+          if (this.props.imageURL == ' ')
+                firebase.storage().ref().child("/FoodImage/" + this.props.id + ".jpg").getDownloadURL().then(url=>{
+                      this.setState({ imageURL: url });
+                });
+          else  this.setState({ imageURL: this.props.imageURL });
+
+          firebase.firestore().collection("Food").doc( this.props.id ).get().then(async (food)=>{
+                const res = await firebase.firestore().collection("Restaurants").doc(food.data().ID_RES).get();
+                this.setState({ title: food.data().Name, nameRes: res.data().NameRES });
+          });
+
+  }
 
   render()
   {
-    const { imageURL, title, nameRes, handleOnPress } = this.props;
-    return(
-        <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={ handleOnPress }
-                style={ LikeFoodStyle.wrapperItem }
-        >
-                <Image
-                      source={ imageURL }
-                      style={ LikeFoodStyle.image }
-                      resizeMode="cover"
-                  />
-            <View style={LikeFoodStyle.wrapTextItem}>
-                  <Text numberOfLines={1} style={ LikeFoodStyle.titleItem }>{ title }</Text>
-                  <Text style={ LikeFoodStyle.nameRes}>{ nameRes }</Text>
-            </View>
-        </TouchableOpacity>
-    );
-  }
+        const { handleOnPress } = this.props;
+        return(
+                    <TouchableOpacity
+                            activeOpacity={0.7}
+                            onPress={ handleOnPress }
+                            style={ LikeFoodStyle.wrapperItem }
+                    >
+                            <Image
+                                  source={{uri: this.state.imageURL }}
+                                  style={ LikeFoodStyle.image }
+                                  resizeMode="cover"
+                              />
+                        <View style={LikeFoodStyle.wrapTextItem}>
+                              <Text numberOfLines={1} style={ LikeFoodStyle.titleItem }>{ this.state.title }</Text>
+                              <Text style={ LikeFoodStyle.nameRes}>{ this.state.nameRes }</Text>
+                        </View>
+                    </TouchableOpacity>
+              );
+    }
 }
 
 
@@ -46,43 +68,76 @@ export default class LikedFood extends Component
     super(props);
     //---------------------------------------------------------------------------------------------------------
     this.state = {
-      data:
-      [
-       {title: "29 Apr 2019", data: [
-                {key: require("../Media/listView/1.jpg"), title: "Title 1: test for long long long long text", rate: 4.5, price: 12000},
-                {key: require("../Media/listView/2.jpg"), title: "Title 2", rate: 5, price: 40000}
-        ]},
-        {title: "28 Apr 2019", data: [
-                {key: require("../Media/listView/3.jpg"), title: "Title 3", rate: 3, price: 20000},
-                {key: require("../Media/listView/4.jpg"), title: "Title 4", rate: 4.5, price: 23000},
-                {key: require("../Media/listView/5.jpg"), title: "Title 5", rate: 4.5, price: 17000},
-                {key: require("../Media/listView/6.jpg"), title: "Title 6", rate: 4.5, price: 6000}
-          ]},
-        {title: "27 Apr 2019", data: [
-                {key: require("../Media/listView/4.jpg"), title: "Title 4", rate: 4.5, price: 23000},
-                {key: require("../Media/listView/5.jpg"), title: "Title 5", rate: 4.5, price: 17000},
-                {key: require("../Media/listView/6.jpg"), title: "Title 6", rate: 4.5, price: 6000}
-          ]}
-      ],
-          isEmpty: false,
+          data: [ ],
+          isEmpty: true,
+          isLoading: true,
           isConnected: true
-      // Fetch data from database
-      //----------------------------
-      // Sort by time ---------
     };
+    this.getData = this.getData.bind(this);
  }
 
- componentDidMount()
+async getData()
+{
+      const account = await firebase.firestore().collection( global.UserType + "s" ).doc( firebase.auth().currentUser.uid ).get();
+      account.data().likeFood.split(" ").filter(i => i != "")
+                             .map(item=>({ id: item.trim().substr(0, 20).trim(), time: item.trim().substr(21).trim() }))
+                             .forEach((item)=>{
+                                     // --- Get ref to database ------------------------------------------------------
+
+                                     // --- Make new item --------------------------------------------------------------
+                                     const newItem = {
+                                               id: item["id"],
+                                               key: ' ',
+                                               time: item["time"]
+                                        };
+                                     //----------------------------------------------------------------------
+                                     let index = this.state.data.findIndex(e => e.title == item.time);
+                                     if (index == -1)
+                                     {
+                                           let temp = this.state.data;
+                                           temp.push({ title: item.time, data: [newItem] });
+                                           temp.sort((a, b)=>{
+                                                if (new Date(a.title) > new Date(b.title)) return -1
+                                                else if (new Date(a.title) == new Date(b.title)) return 0;
+                                                else return 1;
+                                           });
+                                           this.setState({ data: temp, isEmpty: false });
+                                     }
+                                     else
+                                     {
+                                           let temp = this.state.data;
+                                           temp[index].data.push(newItem);
+                                           temp.sort((a, b)=>{
+                                                if (new Date(a.title) > new Date(b.title)) return -1
+                                                else if (new Date(a.title) == new Date(b.title)) return 0;
+                                                else return 1;
+                                           });
+                                           this.setState({ data: temp, isEmpty: false });
+                                     }
+                          });
+                this.setState({ isLoading: false });
+}
+
+async componentWillMount()
  {
-         NetInfo.addEventListener('connectionChange', (data)=>{
-               if (data.type === "unknown" || data.type === "none")
-               {
-                       this.setState({isConnected: false});
-               }
+         NetInfo.addEventListener('connectionChange', async (data)=>{
+               if (data.type === "unknown" || data.type === "none") {  this.setState({isConnected: false});  }
                else {
-                       this.setState({isConnected: true});
+                     if (this.state.isEmpty && !this.state.isLoading)
+                          this.getData();
+                     this.setState({isConnected: true});
                }
          });
+         // ---- Listen to change ---------------------------------------------------------------------------------
+         firebase.firestore().collection(global.UserType + "s" ).where("UID_" + global.UserType.substr(0, 3).toUpperCase(), "==", firebase.auth().currentUser.uid).onSnapshot(async query=>{
+               await this.setState({ data: [], isEmpty: true, isLoading: true });
+               this.getData();
+         });
+
+         // ---- If have the internet -----------------------------------------------------------------------------
+        const isConnected = await NetInfo.isConnected.fetch();
+        if (!isConnected)
+              this.setState({isEmpty: true});
  }
 
   render()
@@ -94,37 +149,48 @@ export default class LikedFood extends Component
                       text="Something went wrong with internet connection."
                     />
     }
-    if (this.state.isEmpty)
+    if (this.state.isLoading)
     {
-          return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Image
-                          source={require("../Media/icon/Like.jpg")}
-                          style={{width: 150, height: 150}}
-                    />
-                    <Text style={{fontSize: 16, fontWeight: "bold"}}>You haven't like any food yet.</Text>
-                    { message }
-            </View>
-          );
-    }
-    else {
-            return(
-              <View style={ LikeFoodStyle.container }>
-                    <SectionList
-                        showsVerticalScrollIndicator={false}
-                        sections={ this.state.data }
-                        keyExtractor={(item, index) => item + index}
-                        renderSectionHeader={({section: {title}}) => ( <Text style={ LikeFoodStyle.titleSection }>{title}</Text> )}
-                        renderItem={( {item, index, section} ) => <LikedFoodItem
-                                                                          imageURL={item.key}
-                                                                          title={item.title}
-                                                                          nameRes="Name of restaurant"
-                                                                          handleOnPress={ ()=>this.props.navigation.push("DetailFood", {data: item}) }
-                                                                    />  }
-                    />
-                    { message }
-              </View>
-            );
-       }
-  }
+       return (
+            <View style={{ display: "flex",justifyContent: 'center', alignItems: 'center', flex: 1}}>
+                  <View style={{ height: "20%", backgroundColor: "white"}}>
+                          <SkypeIndicator />
+                          <Text style={{ width: "100%", fontWeight: "bold", fontSize: 18, textAlign: "center"}}>LOADING...</Text>
+                          { message }
+                  </View>
+             </View>
+    )}
+    else
+    {
+            if (this.state.isEmpty)
+            {
+                  return (
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <Image
+                                  source={require("../Media/icon/Like.jpg")}
+                                  style={{width: 150, height: 150}}
+                            />
+                            <Text style={{fontSize: 16, fontWeight: "bold"}}>You haven't like any food yet.</Text>
+                            { message }
+                    </View>
+            )}
+            else {
+                    return(
+                      <View style={ LikeFoodStyle.container }>
+                            <SectionList
+                                showsVerticalScrollIndicator={false}
+                                sections={ this.state.data }
+                                keyExtractor={(item, index) => item + index}
+                                renderSectionHeader={({section: {title}}) => ( <Text style={ LikeFoodStyle.titleSection }>{title }</Text> )}
+                                renderItem={( {item, index} ) => <LikedFoodItem
+                                                                                  id={ item.id }
+                                                                                  imageURL={item.key}
+                                                                                  handleOnPress={()=>this.props.navigation.push("Detail", {data: {id: item.id, title: item.title}} )}
+                                                                            />  }
+                            />
+                            { message }
+                      </View>
+              )}
+      }
+   }
 }

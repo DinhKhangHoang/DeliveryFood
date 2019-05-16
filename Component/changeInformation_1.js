@@ -4,6 +4,7 @@ import { Avatar } from "react-native-elements";
 import { accountStyle } from "../Style/style";
 import firebase from 'react-native-firebase';
 
+
 const {height, width} = Dimensions.get('window');
 export default class ChangeInformation_1 extends Component {
 	static navigationOptions = {
