@@ -86,7 +86,7 @@ componentDidMount()
 						<View style={{ width: "90%", marginTop: "13%" }}>
 										<Button
 											title="Change Information"
-											onPress={() => this.props.navigation.navigate('ChangeInformation_1')}
+											onPress={() => this.props.navigation.navigate('ChangeInformation_1', { data: global.info.data })}
 											color="blue"
 										/>
 						</View>
