@@ -21,7 +21,11 @@ import LikedFood from "./LikeFood.js";
 import CartCustomer from "./CartCustomer.js";
 import firebase from "react-native-firebase";
 import EditFood from "./EditFood.js";
-
+import ListAccepted from "./ListAccepted.js";
+import ListNonChecked from "./ListNonChecked.js";
+import ListDiscarded from "./ListDiscarded.js";
+import ListDeliveried from "./ListDeliveried.js";
+import OrderInfo from './OrderInfo.js';
 
 
 // Define Home class
@@ -171,7 +175,12 @@ export default class HomeCustomer extends Component
       SignUp: { screen: Register },
       LikedFood: { screen: LikedFood },
       CartCustomer: { screen: CartCustomer },
-      Search: { screen: Search}
+      Search: { screen: Search},
+      ListNonChecked: {screen: ListNonChecked},
+      ListAccepted: {screen: ListAccepted},
+      ListDiscarded: {screen: ListDiscarded},
+      ListDeliveried: {screen: ListDeliveried},
+      OrderInfo: {screen: OrderInfo},
     },
     {
       initialRouteName: "Home",
