@@ -33,10 +33,10 @@ export default class Cart extends Component
                   <FlatList
                     showsVerticalScrollIndicator={false}
                     data={[
-                      {key: "List Accepted", handleOnPress: ()=>{ this.props.navigation.navigate("ListAccepted");}, icon: {name: "checkcircle", type: "antdesign", color: "#00B972"} },
-                      {key: "List Non Checked", handleOnPress: ()=>{ this.props.navigation.navigate("ListNonChecked"); }, icon: {name: "truck-delivery", type: "material-community", color: "#6733B9"} },
-                      {key: "List Discarded", handleOnPress: ()=>{ this.props.navigation.navigate("ListDiscarded"); }, icon: {name: "circle-with-cross", type: "entypo", color: "red"} },
-                      {key: 'List Deliveried', handleOnPress: ()=>{this.props.navigation.navigate("ListDeliveried");}, icon: {name: "truck-check", type: "material-community", color: "#00A7F7"} },
+                      {key: "Đã tiếp nhận", handleOnPress: ()=>{ this.props.navigation.navigate("ListAccepted");}, icon: {name: "checkcircle", type: "antdesign", color: "#00B972"} },
+                      {key: "Đơn hàng mới", handleOnPress: ()=>{ this.props.navigation.navigate("ListNonChecked"); }, icon: {name: "truck-delivery", type: "material-community", color: "#6733B9"} },
+                      {key: "Không tiếp nhận", handleOnPress: ()=>{ this.props.navigation.navigate("ListDiscarded"); }, icon: {name: "circle-with-cross", type: "entypo", color: "red"} },
+                      {key: 'Đã giao hàng', handleOnPress: ()=>{this.props.navigation.navigate("ListDeliveried");}, icon: {name: "truck-check", type: "material-community", color: "#00A7F7"} },
                     ]}
                     renderItem={({item}) =>
                                             <AnchorIcon

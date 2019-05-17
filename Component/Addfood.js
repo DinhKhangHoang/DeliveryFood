@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Image, FlatList, Modal, TextInput, TouchableHighlight, Alert, TouchableOpacity, Picker, ScrollView, Platform } from "react-native";
+import { Text, View, Image, FlatList, Modal, TextInput,Button, TouchableHighlight, Alert, TouchableOpacity, Picker, ScrollView, Platform } from "react-native";
 import { Icon } from "react-native-elements";
 import ImagePicker from 'react-native-image-picker';
 import {UploadImage} from "./UploadImage.js"
@@ -59,6 +59,7 @@ export default class Addfood extends Component
           rating: 0,
           FoodID: ref.id,
           numRate: 0,
+          isDeleted: false,
           ID_RES: firebase.auth().currentUser.uid,
         }, {merge: true});
 
@@ -170,14 +171,14 @@ export default class Addfood extends Component
                  </Picker>
               </View>
 
-            <View style = {{justifyContent: 'center', flexDirection: 'row', paddingTop: 30}}>
-              <TouchableHighlight
+            <View style = {{paddingTop: 20,marginHorizontal: 70, paddingBottom: 30}}>
+              <Button
                 onPress={this._onPressApply}
-                style = {modalAddFoodStyle.apply}
-                disabled = {!(this.state.inputtitle.length != 0 && this.state.inputprice.length != 0 && this.state.inputdescription.length != 0 && this.state.imageSource.length != 0 && this.state.correctNumber)}
-               >
-                  <Text style = {{fontSize:24, fontWeight:"bold",color: 'white'}}>Add</Text>
-              </TouchableHighlight>
+                title = 'Add'
+                disabled = {!(this.state.inputtitle.length != 0 && this.state.inputprice.length != 0 && this.state.inputdescription.length != 0 && this.state.imageSource != null && this.state.correctNumber)}
+
+
+              />
             </View>
       </ScrollView>
     );

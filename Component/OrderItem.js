@@ -29,9 +29,9 @@ export default class OrderItem extends Component
   componentDidMount() {
     this.unsubscribe = this.ref.doc(this.props.orderid).onSnapshot(this.onDocumentUpdate);
   }
-  componentWillUnmount() {
+  /*componentWillUnmount() {
     this.unsubscribe = null;
-  }
+  }*/
   onDocumentUpdate = async (DocumentSnapshot)=>{
 
     await this.setState({
@@ -67,7 +67,7 @@ export default class OrderItem extends Component
   _onLongPress(){
     Alert.alert("View Information ?",'Select one',
     [
-      {text: 'OK', onPress:()=>{NavigationService.navigate('OrderInfo',{orderid: this.props.orderid, status: this.state.Status})}},
+      {text: 'OK', onPress:()=>{NavigationService.navigate('OrderInfo',{orderid: this.props.orderid, status: this.state.Status, type: this.state.Type})}},
       {text: 'Cancel', onPress:()=>{}},
     ]);
   }
