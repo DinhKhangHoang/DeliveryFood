@@ -99,7 +99,7 @@ getInfoUser()
                   const storageRef = firebase.storage().ref();
                   const firestore = firebase.firestore().collection("Food");
                   // =================================================================================================
-                  firestore.where("isDeleted", "==", false).orderBy("rating", "desc").limit(30).get().then(data => {
+                  firestore.where("isDeleted", "==", false).limit(30).get().then(data => {
                           data.forEach(
                                 function (i)
                                 {

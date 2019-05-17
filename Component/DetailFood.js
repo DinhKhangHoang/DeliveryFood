@@ -745,9 +745,9 @@ async componentDidMount()
              </View>
              {(this.state.isDeleted ?
                     <View style={ detailFood.statusFood }>
-                          <View style={ [detailFood.wrapperItemStatus, {width: "90%"}] }>
-                                <Icon type="entypo" name="circle-with-cross" size={15} color="red" />
-                                <Text style={ [detailFood.textOnStatus, {color: "red"}] }>Món ăn đã không còn trong thực đơn của nhà hàng</Text>
+                          <View style={ [detailFood.wrapperItemStatus, {width: "100%"}] }>
+                                <Icon type="entypo" name="circle-with-cross" size={20} color="red" />
+                                <Text style={ [detailFood.textOnStatus, {color: "red", width: "94%", textAlign: "center", fontWeight: "bold"}] }>This food is no longer in restaurant menu.</Text>
                           </View>
                     </View>
                : <View style={ detailFood.statusFood }>
