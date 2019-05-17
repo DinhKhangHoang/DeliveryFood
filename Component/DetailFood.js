@@ -110,7 +110,7 @@ class ReplyComment extends Component
                             </View>
 
                            <View style={ [commentStyle.anchorWrapper, {width: "15%"}] }>
-                                   {( this.state.user ?
+                                   {( this.state.user && !this.props.isDeleted ?
                                          <View style={{width: "50%",  display: "flex", justifyContent: "center", alignItems: "center"}}>
                                                <Icon
                                                      name="like1"
@@ -268,7 +268,7 @@ class Comment extends Component
                      </View>
 
                     <View style={ commentStyle.anchorWrapper }>
-                            {( this.state.user ?
+                            {( this.state.user && !this.props.isDeleted ?
                                   <View style={{width: "50%",  display: "flex", justifyContent: "center", alignItems: "center"}}>
                                         <Icon
                                               name="like1"
@@ -280,7 +280,7 @@ class Comment extends Component
                                         <Text style={{ fontSize: 10, color:  (this.state.liked ? "#2089DC" : "gray" ), width: "100%", textAlign: 'center', fontWeight: (this.state.liked ? "bold" : "normal")}}>{ this.state.numberOfLikes }</Text>
                                   </View> : null
                             )}
-                            {( this.state.user ?
+                            {( this.state.user && !this.props.isDeleted ?
                                   <View style={{width: '50%', display: "flex", justifyContent: "center", alignItems: "center"}}>
                                       <Icon
                                             type="entypo"
@@ -304,6 +304,7 @@ class Comment extends Component
                                                                     UID = { item.UID }
                                                                     foodID={ this.props.foodID }
                                                                     numberOfLikes={item.numberOfLikes}
+                                                                    isDeleted={this.props.isDeleted}
                                                                     /> ) }
                 {( this.state.isReply ?
                       <View style={{paddingLeft: "10%"}}>
@@ -454,6 +455,7 @@ export default class DetailFood extends Component
           similar: [],
           commentList: [],
           isOrderSuccess: false,
+          isDeleted: false
        }
      this.like = this.like.bind(this);
      this.rating = this.rating.bind(this);
@@ -608,7 +610,7 @@ async loadComment(storageRef, dataNav, infoAccount)
 async loadingSimilarFood(infoFood, storageRef, dataNav)
 {
           let similarFood = []
-          const similar = await firebase.firestore().collection("Food").where("TypeOfFood", "==", infoFood.data().TypeOfFood).limit(6).get();
+          const similar = await firebase.firestore().collection("Food").where("isDeleted", "==", false).where("TypeOfFood", "==", infoFood.data().TypeOfFood).limit(6).get();
           similar.forEach(
             (i)=>{
                   const item = {
@@ -647,10 +649,10 @@ async componentDidMount()
                   feedBack: infoRes.data().FeedBack,
                   resID: infoRes.id,
                   numRate: infoFood.data().numRate,
-                  resNumRate: infoRes.data().numberRate
-
+                  resNumRate: infoRes.data().numberRate,
              },
-             loading: false
+             loading: false,
+             isDeleted: infoFood.data().isDeleted
          });
          firebase.storage().ref().child("/FoodImage/" + dataNav.id + ".jpg").getDownloadURL().then(url=>{
                this.setState({ data: {...this.state.data, image: url} });
@@ -721,7 +723,7 @@ async componentDidMount()
                                    <Icon name="star" type="antdesign" color="white" size={15} />
                                    <Text style={{color: "white", fontSize: 14, marginLeft: 10}}>{ this.state.data.rating }</Text>
                            </View>
-                           { ( isSameRes ? null :
+                           { ( isSameRes || this.state.isDeleted ? null :
                            <RoundButton
                                  text="ORDER"
                                  textColor="white"
@@ -741,7 +743,14 @@ async componentDidMount()
                          )}
                      </View>
              </View>
-             <View style={ detailFood.statusFood }>
+             {(this.state.isDeleted ?
+                    <View style={ detailFood.statusFood }>
+                          <View style={ [detailFood.wrapperItemStatus, {width: "90%"}] }>
+                                <Icon type="entypo" name="circle-with-cross" size={15} color="red" />
+                                <Text style={ [detailFood.textOnStatus, {color: "red"}] }>Món ăn đã không còn trong thực đơn của nhà hàng</Text>
+                          </View>
+                    </View>
+               : <View style={ detailFood.statusFood }>
                  <View style={ detailFood.wrapperItemStatus }>
                        <Icon type="font-awesome" name="shopping-bag" size={15} color="#227100" />
                        <Text style={ detailFood.textOnStatus }>Còn hàng</Text>
@@ -750,7 +759,7 @@ async componentDidMount()
                      <Icon type="antdesign" name="checkcircle" size={15} color="#227100" />
                      <Text style={ detailFood.textOnStatus }>Chính hãng</Text>
                  </View>
-             </View>
+             </View> )}
          </View>);
 
     const load =  (<View style={detailFood.foodInfor} >
@@ -772,7 +781,7 @@ async componentDidMount()
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ width: "100%", height: "100%" }}>
               { (this.state.loading ? load : info) }
-          {( this.state.user ?
+          {( this.state.user && !this.state.isDeleted ?
           <ComponentWithTitle
                 title="Rating and like"
                 dataStyle={{width: "100%"}}
@@ -890,11 +899,12 @@ async componentDidMount()
                                                                                       numberOfReply={i.numberOfReply}
                                                                                       numberOfLikes={i.numberOfLikes}
                                                                                       foodID = {this.props.navigation.getParam("data").id}
+                                                                                      isDeleted={this.state.isDeleted}
                                                                             />)
 
                                     )}
 
-                                    {( this.state.user ?
+                                    {( this.state.user && !this.state.isDeleted ?
                                      <CommentInput
                                             foodID = {this.props.navigation.getParam("data").id}
                                             UID = { (firebase.auth().currentUser ? firebase.auth().currentUser.uid : 0) }
