@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View , FlatList, ActivityIndicator, TouchableOpacity} from "react-native";
+import { Text, View , FlatList, ActivityIndicator, TouchableOpacity, Image} from "react-native";
 import {Icon} from "react-native-elements";
 import {accountStyle, notification, flexStyle, listViewMenuItemStyle } from "../Style/style";
 import firebase from 'react-native-firebase';
@@ -45,7 +45,14 @@ export default class ListDeliveried extends Component
     });
     this.setState({
       loading: false,
-      orders: orders,
+      orders: orders.sort((a,b)=>{
+        let ax = new Date(a.time),
+            bx = new Date(b.time);
+        //if (ax>bx) return -1
+        //else if (ax==bx) return 0;
+        //else return 1;
+        return (ax < bx);
+      }),
     });
   }
   render(){
@@ -53,7 +60,10 @@ export default class ListDeliveried extends Component
     return(<Loader/>);
     else if(this.state.orders.length== 0)
     return(
-      <Text>This is an empty list.</Text>
+      <View style ={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        <Image source = {require('../Media/icon/empty.jpg')} style ={{width:70, height: 70}}/>
+        <Text style = {{paddingTop: 20, fontSize: 15, }}>This is an empty list.</Text>
+      </View>
     );
     else
     return(
