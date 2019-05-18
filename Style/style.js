@@ -1914,5 +1914,13 @@ export const CartCustomerStyle = StyleSheet.create({
            fontSize: 25,
            backgroundColor: "white",
            color: "black"
+        },
+        typeOfTable:
+        {
+          width: "28%",
+          marginRight: "2%",
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor:"white"
         }
 });

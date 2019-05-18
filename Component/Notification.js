@@ -28,6 +28,7 @@ class NotLogIn extends Component
                     wrapperStyle={{ borderRadius: 5, backgroundColor: "gray", marginTop: "3%"}}
                     underlayColor="rgba(0, 0, 0, 0.6)"
                     handleOnPress={ ()=> {this.props.navigation.navigate("Login")} }
+                    title="  "
                 />
           </View>
       )}
@@ -62,7 +63,7 @@ export class NotificationItem extends Component
       componentDidMount()
       {
             const { id } = this.props;
-            firebase.firestore().collection("Notification").doc(id).get().then(data=>{
+            firebase.firestore().collection("Notification").doc(id).get().then( data => {
                   this.setState({
                         title: data.data().Title,
                         time: data.data().Time,
@@ -76,11 +77,11 @@ export class NotificationItem extends Component
       {
         if (this.state.isLoading)
               return (
-                <View style={ [notification.itemContainer, {display: "flex", justifyContent: "center", alignItems: 'center'}] }>
-                      <View style={{ width: "90%" }}>
+                  <View style={ [notification.itemContainer, {display: "flex", justifyContent: "center", alignItems: 'center'}] }>
+                        <View style={{ width: "90%" }}>
                               <ActivityIndicator size="small" color="black" />
-                      </View>
-                </View>
+                        </View>
+                  </View>
               );
         else
             return (
@@ -111,54 +112,56 @@ export default class NotificationPage extends Component
 {
   constructor(props)
   {
-          super(props);
-          this.state = {
-                isConnected: false,
-                user: firebase.auth().currentUser,
-                data: [ ],
-                isEmpty: true,
-                isLoading: true,
-          };
+      super(props);
+      this.state = {
+            isConnected: false,
+            user: firebase.auth().currentUser,
+            data: [ ],
+            isEmpty: true,
+            isLoading: true,
+      };
   }
 
 async getData()
   {
       if (this.state.user)
-      {
-          await firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).get().then(doc=>{
-                  doc.forEach(item=>{
-                        let temp = this.state.data;
-                        temp.push({key: item.id, time: item.data().Time});
-                        this.setState({ data: temp, isEmpty: false, isLoading: false});
+            await firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).get().then( doc => {
+                  let temp = [];
+                  doc.forEach( item => temp.push({key: item.id, time: item.data().Time}) );
+                  temp.sort((a, b) => {
+                        if (new Date(b.time) < new Date(a.time))
+                              return -1;
+                        else if (new Date(b.time) > new Date(a.time))
+                              return 1
+                        else return 0;
                   });
+                  this.setState({ data: temp, isEmpty: false });
           });
-      }
       this.setState({ isLoading: false });
-
   }
 
   async componentDidMount()
   {
-          NetInfo.addEventListener('connectionChange', (data)=>{
-                if (data.type === "unknown" || data.type === "none")
+            NetInfo.addEventListener('connectionChange', (data)=>{
+                  if (data.type === "unknown" || data.type === "none")
                         this.setState({isConnected: false});
-                else
-                {
+                  else
+                  {
                         if (this.state.isEmpty && !this.state.isLoading)
-                                this.getData();
+                              this.getData();
                         this.setState({isConnected: true});
-                }
-          });
-
-          this.state.user && firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).onSnapshot(async query=>{
-                await this.setState({ data: [] });
-                this.getData();
-          });
-          const isConnected = await NetInfo.isConnected.fetch();
-          if (isConnected) this.setState({ isConnected: true });
-          else this.setState({isEmpty: true});
-
-          if (!this.state.user) this.setState({ isLoading: false });
+                  }
+            });
+            this.state.user && firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).onSnapshot(async query=>{
+                  await this.setState({ data: [] });
+                  this.getData();
+            });
+            const isConnected = await NetInfo.isConnected.fetch();
+            if (isConnected) 
+                  this.setState({ isConnected: true });
+            else 
+                  this.setState({isEmpty: true});
+            if (!this.state.user) this.setState({ isLoading: false });
   }
 
   render()

@@ -13,14 +13,16 @@ class ShoppingCartItem extends Component
   constructor(props)
   {
         super(props);
-        this.state = { imageURL: ' ', status: 'received', title: '', nameRES: '',  address: '', quantity: 0, price: 0, isLoading: true, foodID: '' };
-  }
+        this.state = { typeOfTable: '', imageURL: ' ', status: 'received', title: '', nameRES: '',  address: '', quantity: 0, price: 0, isLoading: true, foodID: '' };
+        this._isMount = false;
+}
    componentDidMount()
    {
+        this._isMount = true;
         firebase.firestore().collection("ListOrders").doc(this.props.cartID).get().then(
             (doc)=>{
                 const foodID = doc.data().FoodID, resID = doc.data().RES_ID, status = doc.data().Status;
-                this.setState({
+                this._isMount && this.setState({
                         quantity: doc.data().Quantity,
                         price: doc.data().ChargeTotal,
                         foodID: foodID
@@ -30,37 +32,41 @@ class ShoppingCartItem extends Component
                         // -------------------- Set image URL --------------------------------------------------------------------------
                         if (this.props.imageURL == ' ')
                                 firebase.storage().ref().child("/FoodImage/" + foodID + ".jpg").getDownloadURL().then(url=>{
-                                      this.setState({ imageURL: url });
+                                        this._isMount && this.setState({ imageURL: url });
                                 });
-                        else this.setState({ imageURL: this.props.imageURL });
+                        else this._isMount && this.setState({ imageURL: this.props.imageURL });
                         // ------------------- Get food name ---------------------------------------------------------------------------
                         firebase.firestore().collection("Food").doc(foodID).get().then(data=>{
-                                this.setState({ title: data.data().Name });
+                                this._isMount && this.setState({ title: data.data().Name });
                         });
                         // -------------------- Get restaurant name ---------------------------------------------------------------------
                         firebase.firestore().collection("Restaurants").doc(resID).get().then(data=>{
-                                this.setState({ nameRES: data.data().NameRES });
+                                this._isMount && this.setState({ nameRES: data.data().NameRES });
                         });
                         // ------------------- Set status of order ----------------------------------------------------------------------
-                        if (status == "deliveried") this.setState({ status: "received"});
-                        else if (status == "discarded") this.setState({ status: "discarded"});
-                        else this.setState({ status: "delivery"});
+                        if (status == "deliveried") this._isMount && this.setState({ status: "received"});
+                        else if (status == "discarded") this._isMount && this.setState({ status: "discarded"});
+                        else this._isMount && this.setState({ status: "delivery"});
                   }
                   else
                   {
+                        this._isMount && this.setState({typeOfTable: doc.data().typeOfTable.toLowerCase()});
                         // Table --> Must change architechures !!! ----------------------------------------
                         firebase.firestore().collection("Restaurants").doc(resID).get().then(data=>{
-                                this.setState({ nameRES: data.data().NameRES, address: data.data().Address });
+                                this._isMount && this.setState({ nameRES: data.data().NameRES, address: data.data().Address });
                         });
-                        if (status == "nonchecked") this.setState({ status: "In use"});
-                        else this.setState({ status: "Out of order"});
+                        if (status == "nonchecked") this._isMount && this.setState({ status: "In use"});
+                        else this._isMount && this.setState({ status: "Out of order"});
                   }
-                  this.setState({ isLoading: false });
+                  this._isMount && this.setState({ isLoading: false });
             }
         );
    }
 
-
+   componentWillUnmount()
+   {
+           this._isMount = false;
+   }
   render()
   {
     // ---- Price format ------------------------------------------------------------------------------------------------
@@ -146,14 +152,19 @@ class ShoppingCartItem extends Component
                           <Text style= { CartCustomerStyle.time }>{ time }</Text>
                   </View>
                   <View style={{ display: "flex",  width: "100%", padding: 10 }}>
-                          <View style={{width: "98%", borderBottomWidth: 1, borderBottomColor: "rgba(0, 0, 0, 0.2)", paddingBottom: 5, marginBottom: 5}}>
+                        <View style={{width: "98%", borderBottomWidth: 1, borderBottomColor: "rgba(0, 0, 0, 0.2)", paddingBottom: 5, marginBottom: 5}}>
                                   <Text  style={ CartCustomerStyle.title }>{ this.state.nameRES }</Text>
                                   <Text style={ CartCustomerStyle.nameRes }>{ this.state.address }</Text>
-                          </View>
-                          <View style={{width: "100%"}}>
-                                  <Text>Quantity: {this.state.quantity}</Text>
-                                  <Text style={ CartCustomerStyle.price }>Total: { new Intl.NumberFormat('en').format(this.state.price)  + " đ" }</Text>
-                          </View>
+                        </View>
+                        <View style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row"}}>
+                                <View style={{width: "70%"}}>
+                                        <Text>Quantity: {this.state.quantity}</Text>
+                                        <Text style={ CartCustomerStyle.price }>Total: { new Intl.NumberFormat('en').format(this.state.price)  + " đ" }</Text>
+                                </View>
+                                <View style={ [CartCustomerStyle.typeOfTable, { backgroundColor: (this.state.typeOfTable == "normal" ? "rgba(0, 0, 0, 0.2)": "#FFCB2B") }]}>
+                                        <Text style={{width: "100%", textAlign: "center", paddingVertical: 7, color: "white", fontWeight: "bold", }}>{ (this.state.typeOfTable == "vip" ? "VIP" : "Normal") }</Text>
+                                </View>
+                        </View>
                   </View>
             </View>);
        }
@@ -164,64 +175,66 @@ class ShoppingCartItem extends Component
 export default class CartCustomer extends Component
 {
   static navigationOptions = {
-                    title: "Shopping Cart",
-                    headerTitleStyle:  { ...accountStyle.titleStyle, color: "white" },
-                    headerStyle:{
-                          backgroundColor: "#FF5607",
-                    },
-  };
+                title: "Shopping Cart",
+                headerTitleStyle:  { ...accountStyle.titleStyle, color: "white" },
+                headerStyle:{
+                        backgroundColor: "#FF5607",
+                },
+        };
+
 
   constructor(props)
   {
-    super(props);
-    //---------------------------------------------------------------------------------------------------------
-    this.state = {
-      data: [ {title: "Food", data: []}, {title: "Table", data: []} ],
-      isEmpty: true,
-      isConnected: true,
-      isLoading: true
-    };
+        super(props);
+        //---------------------------------------------------------------------------------------------------------
+        this.state = {
+                data: [ {title: "Food", data: []}, {title: "Table", data: []} ],
+                isEmpty: true,
+                isConnected: true,
+                isLoading: true
+        };
     //---------------------------------------------------------------------------------------------------------
     this.getData = this.getData.bind(this);
   }
+
+
   async getData()
   {
-            await firebase.firestore().collection("ListOrders").where("CUS_ID", "==",  firebase.auth().currentUser.uid).get().then(data=>{
-                    data.forEach(doc => {
-                            const item = {
+        await firebase.firestore().collection("ListOrders").where("CUS_ID", "==",  firebase.auth().currentUser.uid).get().then(data=>{
+                data.forEach(doc => {
+                        const item = {
                                     key: ' ',
                                     cartID: doc.data().OrderID,
                                     time: doc.data().TimeReceive,
                                 };
-                          let temp = this.state.data;
-                          temp[temp.findIndex(i=>i.title == doc.data().Type)].data.push(item);
-                          temp[temp.findIndex(i=>i.title == doc.data().Type)].data.sort((a, b)=>{
+                        let temp = this.state.data;
+                        temp[temp.findIndex(i=>i.title == doc.data().Type)].data.push(item);
+                        temp[temp.findIndex(i=>i.title == doc.data().Type)].data.sort((a, b)=>{
                                 if (new Date(a.time) > new Date(b.time)) return -1;
                                 else if (new Date(a.time) == new Date(b.time)) return 0;
                                 else return 1;
-                          });
-                          this.setState({ data: temp, isEmpty: false, isLoading: false });
-                    });
-            });
-
-            this.setState({ isLoading: false });
+                        });
+                        this.setState({ data: temp, isEmpty: false, isLoading: false });
+                });
+        });
+        this.setState({ isLoading: false });
   }
 
 
-  async componentDidMount()
+  async componentWillMount()
   {
           NetInfo.addEventListener('connectionChange', (data)=>{
                 if (data.type === "unknown" || data.type === "none")
                         this.setState({ isConnected: false });
                 else {
                         if (this.state.isEmpty && !this.state.isLoading)
-                                this.getData();
+                                firebase.auth().currentUser && this.getData();
                         this.setState({isConnected: true});
                 }
           });
           const isConnected = await NetInfo.isConnected.fetch();
           if (isConnected)
-                this.getData();
+                firebase.auth().currentUser && this.getData();
           else
                 this.setState({isEmpty: true});
           //this.setState({ isLoading: false });
@@ -267,12 +280,12 @@ export default class CartCustomer extends Component
                                 keyExtractor={(item, index) => item + index}
                                 renderSectionHeader={({section: {title}}) => ( <Text style={ CartCustomerStyle.titleCart }>{  title + " Orders" }</Text> )}
                                 renderItem={( {item, index, section} ) =>  <ShoppingCartItem
-                                                                                  imageURL={item.key}
-                                                                                  cartID={ item.cartID }
-                                                                                  time={ item.time }
-                                                                                  />}
+                                                                                imageURL={item.key}
+                                                                                cartID={ item.cartID }
+                                                                                time={ item.time }
+                                                                        />}
                                 />
-                                    { message }
+                                { message }
                             </View>);
             }
     }

@@ -142,7 +142,8 @@ orderConfig()
                                               Status: "nonchecked",
                                               TimeOrder: this.formatTime(new Date()),
                                               TimeReceive: this.formatTime( this.state.date ),
-                                              Type: "Table"
+                                              Type: "Table",
+                                              typeOfTable: this.state.type.toLowerCase(),
                                         };
                                          firebase.firestore().collection("ListOrders").doc(ref.id).update(item);
                                          firebase.firestore().collection("Restaurants").doc(this.props.navigation.getParam("data").resID).update({ Ordercount: this.props.navigation.getParam("data").ordercount + 1});

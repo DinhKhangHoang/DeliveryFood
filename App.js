@@ -5,34 +5,16 @@ import firebase from 'react-native-firebase';
 import SplashScreen from './Component/splashScreen';
 import { MainScreen } from "./Component/mainScreen";
 import NetInfo from "@react-native-community/netinfo";
-//--------------------------------------------------------------------
-/*
-import Login from './Component/login';
-import Register from './Component/register';
-import MySwiper from './Component/Swiper';
-import AccountPage from "./Component/Account";
-import ListView from "./Component/ListView";
-import ComponentWithTitle from "./Component/ComponentWithTitle";
-import DetailFood from "./Component/DetailFood";
-import Booking from "./Component/Booking";
-import BookingTable from "./Component/BookingTable";
-import RestaurantInfor from "./Component/restaurantInfor";
-import GridView from "./Component/GridView";
-import { NotificationItem } from "./Component/Notification";
-import Message from "./Component/Message";
-import LikedFood from "./Component/LikeFood";
-import CartCustomer from "./Component/CartCustomer";
-*/
-//---------------------------------------------------------------------
+
 
 export default class App extends Component {
 constructor(props)
 {
   super(props);
   this.state = {
-      isAuth: false,
-      isLoaded: false,
-      user: firebase.auth().currentUser,
+    isAuth: false,
+    isLoaded: false,
+    user: firebase.auth().currentUser,
   };
   this.ref = firebase.firestore();
   this.getInfoUser = this.getInfoUser.bind(this);
@@ -64,12 +46,12 @@ getInfoUser()
         setTimeout(()=>{
                     docRes.get().then(
                         (info)=>{
-                             if (info.exists)
-                             {
-                               global.info = { key: info.id, data: info.data() };
-                               docRes.onSnapshot( docSnapshot => global.info = { key: docSnapshot.id, data: { name: docSnapshot.data().NameRES }});
-                               global.UserType = "Restaurant";
-                             }
+                            if (info.exists)
+                            {
+								global.info = { key: info.id, data: info.data() };
+								docRes.onSnapshot( docSnapshot => global.info = { key: docSnapshot.id, data: { name: docSnapshot.data().NameRES }});
+								global.UserType = "Restaurant";
+                            }
                         });
                 }, 50);
    }
@@ -153,8 +135,15 @@ async componentDidMount()
       this.setState({ isLoaded: true });
 }
 
-  render() {
-    // -------- Loading and splashscreen -------------------------------------
+componentWillUnmount()
+{
+    if (this.unsubscriber) {
+      	this.unsubscriber();
+    }
+}
+
+render() {
+    // -------- Loading and splash screen -------------------------------------
     if (this.state.isLoaded === false)
       // Load data from database...
       return (<SplashScreen />);

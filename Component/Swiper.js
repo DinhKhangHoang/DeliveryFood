@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { Text, View, Image, TouchableHighlight, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import ContentLoader from 'rn-content-loader';
 import { Rect } from "react-native-svg";
 import PropTypes from 'prop-types';
 import SwiperFlatList from "react-native-swiper-flatlist";
 import { swiperStyle } from "../Style/style.js";
 import firebase from "react-native-firebase";
-import NetInfo from "@react-native-community/netinfo";
 
 
 // Define item in swiper
@@ -23,7 +22,7 @@ class SwiperItem extends Component
       {
         if (!this.state.disabled)
         {
-                setTimeout( ()=>this.setState( { disabled:false } ), 1000);
+                setTimeout( ()=>this.setState({ disabled:false }), 1000);
                 this.props.handleOnPress();
                 this.setState( { disabled: true } );
         }
@@ -123,7 +122,7 @@ export default class MySwiper extends Component
                                        renderAll={true}
                                  />
                           </ View>
-                          );
+                      );
              }
           }
     }
