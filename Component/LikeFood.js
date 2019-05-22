@@ -79,6 +79,7 @@ export default class LikedFood extends Component
           isConnected: true
     };
     this.getData = this.getData.bind(this);
+    this._isMount = false;
  }
 
 async getData()
@@ -125,25 +126,33 @@ async getData()
 
 async componentWillMount()
  {
-         NetInfo.addEventListener('connectionChange', async (data)=>{
-               if (data.type === "unknown" || data.type === "none") {  this.setState({isConnected: false});  }
+      this._isMount = true;
+      this.ref = NetInfo.addEventListener('connectionChange', async (data)=>{
+               if (data.type === "unknown" || data.type === "none") {  this._isMount && this.setState({isConnected: false});  }
                else {
-                     if (this.state.isEmpty && !this.state.isLoading)
-                          this.getData();
-                     this.setState({isConnected: true});
+                        if (this.state.isEmpty && !this.state.isLoading && this._isMount)
+                              this.getData();
+                        this._isMount && this.setState({isConnected: true});
                }
          });
          // ---- Listen to change ---------------------------------------------------------------------------------
          firebase.firestore().collection(global.UserType + "s" ).where("UID_" + global.UserType.substr(0, 3).toUpperCase(), "==", firebase.auth().currentUser.uid).onSnapshot(async query=>{
-               await this.setState({ data: [], isEmpty: true, isLoading: true });
-               this.getData();
+               await this._isMount && this.setState({ data: [], isEmpty: true, isLoading: true });
+               this._isMount && this.getData();
          });
 
          // ---- If have the internet -----------------------------------------------------------------------------
         const isConnected = await NetInfo.isConnected.fetch();
         if (!isConnected)
-              this.setState({isEmpty: true});
+            this.setState({isEmpty: true});
  }
+
+      componentWillUnmount()
+      {
+            NetInfo.removeEventListener("connectionChange", this.ref);
+            this._isMount = false;
+      } 
+
 
   render()
   {

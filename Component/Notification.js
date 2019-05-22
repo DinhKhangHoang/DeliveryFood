@@ -58,21 +58,21 @@ export class NotificationItem extends Component
       {
             super(props);
             this.state = { title: '', time: '', content: '', isLoading: true };
+            this._isMount = false;
       }
 
       componentDidMount()
       {
-            const { id } = this.props;
-            firebase.firestore().collection("Notification").doc(id).get().then( data => {
-                  this.setState({
-                        title: data.data().Title,
-                        time: data.data().Time,
-                        content: data.data().Content,
+            this._isMount = true;
+            const { data } = this.props;
+            this._isMount && this.setState({
+                        title: data.Title,
+                        time: data.Time,
+                        content: data.Content,
                         isLoading: false
-                  });
             });
       }
-
+      componentWillUnmount() { this._isMount = false; }
       render()
       {
         if (this.state.isLoading)
@@ -125,19 +125,13 @@ export default class NotificationPage extends Component
 async getData()
   {
       if (this.state.user)
-            await firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).get().then( doc => {
+            await firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).onSnapshot( doc => {
                   let temp = [];
-                  doc.forEach( item => temp.push({key: item.id, time: item.data().Time}) );
-                  temp.sort((a, b) => {
-                        if (new Date(b.time) < new Date(a.time))
-                              return -1;
-                        else if (new Date(b.time) > new Date(a.time))
-                              return 1
-                        else return 0;
-                  });
+                  doc.forEach( item =>  temp.push({ key: item.id, data: item.data() }) );
+                  temp.sort((a, b) => new Date(b.data.Time) >= new Date(a.data.Time));
                   this.setState({ data: temp, isEmpty: false });
           });
-      this.setState({ isLoading: false });
+          setTimeout(()=>this.setState({ isLoading: false }), 50);
   }
 
   async componentDidMount()
@@ -166,8 +160,8 @@ async getData()
 
   render()
   {
-    if (this.state.isLoading)
-    {
+      if (this.state.isLoading)
+      {
       return (
         <View style={{ display: "flex",justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: "white"}}>
               <View style={{ height: "20%", backgroundColor: "white"}}>
@@ -175,9 +169,8 @@ async getData()
                       <Text style={{ width: "100%", fontWeight: "bold", fontSize: 18, textAlign: "center", color: "black", marginTop: 20}}>LOADING</Text>
               </View>
          </View>
-      );
-    }
-    else if (this.state.user && this.state.isConnected)
+      )}
+      else if (this.state.user && this.state.isConnected)
             if (this.state.isEmpty)
                 return (
                     <View style={{flex: 1}}>
@@ -197,35 +190,35 @@ async getData()
                                         <FlatList
                                               contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
                                               showsVerticalScrollIndicator={false}
-                                              data = { this.state.data.sort((a, b)=> new Date(b.time) - new Date(a.time) ) }
-                                              renderItem={ ({item})=>( <NotificationItem  id={ item.key } /> )}
+                                              data = { this.state.data }
+                                              renderItem={ ({item})=>( <NotificationItem  data={ item.data } /> )}
                                           />
                                 </View>
                             </View>);
-   else if (!this.state.user) return (<NotLogInNav />);
-   else
-        if (this.state.isEmpty)
-               return (
-                     <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
-                           <Image
-                               source={require("../Media/icon/noWF.png")}
-                               style={{width: 100, height: 100, marginBottom: "2%"}}
-                            />
-                           <Text style={{fontSize: 16, fontWeight: "bold"}}>Please check your internet connection.</Text>
-                     </View>
+      else if (!this.state.user) return (<NotLogInNav />);
+      else
+            if (this.state.isEmpty)
+                  return (
+                        <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
+                              <Image
+                                    source={require("../Media/icon/noWF.png")}
+                                    style={{width: 100, height: 100, marginBottom: "2%"}}
+                              />
+                              <Text style={{fontSize: 16, fontWeight: "bold"}}>Please check your internet connection.</Text>
+                        </View>
               );
-         else
-         return (
-                 <View>
-                       <Header centerComponent={{ text: 'NOTIFICATIONS', style: notification.headerTitle }}  backgroundColor="#5B9642" />
-                       <View style={{ width: "100%", height: "87%"}}>
-                             <FlatList
-                                   contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
-                                   showsVerticalScrollIndicator={false}
-                                   data = {this.state.data}
-                                   renderItem={ ({item})=>( <NotificationItem  id={ item.key } /> )}
-                               />
-                     </View>
-                 </View>);
+            else
+                   return (
+                        <View>
+                              <Header centerComponent={{ text: 'NOTIFICATIONS', style: notification.headerTitle }}  backgroundColor="#5B9642" />
+                              <View style={{ width: "100%", height: "87%"}}>
+                                    <FlatList
+                                          contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
+                                          showsVerticalScrollIndicator={false}
+                                          data = { this.state.data }
+                                          renderItem={ ({item})=>( <NotificationItem  data={ item.data } /> )}
+                                          />
+                              </View>
+                        </View>);
    }
 }

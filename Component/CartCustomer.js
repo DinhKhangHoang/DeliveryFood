@@ -19,48 +19,45 @@ class ShoppingCartItem extends Component
    componentDidMount()
    {
         this._isMount = true;
-        firebase.firestore().collection("ListOrders").doc(this.props.cartID).get().then(
-            (doc)=>{
-                const foodID = doc.data().FoodID, resID = doc.data().RES_ID, status = doc.data().Status;
-                this._isMount && this.setState({
-                        quantity: doc.data().Quantity,
-                        price: doc.data().ChargeTotal,
-                        foodID: foodID
+        const { data } = this.props;
+        const foodID = data.FoodID, resID = data.RES_ID, status = data.Status;
+        this._isMount && this.setState({
+                quantity: data.Quantity,
+                price: data.ChargeTotal,
+                foodID: foodID
+        });
+        if (foodID)
+        {
+        // -------------------- Set image URL --------------------------------------------------------------------------
+        if (this.props.imageURL == ' ')
+                firebase.storage().ref().child("/FoodImage/" + foodID + ".jpg").getDownloadURL().then(url=>{
+                        this._isMount && this.setState({ imageURL: url });
                 });
-                if (foodID)
-                {
-                        // -------------------- Set image URL --------------------------------------------------------------------------
-                        if (this.props.imageURL == ' ')
-                                firebase.storage().ref().child("/FoodImage/" + foodID + ".jpg").getDownloadURL().then(url=>{
-                                        this._isMount && this.setState({ imageURL: url });
-                                });
-                        else this._isMount && this.setState({ imageURL: this.props.imageURL });
-                        // ------------------- Get food name ---------------------------------------------------------------------------
-                        firebase.firestore().collection("Food").doc(foodID).get().then(data=>{
-                                this._isMount && this.setState({ title: data.data().Name });
-                        });
+        else this._isMount && this.setState({ imageURL: this.props.imageURL });
+        // ------------------- Get food name ---------------------------------------------------------------------------
+        firebase.firestore().collection("Food").doc(foodID).get().then(data=>{
+                this._isMount && this.setState({ title: data.data().Name });
+        });
                         // -------------------- Get restaurant name ---------------------------------------------------------------------
-                        firebase.firestore().collection("Restaurants").doc(resID).get().then(data=>{
-                                this._isMount && this.setState({ nameRES: data.data().NameRES });
-                        });
+        firebase.firestore().collection("Restaurants").doc(resID).get().then(data=>{
+                this._isMount && this.setState({ nameRES: data.data().NameRES });
+        });
                         // ------------------- Set status of order ----------------------------------------------------------------------
-                        if (status == "deliveried") this._isMount && this.setState({ status: "received"});
-                        else if (status == "discarded") this._isMount && this.setState({ status: "discarded"});
-                        else this._isMount && this.setState({ status: "delivery"});
-                  }
-                  else
-                  {
-                        this._isMount && this.setState({typeOfTable: doc.data().typeOfTable.toLowerCase()});
-                        // Table --> Must change architechures !!! ----------------------------------------
-                        firebase.firestore().collection("Restaurants").doc(resID).get().then(data=>{
-                                this._isMount && this.setState({ nameRES: data.data().NameRES, address: data.data().Address });
-                        });
-                        if (status == "nonchecked") this._isMount && this.setState({ status: "In use"});
-                        else this._isMount && this.setState({ status: "Out of order"});
-                  }
-                  this._isMount && this.setState({ isLoading: false });
-            }
-        );
+        if (status == "deliveried") this._isMount && this.setState({ status: "received"});
+        else if (status == "discarded") this._isMount && this.setState({ status: "discarded"});
+        else this._isMount && this.setState({ status: "delivery"});
+        }
+        else
+        {
+                this._isMount && this.setState({typeOfTable: data.typeOfTable.toLowerCase()});
+                // Table --> Must change architechures !!! ----------------------------------------
+                firebase.firestore().collection("Restaurants").doc(resID).get().then(data=>{
+                        this._isMount && this.setState({ nameRES: data.data().NameRES, address: data.data().Address });
+                });
+                if (status == "nonchecked") this._isMount && this.setState({ status: "In use"});
+                else this._isMount && this.setState({ status: "Out of order"});
+        }
+        this._isMount && this.setState({ isLoading: false });
    }
 
    componentWillUnmount()
@@ -75,7 +72,6 @@ class ShoppingCartItem extends Component
             require('intl/locale-data/jsonp/en');
     }
     // -------------------------------------------------------------------------------------------------------------------
-    const { time } = this.props;  // ****
     let icon, headerStyle;
     if (this.state.status == "received" || this.state.status == "Out of order")
      {
@@ -120,7 +116,7 @@ class ShoppingCartItem extends Component
                                       { icon }
                               </View>
                               <Text style={ CartCustomerStyle.titleHeader }>{ this.state.status.charAt(0).toUpperCase() + this.state.status.slice(1) }</Text>
-                              <Text style= { CartCustomerStyle.time }>{ time }</Text>
+                              <Text style= { CartCustomerStyle.time }>{ this.props.data.TimeReceive }</Text>
                       </View>
                       <View style={ CartCustomerStyle.info }>
                             <Image
@@ -149,7 +145,7 @@ class ShoppingCartItem extends Component
                                   { icon }
                           </View>
                           <Text style={ CartCustomerStyle.titleHeader }>{ this.state.status.charAt(0).toUpperCase() + this.state.status.slice(1) }</Text>
-                          <Text style= { CartCustomerStyle.time }>{ time }</Text>
+                          <Text style= { CartCustomerStyle.time }>{ this.props.data.TimeReceive  }</Text>
                   </View>
                   <View style={{ display: "flex",  width: "100%", padding: 10 }}>
                         <View style={{width: "98%", borderBottomWidth: 1, borderBottomColor: "rgba(0, 0, 0, 0.2)", paddingBottom: 5, marginBottom: 5}}>
@@ -198,26 +194,25 @@ export default class CartCustomer extends Component
   }
 
 
-  async getData()
+  getData()
   {
-        await firebase.firestore().collection("ListOrders").where("CUS_ID", "==",  firebase.auth().currentUser.uid).get().then(data=>{
+        firebase.firestore().collection("ListOrders").where("CUS_ID", "==",  firebase.auth().currentUser.uid).onSnapshot( data=>{
+                let temp = [ {title: "Food", data: []}, {title: "Table", data: []} ] ;
                 data.forEach(doc => {
                         const item = {
                                     key: ' ',
-                                    cartID: doc.data().OrderID,
-                                    time: doc.data().TimeReceive,
+                                    data: doc.data(),
                                 };
-                        let temp = this.state.data;
-                        temp[temp.findIndex(i=>i.title == doc.data().Type)].data.push(item);
-                        temp[temp.findIndex(i=>i.title == doc.data().Type)].data.sort((a, b)=>{
-                                if (new Date(a.time) > new Date(b.time)) return -1;
-                                else if (new Date(a.time) == new Date(b.time)) return 0;
+                        temp[ temp.findIndex(i => i.title == doc.data().Type) ].data.push(item);
+                        temp[ temp.findIndex(i => i.title == doc.data().Type) ].data.sort((a, b) => {
+                                if (new Date(a.data.TimeReceive) > new Date(b.data.TimeReceive)) return -1;
+                                else if (new Date(a.data.TimeReceive) === new Date(b.data.TimeReceive)) return 0;
                                 else return 1;
                         });
-                        this.setState({ data: temp, isEmpty: false, isLoading: false });
                 });
+                this.setState({ data: temp, isEmpty: false, isLoading: false });
         });
-        this.setState({ isLoading: false });
+        setTimeout(()=>this.setState({ isLoading: false }), 100);
   }
 
 
@@ -280,9 +275,8 @@ export default class CartCustomer extends Component
                                 keyExtractor={(item, index) => item + index}
                                 renderSectionHeader={({section: {title}}) => ( <Text style={ CartCustomerStyle.titleCart }>{  title + " Orders" }</Text> )}
                                 renderItem={( {item, index, section} ) =>  <ShoppingCartItem
-                                                                                imageURL={item.key}
-                                                                                cartID={ item.cartID }
-                                                                                time={ item.time }
+                                                                                imageURL={ item.key }
+                                                                                data={ item.data }
                                                                         />}
                                 />
                                 { message }

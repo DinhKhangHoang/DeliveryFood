@@ -81,28 +81,24 @@ getInfoUser()
                   const storageRef = firebase.storage().ref();
                   const firestore = firebase.firestore().collection("Food");
                   // =================================================================================================
-                  firestore.where("isDeleted", "==", false).limit(30).get().then(data => {
+                  firestore.where("isDeleted", "==", false).limit(30).onSnapshot(data => {
                           data.forEach(
                                 function (i)
                                 {
                                       const item = {
                                                         key: ' ',
                                                         id: i.id,
-                                                        title: i.data().Name,
-                                                        resID: i.data().ID_RES,
-                                                        type: i.data().TypeOfFood,
-                                                        rate: i.data().rating,
-                                                        price: i.data().Price
+                                                        data: i.data()
                                                    };
-                                     if (global.foodData.swiper.length < 6 && global.foodData.swiper.findIndex(obj => obj.id == item.id) == -1)
+                                     if (global.foodData.swiper.length < 6)
                                             global.foodData.swiper.push( item )
                                      else
                                      {
-                                             if (item.type === "maincourse" && global.foodData.main.length < 6 && global.foodData.main.findIndex(obj => obj.id == item.id) == -1)
+                                             if (item.data.TypeOfFood === "maincourse" && global.foodData.main.length < 6)
                                                     global.foodData.main.push( item );
-                                            else if (item.type === "dessert" && global.foodData.dessert.length < 6 && global.foodData.dessert.findIndex(obj => obj.id == item.id) == -1)
+                                            else if (item.data.TypeOfFood === "dessert" && global.foodData.dessert.length < 6)
                                                     global.foodData.dessert.push( item );
-                                            else if ( global.foodData.grid.length < 10 && global.foodData.grid.findIndex(obj => obj.id == item.id) == -1) { global.foodData.grid.push( item ); }
+                                            else if ( global.foodData.grid.length < 10 ) { global.foodData.grid.push( item ); }
                                     }
                            });
                   });
@@ -110,7 +106,7 @@ getInfoUser()
                   const sleep = (milliseconds) => { return new Promise(resolve => setTimeout(resolve, milliseconds)) }
 
                   while (true) {
-                        await sleep(100);
+                        await sleep(50);
                         if ( global.foodData.grid.length >= 5)
                         {
                               global.foodData.isFetchedData = true;

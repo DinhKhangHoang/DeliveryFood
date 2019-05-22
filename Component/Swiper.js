@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import ContentLoader from 'rn-content-loader';
 import { Rect } from "react-native-svg";
 import PropTypes from 'prop-types';
@@ -22,8 +22,8 @@ class SwiperItem extends Component
       {
         if (!this.state.disabled)
         {
-                setTimeout( ()=>this.setState({ disabled:false }), 1000);
                 this.props.handleOnPress();
+                setTimeout( ()=>this.setState({ disabled:false }), 1000);
                 this.setState( { disabled: true } );
         }
       }
@@ -72,11 +72,18 @@ export default class MySwiper extends Component
               super(props);
               this.state = { autoplay: true };
               this.renderItemComponent = this.renderItemComponent.bind(this);
+              this._isMount = false;
       }
 
 
-      componentDidMount() { this.setState({ autoplay: true }); }
-      componentWillUnmount() { this.setState({ autoplay: false }); }
+      componentDidMount() {
+        this._isMount = true;
+        this.setState({ autoplay: true }); 
+      }
+      componentWillUnmount() { 
+        this._isMount = false;
+        this.setState({ autoplay: false });
+      }
 
       renderItemComponent({ item })
       {
@@ -84,10 +91,10 @@ export default class MySwiper extends Component
           <SwiperItem
                 id={item.id}
                 imageURL={item.key}
-                text={item.title}
+                text={item.data.Name}
                 containerStyle={ swiperStyle.swiperItem }
                 imageStyle={ swiperStyle.imageOnSwiper }
-                handleOnPress={ ()=>this.props.navigation.push( this.props.routename, { data: {id: item.id, title: item.title } }) }
+                handleOnPress={ ()=>this.props.navigation.push( this.props.routename, { data: {id: item.id, title: item.data.Name } }) }
            />
          );
     }
@@ -98,14 +105,8 @@ export default class MySwiper extends Component
             if ( loading || data.length < 5 )
             {
                           return (
-                            <View style={{ elevation: 5 }}>
-                                <ContentLoader
-                                       height={ swiperStyle.loading.height * 0.4 }
-                                       width={ swiperStyle.loading.width}
-                                       speed={2}>
-                                    <Rect x="5%" y="5%" rx="10" ry="10" width="90%" height="60%" />
-                                    <Rect x="5%" y="70%" rx="10" ry="10" width="80%" height="20%" />
-                                </ContentLoader>
+                            <View style={{ elevation: 5, height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                <ActivityIndicator />
                             </View>
                             );
                         }
@@ -119,7 +120,7 @@ export default class MySwiper extends Component
                                        autoplayLoop
                                        data={ data }
                                        renderItem={ this.renderItemComponent }
-                                       renderAll={true}
+                                       renderAll={this._isMount}
                                  />
                           </ View>
                       );

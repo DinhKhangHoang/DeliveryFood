@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity, Platform, Image } from "react-native";
+import { Text, View, TouchableOpacity, Platform, Image, ActivityIndicator } from "react-native";
 import { gridStyle } from "../Style/style";
-import ContentLoader from 'rn-content-loader';
-import { Rect } from "react-native-svg";
 import firebase from 'react-native-firebase';
 
 class GridItem extends Component
@@ -18,8 +16,8 @@ class GridItem extends Component
   {
     if (!this.state.disabled)
     {
+            this.props.handleOnPress();
           setTimeout( ()=>this.setState( { disabled:false } ), 1000);
-          this.props.handleOnPress();
           this.setState( { disabled: true} );
     }
   }
@@ -75,7 +73,7 @@ export default class GridView extends Component
   render()
   {
     const { data, loading } = this.props;
-    if ( loading)
+    if ( loading )
     {
             return(
               <View style={ gridStyle.container }>
@@ -83,29 +81,8 @@ export default class GridView extends Component
                         <View style={ gridStyle.titleWrapper }>
                               <Text style={ gridStyle.title }>{ this.props.title }</Text>
                         </View>
-                        <View style={ gridStyle.listWrapper }>
-                            <View style={{ width: "48%", height: 230}}>
-                                <ContentLoader
-                                       height={ gridStyle.cantLoading.height }
-                                       width={ gridStyle.cantLoading.width }
-                                       speed={2}>
-                                    <Rect x="3%" y="0" rx="10" ry="10" width="90%" height="70%" />
-                                    <Rect x="3%" y="75%" rx="5" ry="5" width="90%" height="5%" />
-                                    <Rect x="3%" y="85%" rx="5" ry="5" width="50%" height="5%" />
-                                    <Rect x="58%" y="85%" rx="5" ry="5" width="35%" height="5%" />
-                                </ContentLoader>
-                            </View>
-                            <View style={{ width: "48%", height: 230}}>
-                                <ContentLoader
-                                       height={ gridStyle.cantLoading.height }
-                                       width={ gridStyle.cantLoading.width }
-                                       speed={2}>
-                                    <Rect x="3%" y="0" rx="10" ry="10" width="90%" height="70%" />
-                                    <Rect x="3%" y="75%" rx="5" ry="5" width="90%" height="5%" />
-                                    <Rect x="3%" y="85%" rx="5" ry="5" width="50%" height="5%" />
-                                    <Rect x="58%" y="85%" rx="5" ry="5" width="35%" height="5%" />
-                                </ContentLoader>
-                            </View>
+                        <View style={{width: "100%", height: 150, display: "flex", justifyContent: 'center', alignItems: 'center'}}>
+                            <ActivityIndicator />
                         </View>
                     </View>
               </View>
@@ -127,9 +104,9 @@ export default class GridView extends Component
                                             key={index}
                                             loading={false}
                                             imgURL={item.key}
-                                            title={item.title}
-                                            price={item.price}
-                                            handleOnPress={ ()=>{ this.props.navigation.push( this.props.routename, { data: {id: item.id, title: item.title } } ) }}
+                                            title={item.data.Name}
+                                            price={item.data.Price}
+                                            handleOnPress={ ()=>{ this.props.navigation.push( this.props.routename, { data: {id: item.id, title: item.data.Name } } ) }}
                                       />
                                  )} )
                             }

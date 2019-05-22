@@ -117,7 +117,7 @@ class HomeCustomer_Main extends Component
                                 routename="Detail"
                                 handleOnPress={ ()=>{} }
                                 loading = { this.state.loading }
-                                data = {global.foodData.dessert } />);
+                                data = { global.foodData.dessert } />);
             else if (item.key == "main")
                 return (  <ListView
                                 title="Main Meal"
@@ -149,7 +149,7 @@ class HomeCustomer_Main extends Component
                  removeClippedSubviews={true}
                  showsVerticalScrollIndicator={false}
                  data={dataList}
-                 keyExtractor={ (item, id) => item.key+id }
+                 keyExtractor={ (item, id) => item.key + id }
                  renderItem={_renderItem}
              />
           { myNotification }
