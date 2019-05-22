@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Image, ScrollView, TouchableOpacity, Platform, TextInput } from "react-native";
+import { Text, View, Image, ScrollView, TouchableOpacity, Platform, TextInput, ActivityIndicator } from "react-native";
 import { Rating, Avatar, AirbnbRating, Icon, Input  } from "react-native-elements";
 import firebase from 'react-native-firebase';
 import ComponentWithTitle from "./ComponentWithTitle";
@@ -9,8 +9,6 @@ import ListView from "./ListView";
 import { detailFood, commentStyle, listViewStyle, resInfor, accountStyle } from "../Style/style";
 import NetInfo from "@react-native-community/netinfo";
 import Message from "./Message";
-import ContentLoader from 'rn-content-loader';
-import { Rect } from "react-native-svg";
 
 
 // ---- REPLY COMMENT ------------------------------------------------------------------------------------
@@ -609,21 +607,17 @@ async loadComment(storageRef, dataNav, infoAccount)
 
 async loadingSimilarFood(infoFood, storageRef, dataNav)
 {
-          let similarFood = []
-          const similar = await firebase.firestore().collection("Food").where("isDeleted", "==", false).where("TypeOfFood", "==", infoFood.data().TypeOfFood).limit(6).get();
-          similar.forEach(
-            (i)=>{
-                  const item = {
-                                    key: ' ',
-                                    id: i.id,
-                                    title: i.data().Name,
-                                    resID: i.data().ID_RES,
-                                    price: i.data().Price,
-                                    rate: i.data().rating
-                               };
-                 if (item.id != dataNav.id) { similarFood.push(item);}
-             });
-          this.setState({ similar: similarFood, similarLoading: false });
+      firebase.firestore().collection("Food").where("isDeleted", "==", false).where("TypeOfFood", "==", infoFood.data().TypeOfFood).limit(6).get().then(similar => {
+            let similarFood = []
+            similar.forEach( (i)=>{
+                   const item = {
+                        key: ' ',
+                        id: i.id,
+                        data: i.data() };
+                  if (item.id != dataNav.id) { similarFood.push(item);}
+            });
+            this.setState({ similar: similarFood, similarLoading: false });
+      });
 }
   // ===============================================================================================================
 async componentDidMount()
@@ -762,17 +756,8 @@ async componentDidMount()
              </View> )}
          </View>);
 
-    const load =  (<View style={detailFood.foodInfor} >
-                          <ContentLoader
-                                 height={ detailFood.cantLoading.height }
-                                 width={ detailFood.cantLoading.width } >
-                              <Rect x="5%" y="0" rx="10" ry="10" width="90%" height="70%" />
-                              <Rect x="5%" y="75%" rx="10" ry="10" width="90%" height="5%" />
-                              <Rect x="5%" y="84%" rx="10" ry="10" width="50%" height="5%" />
-                              <Rect x="60%" y="84%" rx="10" ry="10" width="35%" height="5%" />
-                              <Rect x="5%" y="93%" rx="10" ry="10" width="35%" height="5%" />
-                              <Rect x="45%" y="93%" rx="10" ry="10" width="50%" height="5%" />
-                          </ContentLoader>
+    const load =  (<View style={{width: "100%", height: 300, display: "flex", justifyContent: "center", alignItems: "center"}}>
+                              <ActivityIndicator />
                   </View>);
 
     return (

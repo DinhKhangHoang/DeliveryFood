@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import { Text, View, Image, FlatList, TouchableOpacity, Platform } from "react-native";
+import { Text, View, Image, FlatList, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
 import { Icon } from "react-native-elements";
 import Anchor from "./anchor.js";
-import PropTypes from 'prop-types';
 import { listViewStyle } from "../Style/style.js";
-import DetailFood from "./DetailFood";
-import ContentLoader from 'rn-content-loader';
-import { Rect } from "react-native-svg";
 import firebase from "react-native-firebase";
 
 //Define listview item
@@ -18,6 +14,7 @@ class ListViewItem extends Component
         this.state = { disabled: false, imgURL: ' ' };
         this.handleOnPress = this.handleOnPress.bind(this);
   }
+
   componentDidMount()
   {
       if (this.props.imgURL == ' ')
@@ -34,8 +31,8 @@ class ListViewItem extends Component
   {
     if (!this.state.disabled)
     {
-          setTimeout( ()=>this.setState( { disabled:false } ), 1000);
           this.props.handleOnPress();
+          setTimeout( ()=>this.setState( { disabled: false } ), 1000);
           this.setState( { disabled: true } );
     }
   }
@@ -46,17 +43,9 @@ class ListViewItem extends Component
     if (loading)
     {
               return (
-                      <View style={{ elevation: 5 }}>
-                          <ContentLoader
-                                 height={ 200 }
-                                 width={ 150 }
-                                 speed={2}>
-                              <Rect x="0" y="0" rx="10" ry="10" width="90%" height="70%" />
-                              <Rect x="0" y="75%" rx="5" ry="5" width="90%" height="5%" />
-                              <Rect x="0" y="85%" rx="5" ry="5" width="50%" height="5%" />
-                              <Rect x="55%" y="85%" rx="5" ry="5" width="35%" height="5%" />
-                          </ContentLoader>
-                      </View>
+                    <View style={ [listViewStyle.item, {display: "flex", justifyContent: "center", alignItems: "center"}] }>
+                        <ActivityIndicator />
+                    </View>
               );
     }
     else
@@ -84,16 +73,6 @@ class ListViewItem extends Component
   }
 }
 
-/*
-//Define props type for class ListViewItem
-ListViewItem.propTypes = {
-      imgURL
-      title: PropTypes.string.isRequired,
-      rate: PropTypes.number.isRequired,
-      price: PropTypes.number.isRequired
-
-};
-*/
 
 
 export default class ListView extends Component
@@ -101,7 +80,7 @@ export default class ListView extends Component
   constructor(props)
   {
         super(props);
-        this.state = { data : [ {key: "1"}, {key: "2"}, {key: "3"}, {key: "4"},{key: "5"},{key: "6"}] };
+        this.state = { data : [ {key: "1"}, {key: "2"}, {key: "3"}, {key: "4"}, {key: "5"}, {key: "6"}] };
   }
 
   render()
@@ -112,7 +91,7 @@ export default class ListView extends Component
             require('intl/locale-data/jsonp/en');
     }
     const { title = "", containerStyle, loading, data } = this.props;
-    if ( loading || data.length < 4)
+    if ( loading || data.length < 4 )
     {
           return (
                 <View style={ [{width: "100%", backgroundColor: "white"}, containerStyle ]}>
@@ -129,7 +108,7 @@ export default class ListView extends Component
                               horizontal
                               showsHorizontalScrollIndicator={false}
                               data={ this.state.data }
-                              keyExtractor={(item) => item.key }
+                              keyExtractor={(item, index) => item.key + index }
                               renderItem={( {item} ) => <ListViewItem
                                                               handleOnPress={ ()=>{} }
                                                               loading={true} /> }
@@ -154,14 +133,15 @@ export default class ListView extends Component
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={ data }
-                    keyExtractor={(item) => item.key }
+                    keyExtractor={(item, index) => item.key + index }
                     renderItem={( {item} ) => <ListViewItem
                                                     imgURL={item.key}
                                                     id={item.id}
-                                                    title={item.title}
-                                                    rate={item.rate}
-                                                    price={item.price}
-                                                    handleOnPress={ ()=> this.props.navigation.push("Detail", { data: {id: item.id, title: item.title } }) }
+                                                    title={item.data.Name}
+                                                    rate={item.data.rating}
+                                                    price={item.data.Price}
+                                                    loading={false}
+                                                    handleOnPress={ ()=> this.props.navigation.push("Detail", { data: {id: item.id, title: item.data.Name } }) }
                                               />}
                 />
               </View>

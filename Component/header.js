@@ -24,7 +24,7 @@ export default class Header extends Component
                 source={ require("../Media/icon/logo.png") }
                 style={{ width: "60%"}}
                 resizeMode="cover"
-            />
+          />
           <View style={{paddingLeft: "3%", width: "30%", justifyContent: "space-around", alignItems: "center", display: "flex", flexDirection: "row", marginRight: "5%"}}>
               <View style={ headerStyle.iconWrapper}>
                   <Icon

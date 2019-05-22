@@ -38,10 +38,11 @@ constructor(props)
 componentDidMount()
 {
 	if (global.UserType === "Customer")
-	  firebase.firestore().collection("Customers").doc( this.state.key ).onSnapshot( docSnapshot=> this.setState({ key: docSnapshot.id, data: docSnapshot.data() }) );
+	  firebase.firestore().collection("Customers").doc( this.state.key ).onSnapshot( docSnapshot => this.setState({ key: docSnapshot.id, data: docSnapshot.data() }) );
   else
-	  firebase.firestore().collection("Restaurants").doc( this.state.key ).onSnapshot( docSnapshot=> this.setState({ key: docSnapshot.id, data: docSnapshot.data() }) );
+	  firebase.firestore().collection("Restaurants").doc( this.state.key ).onSnapshot( docSnapshot => this.setState({ key: docSnapshot.id, data: docSnapshot.data() }) );
 }
+
 // ---- Render function -------------------------------------------------------------------------------------------------------
 	render() {
 		const changeValue = ( global.UserType === "Restaurant" ?

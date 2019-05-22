@@ -205,12 +205,12 @@ export default class AccountPage extends Component
 
   componentWillMount()
   {
-    firebase.auth().onAuthStateChanged( (currentUser)=>this.setState({ user: currentUser }));
     const { currentUser } = firebase.auth();
     if (currentUser && !global.info)
             global.getUser();
     this.setState({user: currentUser});
   }
+
   render()
   {
     if (this.state.user) return ( <AccountLogIn /> );

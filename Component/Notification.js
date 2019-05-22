@@ -28,6 +28,7 @@ class NotLogIn extends Component
                     wrapperStyle={{ borderRadius: 5, backgroundColor: "gray", marginTop: "3%"}}
                     underlayColor="rgba(0, 0, 0, 0.6)"
                     handleOnPress={ ()=> {this.props.navigation.navigate("Login")} }
+                    title="  "
                 />
           </View>
       )}
@@ -57,30 +58,30 @@ export class NotificationItem extends Component
       {
             super(props);
             this.state = { title: '', time: '', content: '', isLoading: true };
+            this._isMount = false;
       }
 
       componentDidMount()
       {
-            const { id } = this.props;
-            firebase.firestore().collection("Notification").doc(id).get().then(data=>{
-                  this.setState({
-                        title: data.data().Title,
-                        time: data.data().Time,
-                        content: data.data().Content,
+            this._isMount = true;
+            const { data } = this.props;
+            this._isMount && this.setState({
+                        title: data.Title,
+                        time: data.Time,
+                        content: data.Content,
                         isLoading: false
-                  });
             });
       }
-
+      componentWillUnmount() { this._isMount = false; }
       render()
       {
         if (this.state.isLoading)
               return (
-                <View style={ [notification.itemContainer, {display: "flex", justifyContent: "center", alignItems: 'center'}] }>
-                      <View style={{ width: "90%" }}>
+                  <View style={ [notification.itemContainer, {display: "flex", justifyContent: "center", alignItems: 'center'}] }>
+                        <View style={{ width: "90%" }}>
                               <ActivityIndicator size="small" color="black" />
-                      </View>
-                </View>
+                        </View>
+                  </View>
               );
         else
             return (
@@ -111,60 +112,56 @@ export default class NotificationPage extends Component
 {
   constructor(props)
   {
-          super(props);
-          this.state = {
-                isConnected: false,
-                user: firebase.auth().currentUser,
-                data: [ ],
-                isEmpty: true,
-                isLoading: true,
-          };
+      super(props);
+      this.state = {
+            isConnected: false,
+            user: firebase.auth().currentUser,
+            data: [ ],
+            isEmpty: true,
+            isLoading: true,
+      };
   }
 
 async getData()
   {
       if (this.state.user)
-      {
-          await firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).get().then(doc=>{
-                  doc.forEach(item=>{
-                        let temp = this.state.data;
-                        temp.push({key: item.id, time: item.data().Time});
-                        this.setState({ data: temp, isEmpty: false, isLoading: false});
-                  });
+            await firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).onSnapshot( doc => {
+                  let temp = [];
+                  doc.forEach( item =>  temp.push({ key: item.id, data: item.data() }) );
+                  temp.sort((a, b) => new Date(b.data.Time) >= new Date(a.data.Time));
+                  this.setState({ data: temp, isEmpty: false });
           });
-      }
-      this.setState({ isLoading: false });
-
+          setTimeout(()=>this.setState({ isLoading: false }), 50);
   }
 
   async componentDidMount()
   {
-          NetInfo.addEventListener('connectionChange', (data)=>{
-                if (data.type === "unknown" || data.type === "none")
+            NetInfo.addEventListener('connectionChange', (data)=>{
+                  if (data.type === "unknown" || data.type === "none")
                         this.setState({isConnected: false});
-                else
-                {
+                  else
+                  {
                         if (this.state.isEmpty && !this.state.isLoading)
-                                this.getData();
+                              this.getData();
                         this.setState({isConnected: true});
-                }
-          });
-
-          this.state.user && firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).onSnapshot(async query=>{
-                await this.setState({ data: [] });
-                this.getData();
-          });
-          const isConnected = await NetInfo.isConnected.fetch();
-          if (isConnected) this.setState({ isConnected: true });
-          else this.setState({isEmpty: true});
-
-          if (!this.state.user) this.setState({ isLoading: false });
+                  }
+            });
+            this.state.user && firebase.firestore().collection("Notification").where("UID", "==", this.state.user.uid).onSnapshot(async query=>{
+                  await this.setState({ data: [] });
+                  this.getData();
+            });
+            const isConnected = await NetInfo.isConnected.fetch();
+            if (isConnected) 
+                  this.setState({ isConnected: true });
+            else 
+                  this.setState({isEmpty: true});
+            if (!this.state.user) this.setState({ isLoading: false });
   }
 
   render()
   {
-    if (this.state.isLoading)
-    {
+      if (this.state.isLoading)
+      {
       return (
         <View style={{ display: "flex",justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: "white"}}>
               <View style={{ height: "20%", backgroundColor: "white"}}>
@@ -172,9 +169,8 @@ async getData()
                       <Text style={{ width: "100%", fontWeight: "bold", fontSize: 18, textAlign: "center", color: "black", marginTop: 20}}>LOADING</Text>
               </View>
          </View>
-      );
-    }
-    else if (this.state.user && this.state.isConnected)
+      )}
+      else if (this.state.user && this.state.isConnected)
             if (this.state.isEmpty)
                 return (
                     <View style={{flex: 1}}>
@@ -194,35 +190,35 @@ async getData()
                                         <FlatList
                                               contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
                                               showsVerticalScrollIndicator={false}
-                                              data = { this.state.data.sort((a, b)=> new Date(b.time) - new Date(a.time) ) }
-                                              renderItem={ ({item})=>( <NotificationItem  id={ item.key } /> )}
+                                              data = { this.state.data }
+                                              renderItem={ ({item})=>( <NotificationItem  data={ item.data } /> )}
                                           />
                                 </View>
                             </View>);
-   else if (!this.state.user) return (<NotLogInNav />);
-   else
-        if (this.state.isEmpty)
-               return (
-                     <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
-                           <Image
-                               source={require("../Media/icon/noWF.png")}
-                               style={{width: 100, height: 100, marginBottom: "2%"}}
-                            />
-                           <Text style={{fontSize: 16, fontWeight: "bold"}}>Please check your internet connection.</Text>
-                     </View>
+      else if (!this.state.user) return (<NotLogInNav />);
+      else
+            if (this.state.isEmpty)
+                  return (
+                        <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "white"}}>
+                              <Image
+                                    source={require("../Media/icon/noWF.png")}
+                                    style={{width: 100, height: 100, marginBottom: "2%"}}
+                              />
+                              <Text style={{fontSize: 16, fontWeight: "bold"}}>Please check your internet connection.</Text>
+                        </View>
               );
-         else
-         return (
-                 <View>
-                       <Header centerComponent={{ text: 'NOTIFICATIONS', style: notification.headerTitle }}  backgroundColor="#5B9642" />
-                       <View style={{ width: "100%", height: "87%"}}>
-                             <FlatList
-                                   contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
-                                   showsVerticalScrollIndicator={false}
-                                   data = {this.state.data}
-                                   renderItem={ ({item})=>( <NotificationItem  id={ item.key } /> )}
-                               />
-                     </View>
-                 </View>);
+            else
+                   return (
+                        <View>
+                              <Header centerComponent={{ text: 'NOTIFICATIONS', style: notification.headerTitle }}  backgroundColor="#5B9642" />
+                              <View style={{ width: "100%", height: "87%"}}>
+                                    <FlatList
+                                          contentContainerStyle={ [flexStyle.wrapper, {marginVertical: 10}] }
+                                          showsVerticalScrollIndicator={false}
+                                          data = { this.state.data }
+                                          renderItem={ ({item})=>( <NotificationItem  data={ item.data } /> )}
+                                          />
+                              </View>
+                        </View>);
    }
 }
